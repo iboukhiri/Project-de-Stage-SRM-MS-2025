@@ -1,0 +1,316 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    min-height: 100vh;
+}
+
+.auth-page {
+    min-height: 100vh;
+    position: relative;
+}
+
+.auth-page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(2px);
+}
+
+.top-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 1rem 2rem;
+    z-index: 10;
+}
+
+.logo {
+    position: absolute;
+    top: 0.25rem;
+    left: 3.5rem;
+    line-height: 0;
+    height: 120px;
+    width: 350px;
+    z-index: 1000;
+}
+
+.logo img {
+    display: block;
+    height: 130px;
+    width: auto;
+    filter: drop-shadow(3px 3px 5px rgba(0,0,0,0.2));
+    transition: filter 0.3s ease;
+}
+
+.MuiTheme-dark .logo img {
+    filter: drop-shadow(3px 3px 5px rgba(0,0,0,0.4));
+}
+
+.MuiTheme-light .logo img {
+    filter: drop-shadow(3px 3px 5px rgba(0,0,0,0.2));
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.nav-btn {
+    padding: 0.6rem 2.2rem;
+    border: none;
+    border-radius: 25px;
+    background-color: rgba(51, 51, 51, 0.9);
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-btn.active {
+    background-color: rgba(255, 152, 0, 0.9);
+    color: white;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.nav-btn::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 3px;
+    background: #ff9800;
+    transition: all 0.3s ease-out;
+}
+
+.nav-btn:hover::after,
+.nav-btn.active::after {
+    left: 0;
+    width: 100%;
+}
+
+.nav-btn:hover {
+    background-color: #ff9800;
+    color: #333;
+}
+
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 6rem 2rem 2rem 2rem;
+    position: relative;
+    z-index: 1;
+}
+
+.auth-form {
+    background: rgba(51, 51, 51, 0.95);
+    padding: 2.5rem;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+.auth-title {
+    color: #ff9800;
+    text-align: center;
+    font-size: 2.2rem;
+    margin-bottom: 2rem;
+    font-weight: 700;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+    letter-spacing: 0.5px;
+}
+
+.input-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.auth-input {
+    width: 100%;
+    padding: 1rem 1rem 1rem 3rem;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid transparent;
+    border-radius: 25px;
+    color: white;
+    font-size: 1rem;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.auth-input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.auth-input:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 152, 0, 0.5);
+}
+
+.input-group i {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.input-group i.toggle-password {
+    left: auto;
+    right: 1rem;
+    cursor: pointer;
+}
+
+.name-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.submit-button {
+    width: 100%;
+    padding: 1.1rem;
+    background: #f57c00;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.submit-button:hover {
+    background: #ef6c00;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 6px 15px rgba(245, 124, 0, 0.4);
+}
+
+.auth-link {
+    text-align: center;
+    color: white;
+    font-size: 0.95rem;
+}
+
+.auth-link a {
+    color: #ff9800;
+    text-decoration: underline;
+    margin-left: 0.5rem;
+    font-weight: 700;
+    transition: color 0.3s ease;
+}
+
+.auth-link a:hover {
+    color: #fb8c00;
+    text-decoration: none;
+}
+
+.auth-link a[href="/login"] {
+    color: #ff8c00;
+    font-weight: 700;
+    text-decoration: underline;
+    letter-spacing: 0.3px;
+}
+
+.error-message {
+    color: #ff4444;
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .name-group {
+        grid-template-columns: 1fr;
+    }
+    
+    .auth-form {
+        padding: 1.5rem;
+    }
+    
+    .nav-btn {
+        padding: 0.5rem 1.5rem;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Remove the custom scrollbar styles from auth.css since we're handling them in ThemeContext.js */
+:root {
+    --scrollbar-light: none;
+    --scrollbar-light-hover: none;
+    --scrollbar-dark: none;
+    --scrollbar-dark-hover: none;
+}
+
+/* Remove all the webkit scrollbar styles from auth.css */
+::-webkit-scrollbar,
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-thumb:hover,
+textarea::-webkit-scrollbar,
+textarea::-webkit-scrollbar-thumb,
+pre::-webkit-scrollbar,
+pre::-webkit-scrollbar-thumb {
+    /* Reset all scrollbar styles - they will be handled by ThemeContext.js */
+    all: unset;
+}
+
+/* Remove Firefox scrollbar styles */
+* {
+    scrollbar-width: auto;
+    scrollbar-color: unset;
+}
+
+/* Smooth scrolling for the whole page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Optional: Custom scrollbar for specific elements like textareas */
+textarea::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+textarea::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+/* Optional: Custom scrollbar for code blocks or pre elements */
+pre::-webkit-scrollbar {
+  height: 6px;
+}
+
+pre::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+} 
