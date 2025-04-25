@@ -44,11 +44,39 @@ Une application moderne de gestion de projets construite avec React et Node.js, 
   - MongoDB
   - JWT pour l'authentification
 
+## Configuration de GitHub
+
+1. Créer un nouveau repository sur GitHub:
+   - Accédez à [GitHub](https://github.com) et connectez-vous
+   - Cliquez sur "New repository"
+   - Nommez votre repository (ex: "Project-de-Stage-SRM-MS-2025")
+   - Choisissez une visibilité (publique ou privée)
+   - Ne pas initialiser avec README, .gitignore ou licence car le projet en contient déjà
+   - Cliquez sur "Create repository"
+
+2. Initialiser le repository local et pousser vers GitHub:
+```bash
+# Si le dossier n'est pas déjà initialisé comme repository Git
+git init
+
+# Ajouter tous les fichiers pour commit
+git add .
+
+# Créer le premier commit
+git commit -m "Initial commit"
+
+# Ajouter le remote URL (remplacez USERNAME par votre nom d'utilisateur GitHub)
+git remote add origin https://github.com/USERNAME/Project-de-Stage-SRM-MS-2025.git
+
+# Pousser vers GitHub
+git push -u origin master
+```
+
 ## Installation
 
 1. Cloner le dépôt:
 ```bash
-git clone https://github.com/iboukhiri/Project-de-Stage-SRM-MS-2025.git
+git clone https://github.com/VOTRE-USERNAME/Project-de-Stage-SRM-MS-2025.git
 cd Project-de-Stage-SRM-MS-2025
 ```
 
@@ -71,10 +99,14 @@ PORT=5001
 
 4. Démarrer les serveurs de développement:
 ```bash
-# Démarrer le backend (depuis le répertoire racine)
-npm run server
+# Démarrer le backend et le frontend simultanément (depuis le répertoire racine)
+npm run dev:full
 
-# Démarrer le frontend (depuis le répertoire client)
+# Ou démarrer séparément:
+# Backend (depuis le répertoire racine)
+npm run dev
+
+# Frontend (depuis le répertoire client)
 cd client
 npm start
 ```
