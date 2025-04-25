@@ -48,7 +48,7 @@ Une application moderne de gestion de projets construite avec React et Node.js, 
 
 1. Cloner le dépôt:
 ```bash
-git clone https://github.com/votre-utilisateur/Project-de-Stage-SRM-MS-2025.git
+git clone https://github.com/iboukhiri/Project-de-Stage-SRM-MS-2025.git
 cd Project-de-Stage-SRM-MS-2025
 ```
 
