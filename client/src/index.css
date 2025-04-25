@@ -5,9 +5,31 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden; /* Prevent horizontal scrollbar from scaled content */
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+/* Add styles for the scaled content */
+.scaled-container {
+  overflow: hidden;
+}
+
+/* Tab styling fixes */
+.MuiTabs-root {
+  margin-bottom: 0 !important;
+}
+
+/* Ensure tab panels have proper spacing */
+.MuiTabPanel-root {
+  padding-top: 24px !important;
+}
+
+/* Properly align tab content */
+.MuiTab-root {
+  min-height: 48px !important;
+  padding-bottom: 12px !important;
 }

@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Box, Paper, Typography, Grid, Stack, LinearProgress, Tooltip, alpha, Grow, useTheme } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { Box, Paper, Typography, Grid, Stack, LinearProgress, Tooltip, alpha, Grow, useTheme, Button } from '@mui/material';
 import { 
   Chart as ChartJS, 
   ArcElement, 
@@ -64,9 +65,15 @@ const statusTranslations = {
   'Not Started': 'Non démarré',
 };
 
+// Helper to translate status
+const translateStatus = (status) => {
+  return statusTranslations[status] || status;
+};
+
 const ProjectAnalytics = ({ projects }) => {
   const theme = useTheme();
   const chartRef = useRef(null);
+  const navigate = useNavigate();
   const [statusData, setStatusData] = useState({
     labels: [],
     datasets: []
@@ -265,123 +272,130 @@ const ProjectAnalytics = ({ projects }) => {
         <Box 
           sx={{ 
             mb: 2.5,
-            p: 1.5,
+            width: '100%',
             borderRadius: 2,
             transition: 'all 0.3s ease',
-            backgroundColor: theme => hover 
-              ? theme.palette.mode === 'dark' 
-                ? `${project.color}20` 
-                : `${project.color}10`
-              : theme.palette.mode === 'dark' 
-                ? 'rgba(255, 255, 255, 0.03)' 
-                : 'transparent',
+            backgroundColor: theme => theme.palette.mode === 'dark' 
+              ? alpha('#2a2a2a', 0.9)
+              : alpha('#1e1e1e', 0.05),
             transform: hover ? 'translateX(5px)' : 'translateX(0)',
             '&:hover': {
               boxShadow: theme => theme.palette.mode === 'dark'
                 ? `0 4px 12px -2px ${alpha(project.color, 0.4)}`
-                : `0 4px 12px -2px ${alpha(project.color, 0.25)}`,
-            }
+                : `0 4px 12px -2px ${alpha(project.color, 0.25)}`
+            },
+            borderLeft: `4px solid ${project.color}`,
+            position: 'relative',
+            overflow: 'hidden'
           }}
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
         >
-          <Tooltip 
-            title={`${project.title} - ${project.progress}%`} 
-            placement="top"
-            arrow
-          >
-            <Box>
-              <Box sx={{ 
-                display: 'flex', 
-                justifyContent: 'space-between',
-                mb: 0.8,
-                alignItems: 'center'
-              }}>
-                <Typography 
-                  variant="body2" 
-                  sx={{ 
-                    width: '70%', 
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    fontWeight: 500,
-                    transition: 'transform 0.3s ease',
-                    transform: hover ? 'translateX(2px)' : 'translateX(0)',
-                    color: theme => theme.palette.mode === 'dark' 
-                      ? theme.palette.grey[300] 
-                      : theme.palette.text.primary,
-                  }}
-                >
-                  {project.title}
-                </Typography>
-                <Box
-                  sx={{ 
-                    backgroundColor: theme => hover 
-                      ? project.color 
-                      : theme.palette.mode === 'dark'
-                        ? `${project.color}50`
-                        : `${project.color}30`, 
-                    px: 1.5, 
-                    py: 0.5, 
-                    borderRadius: 10,
-                    minWidth: '50px',
-                    textAlign: 'center',
-                    transition: 'all 0.3s ease',
-                    transform: hover ? 'scale(1.05)' : 'scale(1)',
-                    boxShadow: hover ? `0 2px 8px ${alpha(project.color, 0.4)}` : 'none',
-                  }}
-                >
-                  <Typography 
-                    variant="body2" 
-                    fontWeight="bold" 
-                    color={hover ? 'white' : theme => theme.palette.mode === 'dark' ? 'white' : 'inherit'}
-                    sx={{
-                      transition: 'color 0.3s ease',
-                    }}
-                  >
-                    {project.progress}%
-                  </Typography>
-                </Box>
+          <Box sx={{ p: 2 }}>
+            <Typography 
+              variant="h6" 
+              sx={{ 
+                fontSize: '1.1rem',
+                fontWeight: 500,
+                mb: 0.5,
+                color: theme => theme.palette.mode === 'dark' 
+                  ? theme.palette.grey[100]
+                  : theme.palette.text.primary
+              }}
+            >
+              {project.title}
+            </Typography>
+            
+            <Typography 
+              variant="body2" 
+              sx={{ 
+                fontSize: '0.875rem',
+                color: theme => theme.palette.mode === 'dark'
+                  ? theme.palette.grey[400]
+                  : theme.palette.text.secondary,
+                mb: 2
+              }}
+            >
+              {project.description?.length > 120 
+                ? `${project.description.substring(0, 120)}...` 
+                : project.description}
+            </Typography>
+            
+            <Box sx={{ 
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              mb: 1
+            }}>
+              <Box 
+                sx={{
+                  backgroundColor: alpha(project.color, 0.15),
+                  color: project.color,
+                  px: 1.5,
+                  py: 0.5,
+                  borderRadius: 1,
+                  fontSize: '0.75rem',
+                  fontWeight: 'bold'
+                }}
+              >
+                {translateStatus(project.status)}
               </Box>
-              <Box sx={{ position: 'relative', height: 16, mb: 0.5 }}>
-                <LinearProgress 
-                  variant="determinate" 
-                  value={currentProgress} 
-                  sx={{ 
-                    height: 16, 
-                    borderRadius: 2,
-                    backgroundColor: theme => theme.palette.mode === 'dark' 
-                      ? `${project.color}30`
-                      : `${project.color}20`,
-                    '& .MuiLinearProgress-bar': {
-                      backgroundColor: theme => theme.palette.mode === 'dark'
-                        ? alpha(project.color, 0.9)
-                        : project.color,
-                      borderRadius: 2,
-                      transition: 'transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                    }
-                  }}
-                />
-                {hover && (
-                  <Box 
-                    sx={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      height: '100%',
-                      width: '100%',
-                      borderRadius: 2,
-                      boxShadow: theme => theme.palette.mode === 'dark'
-                        ? `0 0 8px ${alpha(project.color, 0.8)}`
-                        : `0 0 8px ${alpha(project.color, 0.6)}`,
-                      pointerEvents: 'none',
-                      transition: 'opacity 0.3s ease',
-                    }}
-                  />
-                )}
-              </Box>
+              <Typography 
+                variant="body2" 
+                sx={{
+                  color: theme => theme.palette.text.secondary,
+                  fontWeight: 'medium'
+                }}
+              >
+                {currentProgress}%
+              </Typography>
             </Box>
-          </Tooltip>
+            
+            <LinearProgress 
+              variant="determinate" 
+              value={currentProgress} 
+              sx={{ 
+                height: 10, 
+                borderRadius: 5,
+                backgroundColor: theme => theme.palette.mode === 'dark' 
+                  ? `${project.color}30`
+                  : `${project.color}20`,
+                '& .MuiLinearProgress-bar': {
+                  backgroundColor: project.color,
+                  borderRadius: 5,
+                  transition: 'transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                }
+              }}
+            />
+          </Box>
+          
+          <Box sx={{
+            position: 'absolute',
+            bottom: 0,
+            right: 0,
+            p: 2,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            width: '100%',
+            opacity: hover ? 1 : 0,
+            transition: 'opacity 0.3s ease'
+          }}>
+            <Button
+              size="small"
+              sx={{
+                color: project.color,
+                fontSize: '0.75rem',
+                textTransform: 'none',
+                '&:hover': {
+                  backgroundColor: alpha(project.color, 0.1)
+                }
+              }}
+              onClick={() => navigate(`/projects/${project.id}`)}
+            >
+              Voir les détails
+            </Button>
+          </Box>
         </Box>
       </Grow>
     );
@@ -430,10 +444,11 @@ const ProjectAnalytics = ({ projects }) => {
               Distribution par Statut
             </Typography>
             <Box sx={{ 
-              height: 300, 
+              height: 380, 
               width: '100%',
               position: 'relative',
               display: 'flex',
+              flexDirection: 'column',
               justifyContent: 'center',
               alignItems: 'center'
             }}>
@@ -442,22 +457,63 @@ const ProjectAnalytics = ({ projects }) => {
                   sx={{
                     position: 'relative',
                     width: '100%',
-                    maxWidth: 340,
+                    height: '100%',
+                    maxWidth: 480,
                     mx: 'auto',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
                     '& canvas': {
                       filter: theme => theme.palette.mode === 'dark' 
-                        ? 'drop-shadow(0px 4px 8px rgba(255, 255, 255, 0.15))' 
-                        : 'drop-shadow(0px 5px 10px rgba(140, 180, 250, 0.2))',
+                        ? 'drop-shadow(0px 8px 16px rgba(255, 255, 255, 0.25))' 
+                        : 'drop-shadow(0px 8px 20px rgba(140, 180, 250, 0.3))',
                       transition: 'all 0.3s ease',
                       '&:hover': {
-                        transform: 'scale(1.02)',
+                        transform: 'scale(1.05)',
                       }
                     }
                   }}
                 >
                   <Pie 
                     data={statusData} 
-                    options={chartOptions}
+                    options={{
+                      ...chartOptions,
+                      maintainAspectRatio: false,
+                      responsive: true,
+                      plugins: {
+                        ...chartOptions.plugins,
+                        legend: {
+                          ...chartOptions.plugins.legend,
+                          position: 'bottom',
+                          align: 'center',
+                          labels: {
+                            ...chartOptions.plugins.legend.labels,
+                            padding: 25,
+                            font: {
+                              size: 14,
+                              weight: 600,
+                            },
+                            boxWidth: 15,
+                            boxHeight: 15,
+                          },
+                        },
+                      },
+                      cutout: '35%', // Smaller hole = bigger pie
+                      radius: '90%', // Larger radius = bigger pie
+                      animation: {
+                        animateScale: true,
+                        animateRotate: true,
+                        duration: 1000,
+                      },
+                      layout: {
+                        padding: {
+                          top: 5,
+                          bottom: 0,
+                          left: 5,
+                          right: 5
+                        }
+                      },
+                    }}
                     id="project-status-chart"
                     key={`pie-chart-${statusData.labels.join('-')}`}
                   />

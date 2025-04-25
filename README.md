@@ -1,85 +1,94 @@
-# Project Management Application
+# Projet de Stage SRM-MS 2025
 
-A modern project management application built with React and Node.js, featuring a beautiful UI with Material-UI components and theme customization.
+Une application moderne de gestion de projets construite avec React et Node.js, avec une interface utilisateur élégante basée sur Material-UI et des fonctionnalités avancées de visualisation de données.
 
-## Features
+## Fonctionnalités principales
 
-- 🔐 User Authentication (Login/Register)
-- 🌓 Light/Dark Theme Toggle
-- 📊 Project Dashboard
-- 📋 Project Management
-  - Create Projects
-  - Assign Users
-  - Track Progress
-  - Add Comments
-- 👥 User Management
-- 📱 Responsive Design
-- 🎨 Modern UI/UX
+- 🔐 Authentification utilisateur (Connexion/Inscription)
+- 🌓 Basculement entre thème clair/sombre
+- 📊 Tableau de bord interactif avec statistiques en temps réel
+- 📱 Conception responsive adaptée à tous les appareils
+- 📈 Visualisations et graphiques améliorés
+  - Taux de complétion des projets
+  - Tendances d'achèvement
+  - Analyse de progression
+- 📋 Gestion complète des projets
+  - Création et édition de projets
+  - Attribution d'utilisateurs
+  - Suivi de progression détaillé
+  - Système de commentaires
+- 👥 Gestion des utilisateurs avec rôles différenciés
+- 🛠️ Interface d'administration spécialisée
 
-## Tech Stack
+## Améliorations récentes
+
+- ✅ Refonte complète des graphiques de tendance
+- ✅ Améliorations visuelles pour les indicateurs de performance
+- ✅ Interface administrateur avec notifications spécifiques
+- ✅ Optimisation de la performance et de l'expérience utilisateur
+- ✅ Ajout de fonctionnalités de filtrage et tri avancés
+
+## Stack technique
 
 - **Frontend:**
   - React
-  - Material-UI
+  - Material-UI 
   - React Router
   - Axios
-  - Context API for state management
+  - Chart.js pour les visualisations
+  - Context API pour la gestion d'état
 
 - **Backend:**
   - Node.js
   - Express
   - MongoDB
-  - JWT Authentication
+  - JWT pour l'authentification
 
 ## Installation
 
-1. Clone the repository:
+1. Cloner le dépôt:
 ```bash
-git clone [your-repository-url]
-cd [repository-name]
+git clone https://github.com/votre-utilisateur/Project-de-Stage-SRM-MS-2025.git
+cd Project-de-Stage-SRM-MS-2025
 ```
 
-2. Install dependencies for both backend and frontend:
+2. Installer les dépendances du backend et du frontend:
 ```bash
-# Install backend dependencies
+# Installer les dépendances du backend
 npm install
 
-# Install frontend dependencies
+# Installer les dépendances du frontend
 cd client
 npm install
 ```
 
-3. Create a `.env` file in the root directory with the following variables:
+3. Créer un fichier `.env` dans le répertoire racine avec les variables suivantes:
 ```env
-MONGODB_URI=your_mongodb_uri
-JWT_SECRET=your_jwt_secret
+MONGODB_URI=votre_uri_mongodb
+JWT_SECRET=votre_secret_jwt
 PORT=5001
 ```
 
-4. Start the development servers:
+4. Démarrer les serveurs de développement:
 ```bash
-# Start backend (from root directory)
+# Démarrer le backend (depuis le répertoire racine)
 npm run server
 
-# Start frontend (from client directory)
+# Démarrer le frontend (depuis le répertoire client)
 cd client
 npm start
 ```
 
-## Environment Setup
+## Prérequis système
 
-- Node.js version: 14.x or higher
-- MongoDB: 4.x or higher
-- npm: 6.x or higher
+- Node.js version: 14.x ou supérieure
+- MongoDB: 4.x ou supérieure
+- npm: 6.x ou supérieure
 
-## Contributing
+## Contributions
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+Ce projet a été développé dans le cadre d'un stage professionnel. Les contributions sont les bienvenues via pull requests.
 
-## License
+## Licence
 
-This project is licensed under the MIT License - see the LICENSE file for details. 
+Ce projet est sous licence MIT - voir le fichier LICENSE pour plus de détails. 

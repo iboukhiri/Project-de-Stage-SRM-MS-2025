@@ -115,37 +115,56 @@ const ProjectList = () => {
       <Grid container spacing={3}>
         {filteredProjects.map((project) => (
           <Grid item xs={12} md={6} key={project._id}>
-            <Card>
-              <CardContent>
+            <Card sx={{ 
+              height: '100%', 
+              display: 'flex', 
+              flexDirection: 'column',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+              '&:hover': {
+                transform: 'translateY(-5px)',
+                boxShadow: '0 8px 16px rgba(0,0,0,0.1)'
+              }
+            }}>
+              <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                 <Typography variant="h6" gutterBottom>
                   {project.title}
                 </Typography>
                 <Typography
                   variant="body2"
                   color="text.secondary"
-                  sx={{ mb: 1.5 }}
+                  sx={{ 
+                    mb: 1.5,
+                    height: '60px',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 3,
+                    WebkitBoxOrient: 'vertical'
+                  }}
                 >
                   {project.description}
                 </Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                  <Chip
-                    label={project.status}
-                    color={getStatusColor(project.status)}
-                    size="small"
-                    sx={{ mr: 1 }}
+                <Box sx={{ mt: 'auto' }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                    <Chip
+                      label={project.status}
+                      color={getStatusColor(project.status)}
+                      size="small"
+                      sx={{ mr: 1 }}
+                    />
+                    <Typography variant="body2" color="text.secondary">
+                      {project.progress}% Terminé
+                    </Typography>
+                  </Box>
+                  <LinearProgress
+                    variant="determinate"
+                    value={project.progress}
+                    sx={{ mb: 1 }}
                   />
                   <Typography variant="body2" color="text.secondary">
-                    {project.progress}% Terminé
+                    Créé par: {project.createdBy?.name}
                   </Typography>
                 </Box>
-                <LinearProgress
-                  variant="determinate"
-                  value={project.progress}
-                  sx={{ mb: 1 }}
-                />
-                <Typography variant="body2" color="text.secondary">
-                  Créé par: {project.createdBy?.name}
-                </Typography>
               </CardContent>
               <CardActions>
                 <Button

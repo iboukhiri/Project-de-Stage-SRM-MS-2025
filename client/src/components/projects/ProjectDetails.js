@@ -24,6 +24,7 @@ import {
   Slider,
   Autocomplete,
   FormHelperText,
+  Tooltip,
 } from '@mui/material';
 import {
   Edit as EditIcon,
@@ -825,23 +826,29 @@ const ProjectDetails = () => {
                     }}
                   >
                     {project.assignedTo.map((assignedUser) => (
-                      <Avatar 
+                      <Tooltip 
                         key={assignedUser._id}
-                        alt={assignedUser.name}
-                        sx={{ 
-                          bgcolor: stringToColor(assignedUser.name || ''),
-                          width: 35,
-                          height: 35,
-                          border: theme => `2px solid ${alpha(theme.palette.primary.main, 0.2)}`,
-                          transition: 'all 0.2s ease-in-out',
-                          '&:hover': {
-                            transform: 'scale(1.1)',
-                            boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
-                          }
-                        }}
+                        title={assignedUser.name || "Utilisateur"}
+                        arrow
+                        placement="top"
                       >
-                        {assignedUser.name ? assignedUser.name.charAt(0).toUpperCase() : 'U'}
-                      </Avatar>
+                        <Avatar 
+                          alt={assignedUser.name}
+                          sx={{ 
+                            bgcolor: stringToColor(assignedUser.name || ''),
+                            width: 35,
+                            height: 35,
+                            border: theme => `2px solid ${alpha(theme.palette.primary.main, 0.2)}`,
+                            transition: 'all 0.2s ease-in-out',
+                            '&:hover': {
+                              transform: 'scale(1.1)',
+                              boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                            }
+                          }}
+                        >
+                          {assignedUser.name ? assignedUser.name.charAt(0).toUpperCase() : 'U'}
+                        </Avatar>
+                      </Tooltip>
                     ))}
                   </Box>
                 </Box>

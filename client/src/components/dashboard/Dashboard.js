@@ -29,6 +29,7 @@ import {
   Timeline as TimelineIcon,
   PauseCircleOutline as PauseCircleOutlineIcon,
   DoNotDisturbOn as DoNotDisturbOnIcon,
+  NotificationImportant as NotificationIcon,
 } from '@mui/icons-material';
 import axios from 'axios';
 import { AuthContext } from '../../context/AuthContext';
@@ -89,6 +90,7 @@ function TabPanel(props) {
       hidden={value !== index}
       id={`dashboard-tabpanel-${index}`}
       aria-labelledby={`dashboard-tab-${index}`}
+      sx={{ marginBottom: 0 }}
       {...other}
     >
       {value === index && (
@@ -98,7 +100,7 @@ function TabPanel(props) {
           mountOnEnter
           unmountOnExit={false}
         >
-          <Box sx={{ pt: 3 }}>
+          <Box sx={{ pt: 3, pb: 3 }}>
             {children}
           </Box>
         </Fade>
@@ -630,7 +632,66 @@ const Dashboard = () => {
                 Consultez l'état de vos projets et suivez leur progression en temps réel. 
                 Votre tableau de bord personnel vous attend avec des informations actualisées.
               </Typography>
+              
+              {user && user.role === 'admin' && (
+                <Box
+                  sx={{
+                    mt: 2.5,
+                    mb: 1,
+                    p: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1.5,
+                    maxWidth: '600px',
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: 4,
+                      alignSelf: 'stretch',
+                      bgcolor: 'primary.main',
+                      borderRadius: 4,
+                    }}
+                  />
+                  <NotificationIcon 
+                    fontSize="small" 
+                    color="primary"
+                    sx={{
+                      animation: 'pulse 2s infinite',
+                      mr: 0.5,
+                      borderRadius: '50%',
+                      padding: '4px',
+                      bgcolor: theme => alpha(theme.palette.primary.main, 0.1),
+                      boxShadow: theme => `0 0 0 rgba(25, 118, 210, 0.4)`,
+                      animationName: 'pulseRing',
+                      '@keyframes pulseRing': {
+                        '0%': {
+                          boxShadow: '0 0 0 0 rgba(25, 118, 210, 0.4)'
+                        },
+                        '70%': {
+                          boxShadow: '0 0 0 8px rgba(25, 118, 210, 0)'
+                        },
+                        '100%': {
+                          boxShadow: '0 0 0 0 rgba(25, 118, 210, 0)'
+                        }
+                      }
+                    }}
+                  />
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: 'text.primary',
+                      fontWeight: 500,
+                      lineHeight: 1.5,
+                      py: 0.75,
+                    }}
+                  >
+                    En tant qu'administrateur, vous pouvez ajouter et modifier des projets à tout moment via le bouton "Nouveau Projet" ou depuis la liste des projets.
+                  </Typography>
+                </Box>
+              )}
             </Box>
+            
             {user && user.role === 'admin' && (
               <Button
                 variant="contained"
@@ -735,23 +796,55 @@ const Dashboard = () => {
           borderRadius: 2, 
           mb: 4, 
           overflow: 'hidden',
-          background: theme => `linear-gradient(to bottom, ${theme.palette.background.paper}, ${alpha(safeColorAccess(theme, 'primary', 'light'), 0.05)})`
+          background: theme => `linear-gradient(to bottom, ${theme.palette.background.paper}, ${alpha(safeColorAccess(theme, 'primary', 'light'), 0.05)})`,
+          position: 'relative',
+          zIndex: 1
         }}
       >
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider', overflow: 'visible' }}>
           <Tabs 
             value={tabValue} 
             onChange={handleTabChange} 
             aria-label="dashboard tabs" 
             centered
+            TabIndicatorProps={{
+              style: { 
+                display: 'none'  // Completely hide the default indicator
+              }
+            }}
             sx={{
               '& .MuiTab-root': {
                 fontWeight: 'medium',
-                py: 2
+                py: 2,
+                position: 'relative',
+                transition: 'all 0.3s ease',
+                '&::after': {
+                  content: '""',
+                  position: 'absolute',
+                  bottom: 0,
+                  left: '50%',
+                  width: '0%',
+                  height: '3px',
+                  backgroundColor: 'primary.main',
+                  borderRadius: '1.5px',
+                  transition: 'all 0.3s ease',
+                  transform: 'translateX(-50%)',
+                  opacity: 0
+                },
+                '&.Mui-selected::after': {
+                  width: '80%',
+                  opacity: 1
+                },
+                '&:hover::after': {
+                  width: '60%',
+                  opacity: 0.7
+                }
               },
               '& .Mui-selected': {
-                fontWeight: 'bold'
-              }
+                fontWeight: 'bold',
+                color: 'primary.main'
+              },
+              mb: 0
             }}
           >
             <Tab icon={<DashboardIcon />} label="APERÇU" />
@@ -898,7 +991,15 @@ const Dashboard = () => {
           sx={{
             borderRadius: 4,
             overflow: 'hidden',
-            mb: 4
+            mb: 4,
+            maxWidth: '1200px',
+            mx: 'auto',
+            background: theme => `linear-gradient(to bottom, ${theme.palette.background.paper}, ${alpha(safeColorAccess(theme, 'primary', 'light'), 0.05)})`,
+            boxShadow: theme => `0 8px 32px -8px ${
+              theme.palette.mode === 'light' 
+              ? 'rgba(0,0,0,0.15)' 
+              : 'rgba(0,0,0,0.4)'
+            }`
           }}
         >
           <CardContent sx={{ p: 0 }}>
@@ -924,7 +1025,7 @@ const Dashboard = () => {
                 Tendances
               </Typography>
             </Box>
-            <Box sx={{ p: 3 }}>
+            <Box sx={{ p: { xs: 2, sm: 3, md: 4 } }}>
               <ProjectTimeline projects={projects} />
             </Box>
           </CardContent>
