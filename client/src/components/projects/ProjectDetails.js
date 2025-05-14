@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   Container,
@@ -30,9 +30,12 @@ import {
   Edit as EditIcon,
   Delete as DeleteIcon,
   DeleteOutline as DeleteCommentIcon,
+  Edit as EditCommentIcon,
+  Save as SaveIcon,
+  Cancel as CancelIcon
 } from '@mui/icons-material';
 import axios from 'axios';
-import { AuthContext } from '../../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import config from '../../config';
 import { alpha } from '@mui/material/styles';
 
@@ -60,10 +63,16 @@ const translateStatus = (status) => {
 //   return `${config.API_URL}/uploads/profile-photos/${userId}.jpg`;
 // };
 
+// Add a helper function to normalize MongoDB IDs for comparison
+const isSameId = (id1, id2) => {
+  if (!id1 || !id2) return false;
+  return String(id1) === String(id2);
+};
+
 const ProjectDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext);
+  const { user, token } = useAuth();
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
   const [comment, setComment] = useState('');
@@ -75,19 +84,43 @@ const ProjectDetails = () => {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [commentDeleteConfirmOpen, setCommentDeleteConfirmOpen] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState(null);
+  // New state for comment editing
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [editingCommentContent, setEditingCommentContent] = useState('');
+
+  // Create headers with authorization token
+  const getAuthHeaders = () => ({
+    headers: { Authorization: `Bearer ${token}` }
+  });
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
+        if (!token) {
+          throw new Error('No authentication token found');
+        }
+
         // Fetch project and users in parallel for efficiency
         const [projectRes, usersRes] = await Promise.all([
-          axios.get(`${config.API_URL}/api/projects/${id}`),
-          axios.get(`${config.API_URL}/api/users`)
+          axios.get(`${config.API_URL}/api/projects/${id}`, getAuthHeaders()),
+          axios.get(`${config.API_URL}/api/users`, getAuthHeaders())
         ]);
         
         const projectData = projectRes.data;
         const usersData = usersRes.data;
+        
+        // Debug: Log user IDs to help with troubleshooting
+        if (projectData.comments && projectData.comments.length > 0) {
+          console.log('Current user ID:', user?.id);
+          console.log('Current user _id:', user?._id);
+          console.log('Comment user IDs:', projectData.comments.map(c => ({ 
+            commentId: c._id,
+            userId: c.user._id, 
+            userName: c.user.name,
+            isOwner: c.user._id === user?.id || c.user._id === user?._id
+          })));
+        }
         
         setProject(projectData);
         setEditData(projectData);
@@ -118,16 +151,18 @@ const ProjectDetails = () => {
     };
 
     fetchData();
-  }, [id]);
+  }, [id, token]);
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     if (!comment.trim()) return;
 
     try {
-      const res = await axios.post(`${config.API_URL}/api/projects/${id}/comments`, {
-        content: comment,
-      });
+      const res = await axios.post(
+        `${config.API_URL}/api/projects/${id}/comments`, 
+        { content: comment },
+        getAuthHeaders()
+      );
       setProject(res.data);
       setComment('');
     } catch (error) {
@@ -137,7 +172,11 @@ const ProjectDetails = () => {
 
   const handleEditSubmit = async () => {
     try {
-      const res = await axios.put(`${config.API_URL}/api/projects/${id}`, editData);
+      const res = await axios.put(
+        `${config.API_URL}/api/projects/${id}`, 
+        editData,
+        getAuthHeaders()
+      );
       setProject(res.data);
       setEditMode(false);
     } catch (error) {
@@ -147,22 +186,15 @@ const ProjectDetails = () => {
 
   const handleDelete = async () => {
     try {
-      // Get the token from localStorage
-      const token = localStorage.getItem('token');
-      
       if (!token) {
         setError('Authentication token not found. Please log in again.');
         return;
       }
       
-      // Configure the request with the token in headers
-      const axiosConfig = {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      };
-      
-      await axios.delete(`${config.API_URL}/api/projects/${id}`, axiosConfig);
+      await axios.delete(
+        `${config.API_URL}/api/projects/${id}`,
+        getAuthHeaders()
+      );
       navigate('/projects');
     } catch (error) {
       console.error('Error deleting project:', error);
@@ -233,9 +265,6 @@ const ProjectDetails = () => {
 
   const handleCommentDelete = async (commentId) => {
     try {
-      // Get the token from localStorage
-      const token = localStorage.getItem('token');
-      
       if (!token) {
         setError('Authentication token not found. Please log in again.');
         return;
@@ -246,14 +275,10 @@ const ProjectDetails = () => {
       
       console.log('Deleting comment with ID:', commentIdStr);
       
-      // Configure the request with the token in headers
-      const axiosConfig = {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      };
-      
-      const res = await axios.delete(`${config.API_URL}/api/projects/${id}/comments/${commentIdStr}`, axiosConfig);
+      const res = await axios.delete(
+        `${config.API_URL}/api/projects/${id}/comments/${commentIdStr}`,
+        getAuthHeaders()
+      );
       console.log('Delete comment response:', res.data);
       setProject(res.data);
       setCommentDeleteConfirmOpen(false);
@@ -271,6 +296,41 @@ const ProjectDetails = () => {
     console.log('Comment to delete:', comment);
     setCommentToDelete(comment);
     setCommentDeleteConfirmOpen(true);
+  };
+
+  const handleCommentEdit = async (commentId, content) => {
+    try {
+      if (!token) {
+        setError('Authentication token not found. Please log in again.');
+        return;
+      }
+
+      const res = await axios.put(
+        `${config.API_URL}/api/projects/${id}/comments/${commentId}`,
+        { content },
+        getAuthHeaders()
+      );
+      
+      setProject(res.data);
+      setEditingCommentId(null);
+      setEditingCommentContent('');
+    } catch (error) {
+      console.error('Error editing comment:', error);
+      if (error.response) {
+        console.error('Server response:', error.response.data);
+        setError(error.response.data.message || 'Error editing comment');
+      }
+    }
+  };
+
+  const startEditingComment = (comment) => {
+    setEditingCommentId(comment._id);
+    setEditingCommentContent(comment.content);
+  };
+
+  const cancelEditingComment = () => {
+    setEditingCommentId(null);
+    setEditingCommentContent('');
   };
 
   if (loading) {
@@ -311,10 +371,15 @@ const ProjectDetails = () => {
     );
   }
 
-  // Check if user can edit (is admin or creator)
+  // Check if user can edit (based on role and project ownership)
   const canEdit = user && (
-    user.role === 'admin' || 
-    (project.createdBy && user.id === project.createdBy._id)
+    // Own project - anyone can edit their own project
+    (project.createdBy && (isSameId(user.id, project.createdBy._id) || isSameId(user._id, project.createdBy._id))) ||
+    // Superadmin can edit any project
+    user.role === 'superadmin' ||
+    // Admin can only edit regular users' projects, not other admins'
+    (user.role === 'admin' && project.createdBy && 
+     project.createdBy.role !== 'admin' && project.createdBy.role !== 'superadmin')
   );
 
   return (
@@ -506,8 +571,28 @@ const ProjectDetails = () => {
                                   hour: '2-digit',
                                   minute: '2-digit'
                                 })}
+                                {comment.updatedAt && (
+                                  <span> (modifié)</span>
+                                )}
                               </Typography>
-                              {(user?.role === 'admin' || comment.user._id === user?._id) && (
+                              {/* Show edit button if user is the comment owner */}
+                              {(isSameId(comment.user._id, user?.id) || isSameId(comment.user._id, user?._id)) && 
+                                editingCommentId !== comment._id && (
+                                <IconButton 
+                                  size="small" 
+                                  onClick={() => startEditingComment(comment)}
+                                  color="primary"
+                                  sx={{
+                                    opacity: 0.7,
+                                    '&:hover': { opacity: 1 },
+                                  }}
+                                >
+                                  <EditCommentIcon fontSize="small" />
+                                </IconButton>
+                              )}
+                              {/* Show delete button if user is admin or the comment owner */}
+                              {(user?.role === 'admin' || isSameId(comment.user._id, user?.id) || 
+                                isSameId(comment.user._id, user?._id)) && (
                                 <IconButton 
                                   size="small" 
                                   onClick={() => openCommentDeleteDialog(comment)}
@@ -525,19 +610,57 @@ const ProjectDetails = () => {
                           </Box>
                         }
                         secondary={
-                          <Typography
-                            variant="body2"
-                            sx={{
-                              color: theme => theme.palette.mode === 'dark'
-                                ? theme.palette.grey[300]
-                                : theme.palette.text.primary,
-                              mt: 1,
-                              lineHeight: 1.6,
-                              whiteSpace: 'pre-wrap'
-                            }}
-                          >
-                            {comment.content}
-                          </Typography>
+                          editingCommentId === comment._id ? (
+                            <Box sx={{ mt: 2 }}>
+                              <TextField
+                                fullWidth
+                                multiline
+                                rows={3}
+                                value={editingCommentContent}
+                                onChange={(e) => setEditingCommentContent(e.target.value)}
+                                sx={{ 
+                                  mb: 2,
+                                  '& .MuiOutlinedInput-root': {
+                                    borderRadius: 2,
+                                    backgroundColor: theme => alpha(theme.palette.background.paper, 0.6),
+                                  }
+                                }}
+                              />
+                              <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
+                                <Button 
+                                  variant="outlined" 
+                                  size="small" 
+                                  onClick={cancelEditingComment}
+                                  startIcon={<CancelIcon />}
+                                >
+                                  Annuler
+                                </Button>
+                                <Button 
+                                  variant="contained" 
+                                  size="small" 
+                                  onClick={() => handleCommentEdit(comment._id, editingCommentContent)}
+                                  startIcon={<SaveIcon />}
+                                  disabled={!editingCommentContent.trim()}
+                                >
+                                  Enregistrer
+                                </Button>
+                              </Box>
+                            </Box>
+                          ) : (
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                color: theme => theme.palette.mode === 'dark'
+                                  ? theme.palette.grey[300]
+                                  : theme.palette.text.primary,
+                                mt: 1,
+                                lineHeight: 1.6,
+                                whiteSpace: 'pre-wrap'
+                              }}
+                            >
+                              {comment.content}
+                            </Typography>
+                          )
                         }
                       />
                     </ListItem>

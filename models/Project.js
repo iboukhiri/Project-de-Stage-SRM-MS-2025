@@ -13,6 +13,10 @@ const commentSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  updatedAt: {
+    type: Date,
+    default: null
   }
 });
 
@@ -27,7 +31,7 @@ const projectSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['Not Started', 'In Progress', 'On Hold', 'Completed', 'Non démarré', 'En cours', 'En attente', 'Terminé'],
+    enum: ['Not Started', 'In Progress', 'On Hold', 'Completed', 'Non démarré', 'En cours', 'En attente', 'Terminé', 'En garantie'],
     default: 'Not Started'
   },
   progress: {
@@ -61,12 +65,30 @@ const projectSchema = new mongoose.Schema({
   updatedAt: {
     type: Date,
     default: Date.now
+  },
+  guaranteeDays: {
+    type: Number,
+    default: 0
+  },
+  guaranteeEndDate: {
+    type: Date,
+    default: null
   }
 });
 
 // Update the updatedAt timestamp before saving
 projectSchema.pre('save', function(next) {
   this.updatedAt = Date.now();
+  
+  if (this.guaranteeDays > 0 && (!this.guaranteeEndDate || this.isModified('guaranteeDays'))) {
+    const today = new Date();
+    this.guaranteeEndDate = new Date(today.setDate(today.getDate() + this.guaranteeDays));
+    
+    if (this.progress === 100) {
+      this.status = 'En garantie';
+    }
+  }
+  
   next();
 });
 

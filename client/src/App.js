@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'r
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { CustomThemeProvider } from './context/ThemeContext';
+import { AuthProvider } from './context/AuthContext';
+import NotificationProvider from './context/NotificationContext';
 import { Box } from '@mui/material';
 
 // Styles
@@ -20,15 +22,22 @@ import CreateProject from './components/projects/CreateProject';
 import ProjectAssignment from './components/admin/ProjectAssignment';
 import PrivateRoute from './components/routing/PrivateRoute';
 import AdminRoute from './components/routing/AdminRoute';
+import SuperAdminDashboard from './components/dashboard/SuperAdminDashboard';
+import SuperAdminRoute from './components/routing/SuperAdminRoute';
+import UserManagement from './components/admin/UserManagement';
 
 function App() {
   return (
     <CustomThemeProvider>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <Router>
-          <AppRoutes />
-        </Router>
-      </LocalizationProvider>
+      <AuthProvider>
+        <NotificationProvider>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <Router>
+              <AppRoutes />
+            </Router>
+          </LocalizationProvider>
+        </NotificationProvider>
+      </AuthProvider>
     </CustomThemeProvider>
   );
 }
@@ -72,6 +81,14 @@ function AppRoutes() {
           
           {/* Dashboard route now at /dashboard */}
           <Route
+            path="/superadmin"
+            element={
+              <SuperAdminRoute>
+                <Dashboard />
+              </SuperAdminRoute>
+            }
+          />
+          <Route
             path="/dashboard"
             element={
               <PrivateRoute>
@@ -109,6 +126,14 @@ function AppRoutes() {
               <AdminRoute>
                 <ProjectAssignment />
               </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/user-management"
+            element={
+              <SuperAdminRoute>
+                <UserManagement />
+              </SuperAdminRoute>
             }
           />
           <Route

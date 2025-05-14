@@ -1,23 +1,34 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import config from '../config';
 
 export const AuthContext = createContext();
 
+// Add custom hook to use the auth context
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
+
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [token, setToken] = useState(localStorage.getItem('token') || null);
 
   // Load user data from token on initial mount
   useEffect(() => {
     const loadUser = async () => {
       setLoading(true);
-      const token = localStorage.getItem('token');
+      const tokenFromStorage = localStorage.getItem('token');
       
-      if (token) {
+      if (tokenFromStorage) {
+        setToken(tokenFromStorage);
         try {
-          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+          axios.defaults.headers.common['Authorization'] = `Bearer ${tokenFromStorage}`;
           
           // First, check if we have cached user data
           const savedUserData = localStorage.getItem('userData');
@@ -58,6 +69,7 @@ export const AuthProvider = ({ children }) => {
               delete axios.defaults.headers.common['Authorization'];
               setIsAuthenticated(false);
               setUser(null);
+              setToken(null);
             }
           }
         } catch (err) {
@@ -77,19 +89,20 @@ export const AuthProvider = ({ children }) => {
         email,
         password,
       });
-      const { token, user } = res.data;
+      const { token: newToken, user } = res.data;
       
       // Ensure user data is complete
       console.log('User data from login:', user);
       
       // Save token to localStorage
-      localStorage.setItem('token', token);
+      localStorage.setItem('token', newToken);
+      setToken(newToken);
       
       // Save full user data to localStorage
       localStorage.setItem('userData', JSON.stringify(user));
       
       // Set axios auth header
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
       
       // Update application state
       setIsAuthenticated(true);
@@ -113,19 +126,20 @@ export const AuthProvider = ({ children }) => {
         role
       });
       
-      const { token, user } = res.data;
+      const { token: newToken, user } = res.data;
       
       // Ensure user data is complete
       console.log('User data from registration:', user);
       
       // Save token to localStorage
-      localStorage.setItem('token', token);
+      localStorage.setItem('token', newToken);
+      setToken(newToken);
       
       // Save full user data to localStorage
       localStorage.setItem('userData', JSON.stringify(user));
       
       // Set axios auth header
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
       
       // Update application state
       setIsAuthenticated(true);
@@ -145,6 +159,7 @@ export const AuthProvider = ({ children }) => {
     delete axios.defaults.headers.common['Authorization'];
     setIsAuthenticated(false);
     setUser(null);
+    setToken(null);
   };
 
   const updateUserProfile = (updatedUser) => {
@@ -177,6 +192,7 @@ export const AuthProvider = ({ children }) => {
         isAuthenticated,
         user,
         loading,
+        token,
         login,
         register,
         logout,

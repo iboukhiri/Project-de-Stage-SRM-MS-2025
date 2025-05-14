@@ -46,6 +46,7 @@ const STATUS_OPTIONS = [
   { value: 'Non démarré', label: 'Non démarré' },
   { value: 'En cours', label: 'En cours' },
   { value: 'En attente', label: 'En attente' },
+  { value: 'En garantie', label: 'En garantie' },
   { value: 'Terminé', label: 'Terminé' },
 ];
 
@@ -74,6 +75,7 @@ const CreateProject = () => {
     startDate: null,
     endDate: null,
     assignedTo: [],
+    guaranteeDays: 0
   });
   const [users, setUsers] = useState([]);
   const [error, setError] = useState('');
@@ -307,6 +309,26 @@ const CreateProject = () => {
                     required: true,
                     sx: { '& .MuiOutlinedInput-root': { borderRadius: 1 } }
                   }
+                }}
+              />
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                label="Phase de garantie (en jours)"
+                name="guaranteeDays"
+                type="number"
+                value={formData.guaranteeDays}
+                onChange={handleChange}
+                InputProps={{ 
+                  inputProps: { min: 0 },
+                }}
+                helperText="Nombre de jours de garantie après lesquels le projet passera au statut 'Terminé'"
+                sx={{ 
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 1,
+                  },
                 }}
               />
             </Grid>

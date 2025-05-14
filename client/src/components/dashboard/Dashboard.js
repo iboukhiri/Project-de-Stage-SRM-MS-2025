@@ -116,6 +116,17 @@ const Dashboard = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  // Welcome message based on user role
+  const getWelcomeMessage = () => {
+    if (user?.role === 'superadmin') {
+      return "Centre d'Administration Système 💻";
+    } else if (user?.role === 'admin') {
+      return "Bienvenue, Admin ! 👋";
+    } else {
+      return "Bienvenue sur votre tableau de bord ! 👋";
+    }
+  };
+
   useEffect(() => {
     const fetchProjects = async () => {
       setLoading(true);
@@ -588,7 +599,7 @@ const Dashboard = () => {
                   letterSpacing: '-0.02em'
                 }}
               >
-                Bienvenue, {user?.name} ! <span style={{ marginLeft: '4px' }}>👋</span>
+                {getWelcomeMessage()}
               </Typography>
               <Box 
                 sx={{ 
@@ -633,7 +644,7 @@ const Dashboard = () => {
                 Votre tableau de bord personnel vous attend avec des informations actualisées.
               </Typography>
               
-              {user && user.role === 'admin' && (
+              {(user && (user.role === 'admin' || user.role === 'superadmin')) && (
                 <Box
                   sx={{
                     mt: 2.5,
@@ -686,13 +697,16 @@ const Dashboard = () => {
                       py: 0.75,
                     }}
                   >
-                    En tant qu'administrateur, vous pouvez ajouter et modifier des projets à tout moment via le bouton "Nouveau Projet" ou depuis la liste des projets.
+                    {user.role === 'superadmin' 
+                      ? "En tant que Super Admin, vous avez un accès complet au système. Vous pouvez gérer les utilisateurs, ajouter et modifier des projets, et effectuer toutes les opérations administratives."
+                      : "En tant qu'administrateur, vous pouvez ajouter et modifier des projets à tout moment via le bouton \"Nouveau Projet\" ou depuis la liste des projets."
+                    }
                   </Typography>
                 </Box>
               )}
             </Box>
             
-            {user && user.role === 'admin' && (
+            {(user && (user.role === 'admin' || user.role === 'superadmin')) && (
               <Button
                 variant="contained"
                 startIcon={<AddIcon />}

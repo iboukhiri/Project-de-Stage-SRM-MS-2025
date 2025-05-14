@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Container,
@@ -16,40 +16,58 @@ import {
 } from '@mui/material';
 import { Add as AddIcon } from '@mui/icons-material';
 import axios from 'axios';
-import { AuthContext } from '../../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import config from '../../config';
 
 const ProjectList = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext);
+  const { user, token } = useAuth();
+
+  // Create headers with authorization token
+  const getAuthHeaders = () => ({
+    headers: { Authorization: `Bearer ${token}` }
+  });
 
   useEffect(() => {
     const fetchProjects = async () => {
+      setLoading(true);
       try {
-        const res = await axios.get(`${config.API_URL}/api/projects`);
+        if (!token) {
+          throw new Error('No authentication token found');
+        }
+        
+        const res = await axios.get(`${config.API_URL}/api/projects`, getAuthHeaders());
         setProjects(res.data);
-        setLoading(false);
+        setError(null);
       } catch (error) {
         console.error('Error fetching projects:', error);
+        setError('Erreur lors du chargement des données');
+      } finally {
         setLoading(false);
       }
     };
 
     fetchProjects();
-  }, []);
+  }, [token]);
 
   const getStatusColor = (status) => {
     switch (status) {
       case 'Terminé':
+      case 'Completed':
         return 'success';
       case 'En cours':
+      case 'In Progress':
         return 'primary';
       case 'En attente':
+      case 'On Hold':
         return 'warning';
+      case 'Non démarré':
+      case 'Not Started':
       default:
         return 'default';
     }
@@ -65,7 +83,26 @@ const ProjectList = () => {
   });
 
   if (loading) {
-    return <LinearProgress />;
+    return (
+      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        <LinearProgress />
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        <Typography color="error">{error}</Typography>
+        <Button 
+          variant="contained" 
+          onClick={() => navigate('/dashboard')} 
+          sx={{ mt: 2 }}
+        >
+          Retour au tableau de bord
+        </Button>
+      </Container>
+    );
   }
 
   return (

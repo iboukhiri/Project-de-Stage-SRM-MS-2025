@@ -12,7 +12,14 @@ import {
   Avatar,
   Tooltip,
   useTheme,
-  useMediaQuery
+  useMediaQuery,
+  Badge,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemAvatar,
+  Divider,
+  CircularProgress
 } from '@mui/material';
 import {
   Dashboard as DashboardIcon,
@@ -23,13 +30,18 @@ import {
   Group as GroupIcon,
   Settings as SettingsIcon,
   Person as PersonIcon,
+  AdminPanelSettings as SuperAdminIcon,
+  Notifications as NotificationsIcon,
+  CheckCircle as ReadIcon,
 } from '@mui/icons-material';
 import { AuthContext } from '../../context/AuthContext';
+import { NotificationContext } from '../../context/NotificationContext';
 import ThemeToggle from '../common/ThemeToggle';
 import { ThemeContext } from '../../context/ThemeContext';
 import config from '../../config';
 import { darken, lighten } from '@mui/material/styles';
 import { styled } from '@mui/material/styles';
+import axios from 'axios';
 
 // Helper to get profile photo URL
 const getProfilePhotoUrl = (userId) => {
@@ -101,10 +113,20 @@ const Navbar = () => {
     logout, 
     user
   } = useContext(AuthContext);
+  const { 
+    notifications, 
+    unreadCount, 
+    loading, 
+    markAsRead, 
+    markAllAsRead, 
+    formatNotificationDate, 
+    fetchNotifications 
+  } = useContext(NotificationContext);
   const { themeMode } = useContext(ThemeContext);
   const navigate = useNavigate();
   const [adminMenuAnchor, setAdminMenuAnchor] = useState(null);
   const [userMenuAnchor, setUserMenuAnchor] = useState(null);
+  const [notificationAnchor, setNotificationAnchor] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
   const notificationRef = useRef(null);
@@ -133,25 +155,34 @@ const Navbar = () => {
   };
   
   // Determine if user is admin
-  const isAdmin = user && user.role === 'admin';
+  const isAdmin = user && (user.role === 'admin' || user.role === 'superadmin');
+  const isSuperAdmin = user && user.role === 'superadmin';
 
-  // Admin-specific function defined outside conditional code
-  const fetchNotifications = () => {
-    // Implementation of fetchNotifications
-    console.log("Fetching notifications for admin");
+  // Handle notification click
+  const handleNotificationClick = (notification) => {
+    // Mark as read
+    if (!notification.read) {
+      markAsRead(notification._id);
+    }
+    
+    // Navigate to related content based on notification type
+    if (notification.relatedProject) {
+      navigate(`/projects/${notification.relatedProject._id}`);
+    } else if (notification.type === 'role_change') {
+      navigate('/profile');
+    }
+    
+    // Close notification menu
+    handleCloseNotificationMenu();
   };
 
   // useEffect hooks go here, before any conditional returns
   useEffect(() => {
-    if (isAdmin) {
-      fetchNotifications();
-    }
-    
     // Add click outside listeners
     function handleClickOutside(event) {
       if (notificationRef.current && !notificationRef.current.contains(event.target) && 
           notificationIconRef.current && !notificationIconRef.current.contains(event.target)) {
-        // Handle notification close
+        handleCloseNotificationMenu();
       }
       if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target) && 
           hamburgerRef.current && !hamburgerRef.current.contains(event.target)) {
@@ -163,7 +194,7 @@ const Navbar = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isAdmin]);
+  }, []);
   
   // Close mobile menu when switching from mobile to desktop view
   useEffect(() => {
@@ -266,6 +297,16 @@ const Navbar = () => {
     setUserMenuAnchor(event.currentTarget);
   };
 
+  const handleOpenNotificationMenu = (event) => {
+    setNotificationAnchor(event.currentTarget);
+    // Refresh notifications when opening menu
+    fetchNotifications();
+  };
+
+  const handleCloseNotificationMenu = () => {
+    setNotificationAnchor(null);
+  };
+
   return (
     <StyledAppBar 
       position="static" 
@@ -309,16 +350,192 @@ const Navbar = () => {
               Projets
             </Button>
             
+            {/* Notification Bell */}
+            <Tooltip title="Notifications">
+              <IconButton
+                ref={notificationIconRef}
+                onClick={handleOpenNotificationMenu}
+                sx={{
+                  color: theme.palette.mode === 'dark' ? 'rgba(0, 0, 0, 0.87)' : 'white',
+                  mx: 1,
+                  transition: 'transform 0.2s',
+                  '&:hover': { 
+                    transform: 'scale(1.1)',
+                    bgcolor: theme.palette.mode === 'dark' ? 'rgba(0, 0, 0, 0.08)' : 'rgba(255, 255, 255, 0.1)',
+                  }
+                }}
+              >
+                <Badge 
+                  badgeContent={unreadCount} 
+                  color="error"
+                  sx={{
+                    '& .MuiBadge-badge': {
+                      fontSize: '0.7rem',
+                      fontWeight: 'bold',
+                      animation: unreadCount > 0 ? 'pulse 2s infinite' : 'none',
+                      '@keyframes pulse': {
+                        '0%': { boxShadow: '0 0 0 0 rgba(239, 83, 80, 0.7)' },
+                        '70%': { boxShadow: '0 0 0 5px rgba(239, 83, 80, 0)' },
+                        '100%': { boxShadow: '0 0 0 0 rgba(239, 83, 80, 0)' }
+                      }
+                    }
+                  }}
+                >
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+            </Tooltip>
+            
+            {/* Notifications Dropdown Menu */}
+            <Menu
+              ref={notificationRef}
+              anchorEl={notificationAnchor}
+              open={Boolean(notificationAnchor)}
+              onClose={handleCloseNotificationMenu}
+              PaperProps={{
+                elevation: 3,
+                sx: {
+                  mt: 1.5,
+                  width: 360,
+                  maxHeight: 500,
+                  borderRadius: 2,
+                  overflow: 'auto',
+                  '&:before': {
+                    content: '""',
+                    display: 'block',
+                    position: 'absolute',
+                    top: 0,
+                    right: 14,
+                    width: 10,
+                    height: 10,
+                    bgcolor: 'background.paper',
+                    transform: 'translateY(-50%) rotate(45deg)',
+                    zIndex: 0,
+                  },
+                },
+              }}
+              transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+              anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+            >
+              <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(0,0,0,0.1)' }}>
+                <Typography variant="h6" fontWeight="600">Notifications</Typography>
+                {notifications.length > 0 && (
+                  <Button 
+                    size="small" 
+                    onClick={markAllAsRead}
+                    startIcon={<ReadIcon />}
+                    disabled={unreadCount === 0}
+                    sx={{
+                      textTransform: 'none',
+                      fontWeight: 'medium',
+                      fontSize: '0.8rem'
+                    }}
+                  >
+                    Tout marquer comme lu
+                  </Button>
+                )}
+              </Box>
+              
+              {loading ? (
+                <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
+                  <CircularProgress size={30} />
+                </Box>
+              ) : notifications.length > 0 ? (
+                <List sx={{ p: 0 }}>
+                  {notifications.map((notification) => (
+                    <React.Fragment key={notification._id}>
+                      <ListItem 
+                        alignItems="flex-start" 
+                        sx={{ 
+                          px: 2, 
+                          py: 1.5,
+                          cursor: 'pointer', 
+                          bgcolor: notification.read ? 'transparent' : (theme.palette.mode === 'dark' ? 'rgba(255, 153, 51, 0.08)' : 'rgba(0, 150, 136, 0.05)'),
+                          '&:hover': {
+                            bgcolor: theme.palette.mode === 'dark' ? 'rgba(255, 153, 51, 0.12)' : 'rgba(0, 150, 136, 0.08)',
+                          }
+                        }}
+                        onClick={() => handleNotificationClick(notification)}
+                      >
+                        <ListItemAvatar>
+                          <Avatar 
+                            alt={notification.sender?.name || "Système"} 
+                            src={notification.sender ? getProfilePhotoUrl(notification.sender._id) : ''}
+                            sx={{ 
+                              bgcolor: notification.sender?.name ? stringToColor(notification.sender.name) : 'primary.main',
+                              width: 40,
+                              height: 40
+                            }}
+                          >
+                            {notification.sender?.name ? notification.sender.name.charAt(0).toUpperCase() : 'S'}
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={
+                            <Typography 
+                              variant="body1" 
+                              component="div" 
+                              sx={{ 
+                                fontWeight: notification.read ? 'normal' : 'bold',
+                                fontSize: '0.9rem',
+                                mb: 0.5
+                              }}
+                            >
+                              {notification.content}
+                            </Typography>
+                          }
+                          secondary={
+                            <Typography 
+                              variant="caption" 
+                              color="text.secondary"
+                              sx={{ display: 'block', fontSize: '0.75rem' }}
+                            >
+                              {formatNotificationDate(notification.date)}
+                            </Typography>
+                          }
+                        />
+                        {!notification.read && (
+                          <Box
+                            sx={{
+                              width: 8,
+                              height: 8,
+                              borderRadius: '50%',
+                              bgcolor: 'error.main',
+                              alignSelf: 'center',
+                              ml: 1
+                            }}
+                          />
+                        )}
+                      </ListItem>
+                      <Divider component="li" />
+                    </React.Fragment>
+                  ))}
+                </List>
+              ) : (
+                <Box sx={{ p: 3, textAlign: 'center' }}>
+                  <Typography variant="body2" color="text.secondary">
+                    Pas de notifications pour le moment
+                  </Typography>
+                </Box>
+              )}
+            </Menu>
+            
             {isAdmin && (
               <>
                 <Button 
                   color="inherit" 
                   startIcon={<AdminIcon />} 
-                  sx={navButtonStyles}
+                  sx={{
+                    ...navButtonStyles,
+                    bgcolor: theme => theme.palette.mode === 'dark' ? 'rgba(255, 153, 51, 0.2)' : 'rgba(0, 150, 136, 0.2)',
+                    '&:hover': {
+                      bgcolor: theme => theme.palette.mode === 'dark' ? 'rgba(255, 153, 51, 0.3)' : 'rgba(0, 150, 136, 0.3)',
+                    }
+                  }}
                   onClick={handleOpenAdminMenu}
                   aria-haspopup="true"
                 >
-                  Admin
+                  {isSuperAdmin ? 'Super Admin' : 'Administrateur'}
                 </Button>
                 <Menu
                   anchorEl={adminMenuAnchor}
@@ -331,7 +548,7 @@ const Navbar = () => {
                     elevation: 3,
                     sx: {
                       mt: 1.5,
-                      width: 200,
+                      width: 240,
                       borderRadius: 2,
                       overflow: 'visible',
                       '&:before': {
@@ -348,6 +565,8 @@ const Navbar = () => {
                       },
                       '& .MuiMenuItem-root': {
                         py: 1.5,
+                        px: 2,
+                        whiteSpace: 'normal',
                         '&:hover': {
                           bgcolor: getMenuHoverColor(),
                         }
@@ -365,6 +584,12 @@ const Navbar = () => {
                     <GroupIcon fontSize="small" sx={{ mr: 1.5 }} />
                     <Typography variant="body2" fontWeight={600}>Assigner Employés</Typography>
                   </MenuItem>
+                  {isSuperAdmin && (
+                    <MenuItem onClick={() => handleAdminMenuItemClick('/admin/user-management')}>
+                      <SuperAdminIcon fontSize="small" sx={{ mr: 1.5 }} />
+                      <Typography variant="body2" fontWeight={600}>Gestion des Utilisateurs</Typography>
+                    </MenuItem>
+                  )}
                 </Menu>
               </>
             )}
@@ -398,7 +623,7 @@ const Navbar = () => {
                 elevation: 3,
                 sx: {
                   mt: 1.5,
-                  width: 200,
+                  width: 240,
                   borderRadius: 2,
                   overflow: 'visible',
                   '&:before': {
@@ -415,6 +640,8 @@ const Navbar = () => {
                   },
                   '& .MuiMenuItem-root': {
                     py: 1.5,
+                    px: 2,
+                    whiteSpace: 'normal',
                     '&:hover': {
                       bgcolor: getMenuHoverColor(),
                     }

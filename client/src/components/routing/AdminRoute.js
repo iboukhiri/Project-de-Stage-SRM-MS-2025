@@ -9,7 +9,7 @@ const AdminRoute = ({ children }) => {
     return <div>Loading...</div>;
   }
 
-  return isAuthenticated && user && user.role === 'admin' ? children : <Navigate to="/dashboard" />;
+  return isAuthenticated && user && (user.role === 'admin' || user.role === 'superadmin') ? children : <Navigate to="/dashboard" />;
 };
 
 export default AdminRoute; 
