@@ -7,7 +7,7 @@ const createProjectAssignmentNotification = async (projectId, assignedUserId, as
     const assigner = await User.findById(assignerUserId);
     if (!assigner) {
       console.error('Assigner user not found');
-      return null;
+      throw new Error('Assigner user not found');
     }
 
     const content = `${assigner.name} vous a assigné(e) au projet "${projectTitle}"`;
@@ -24,7 +24,7 @@ const createProjectAssignmentNotification = async (projectId, assignedUserId, as
     return notification;
   } catch (error) {
     console.error('Error creating project assignment notification:', error);
-    return null;
+    throw error; // Propagate the error to allow proper handling upstream
   }
 };
 
@@ -34,7 +34,7 @@ const createCommentNotification = async (projectId, commentId, commenterId, reci
     const commenter = await User.findById(commenterId);
     if (!commenter) {
       console.error('Commenter user not found');
-      return null;
+      throw new Error('Commenter user not found');
     }
 
     const content = `${commenter.name} a commenté sur le projet "${projectTitle}"`;
@@ -52,7 +52,7 @@ const createCommentNotification = async (projectId, commentId, commenterId, reci
     return notification;
   } catch (error) {
     console.error('Error creating comment notification:', error);
-    return null;
+    throw error; // Propagate the error to allow proper handling upstream
   }
 };
 

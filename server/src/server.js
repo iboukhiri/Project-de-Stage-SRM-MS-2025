@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const path = require('path');
 const config = require('./config');
 const projectService = require('./utils/projectService');
+const cron = require('node-cron');
 
 // Load environment variables
 dotenv.config();
@@ -26,7 +27,7 @@ app.use('/uploads', (req, res, next) => {
   res.setHeader('Pragma', 'no-cache');
   res.setHeader('Expires', '0');
   next();
-}, express.static(path.join(__dirname, 'uploads')));
+}, express.static(path.join(__dirname, '../../uploads')));
 
 // Connect to MongoDB
 mongoose.connect(config.mongoURI)
@@ -46,7 +47,20 @@ mongoose.connect(config.mongoURI)
       .catch(err => {
         console.error('Erreur lors de la vérification des phases de garantie:', err);
       });
-      
+    
+    // Planifier la vérification des phases de garantie tous les jours à minuit
+    cron.schedule('0 0 * * *', async () => {
+      console.log('[CRON] Vérification quotidienne des phases de garantie...');
+      try {
+        const result = await projectService.checkAndUpdateGuaranteePhases();
+        console.log(`[CRON] Phases de garantie: ${result.projectsUpdated} projet(s) mis à jour.`);
+        console.log(`[CRON] - ${result.enteringGuarantee} projet(s) entrés en phase de garantie`);
+        console.log(`[CRON] - ${result.completedAfterGuarantee} projet(s) terminés après la fin de la garantie`);
+      } catch (err) {
+        console.error('[CRON] Erreur lors de la vérification des phases de garantie:', err);
+      }
+    });
+    
     // 2. Vérifier les jalons de progression
     projectService.checkProgressMilestones()
       .then(result => {
@@ -55,7 +69,7 @@ mongoose.connect(config.mongoURI)
       .catch(err => {
         console.error('Erreur lors de la vérification des jalons de progression:', err);
       });
-      
+    
     // 3. Vérifier les échéances approchantes
     projectService.checkDeadlineApproaching()
       .then(result => {
@@ -64,7 +78,7 @@ mongoose.connect(config.mongoURI)
       .catch(err => {
         console.error('Erreur lors de la vérification des échéances approchantes:', err);
       });
-      
+    
     // 4. Vérifier les projets inactifs
     projectService.checkInactiveProjects()
       .then(result => {
@@ -85,10 +99,10 @@ app.use('/api/notifications', require('./routes/notifications'));
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {
   // Set static folder
-  app.use(express.static(path.join(__dirname, 'client/build')));
+  app.use(express.static(path.join(__dirname, '../../client/build')));
 
   app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+    res.sendFile(path.resolve(__dirname, '../../client', 'build', 'index.html'));
   });
 }
 

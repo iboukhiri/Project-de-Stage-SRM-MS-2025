@@ -164,7 +164,7 @@ router.post('/:id/comments', auth, async (req, res) => {
       user: req.user.id,
       content: req.body.content
     };
-    
+
     project.comments.unshift(newComment);
     await project.save();
     
@@ -179,17 +179,20 @@ router.post('/:id/comments', auth, async (req, res) => {
       );
     }
     
-    // Create notification for assigned user if they're not the commenter
-    if (project.assignedTo && 
-        project.assignedTo.toString() !== req.user.id && 
-        project.assignedTo.toString() !== project.createdBy.toString()) {
-      await notificationService.createCommentNotification(
-        project._id,
-        project.comments[0]._id,
-        req.user.id,
-        project.assignedTo,
-        project.title
-      );
+    // Create notification for all assigned users who aren't the commenter or owner
+    if (project.assignedTo && project.assignedTo.length > 0) {
+      for (const assignedUser of project.assignedTo) {
+        if (assignedUser.toString() !== req.user.id && 
+            assignedUser.toString() !== project.createdBy.toString()) {
+          await notificationService.createCommentNotification(
+            project._id,
+            project.comments[0]._id,
+            req.user.id,
+            assignedUser,
+            project.title
+          );
+        }
+      }
     }
     
     // Fetch the updated project with populated data
@@ -234,42 +237,49 @@ router.delete('/:id', auth, async (req, res) => {
 router.delete('/:id/comments/:commentId', auth, async (req, res) => {
   try {
     const project = await Project.findById(req.params.id);
+    
     if (!project) {
-      return res.status(404).json({ msg: 'Project not found' });
+      return res.status(404).json({ message: 'Project not found' });
     }
-
-    // Get the comment
+    
+    // Find the comment
     const comment = project.comments.find(
-      comment => comment.id === req.params.commentId
+      comment => comment._id.toString() === req.params.commentId
     );
-
-    // Make sure comment exists
+    
     if (!comment) {
-      return res.status(404).json({ msg: 'Comment not found' });
+      return res.status(404).json({ message: 'Comment not found' });
     }
-
-    // Check if user is authorized to delete comment
-    // (if they're the comment owner, superadmin, or admin)
-    if (
-      comment.user.toString() !== req.user.id && // Not the comment creator
-      req.user.role !== 'superadmin' && // Not a superadmin (superadmins can delete any comment)
-      req.user.role !== 'admin' // Not an admin
-    ) {
-      return res.status(401).json({ msg: 'User not authorized to delete this comment' });
+    
+    // Check if user is authorized to delete the comment
+    // Users can delete their own comments
+    // Project owners can delete any comment on their projects
+    // Admins, managers, and superadmins can delete any comment
+    if (comment.user.toString() !== req.user.id && 
+        project.createdBy.toString() !== req.user.id && 
+        req.user.role !== 'manager' &&
+        req.user.role !== 'admin' && 
+        req.user.role !== 'superadmin') {
+      return res.status(401).json({ message: 'Not authorized to delete this comment' });
     }
-
-    // Get index of the comment to be removed
-    const removeIndex = project.comments
-      .map(comment => comment.id)
-      .indexOf(req.params.commentId);
-
-    project.comments.splice(removeIndex, 1);
+    
+    // Remove the comment
+    project.comments = project.comments.filter(
+      comment => comment._id.toString() !== req.params.commentId
+    );
+    
     await project.save();
-
-    res.json(project.comments);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
+    
+    // Return the updated project with populated data
+    const updatedProject = await Project.findById(req.params.id)
+      .populate('createdBy', 'name email')
+      .populate('assignedTo', 'name email')
+      .populate('comments.user', 'name email');
+    
+    res.json(updatedProject);
+  } catch (error) {
+    console.error('Error deleting comment:', error);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
@@ -282,41 +292,52 @@ router.put('/:id/comments/:commentId', auth, async (req, res) => {
     console.log('Request body:', req.body);
     const project = await Project.findById(req.params.id);
     if (!project) {
-      return res.status(404).json({ msg: 'Project not found' });
+      return res.status(404).json({ message: 'Project not found' });
     }
 
     // Get the comment
     const comment = project.comments.find(
-      comment => comment.id === req.params.commentId
+      comment => comment._id.toString() === req.params.commentId
     );
 
     // Make sure comment exists
     if (!comment) {
-      return res.status(404).json({ msg: 'Comment not found' });
+      return res.status(404).json({ message: 'Comment not found' });
     }
 
     // Check if user is authorized to edit comment
-    // (if they're the comment owner, superadmin, or admin)
+    // Users can edit their own comments
+    // Project owners can edit any comment on their projects 
+    // Managers, admins, and superadmins can edit any comment
     if (
       comment.user.toString() !== req.user.id && // Not the comment creator
-      req.user.role !== 'superadmin' && // Not a superadmin (superadmins can edit any comment)
-      req.user.role !== 'admin' // Not an admin
+      project.createdBy.toString() !== req.user.id && // Not the project owner
+      req.user.role !== 'manager' && // Not a manager
+      req.user.role !== 'admin' && // Not an admin
+      req.user.role !== 'superadmin' // Not a superadmin
     ) {
-      return res.status(401).json({ msg: 'User not authorized to edit this comment' });
+      return res.status(401).json({ message: 'Not authorized to edit this comment' });
     }
 
     // Update the comment
-    const { text } = req.body;
-    if (text) {
-      comment.text = text;
+    const { content } = req.body;
+    if (content) {
+      comment.content = content;
       comment.updatedAt = Date.now();
     }
 
     await project.save();
-    res.json(project.comments);
+    
+    // Return the updated project with populated data
+    const updatedProject = await Project.findById(req.params.id)
+      .populate('createdBy', 'name email')
+      .populate('assignedTo', 'name email')
+      .populate('comments.user', 'name email');
+    
+    res.json(updatedProject);
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
+    console.error('Error editing comment:', err);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
@@ -445,4 +466,4 @@ router.post('/check-inactive', auth, async (req, res) => {
   }
 });
 
-module.exports = router; 
+module.exports = router;

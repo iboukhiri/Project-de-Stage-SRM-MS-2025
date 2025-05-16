@@ -30,9 +30,11 @@ import {
   Edit as EditIcon,
   Delete as DeleteIcon,
   DeleteOutline as DeleteCommentIcon,
-  Edit as EditCommentIcon,
+  EditNote as EditCommentIcon,
   Save as SaveIcon,
-  Cancel as CancelIcon
+  Cancel as CancelIcon,
+  Forum as ForumIcon,
+  AccessTime as AccessTimeIcon,
 } from '@mui/icons-material';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
@@ -67,6 +69,62 @@ const translateStatus = (status) => {
 const isSameId = (id1, id2) => {
   if (!id1 || !id2) return false;
   return String(id1) === String(id2);
+};
+
+// Helper to generate consistent colors based on name
+const getAvatarColor = (name) => {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  
+  const colors = [
+    '#3f51b5', // Indigo
+    '#2196f3', // Blue
+    '#009688', // Teal
+    '#4caf50', // Green
+    '#8bc34a', // Light Green
+    '#cddc39', // Lime
+    '#ffc107', // Amber
+    '#ff9800', // Orange
+    '#ff5722', // Deep Orange
+    '#f44336', // Red
+    '#e91e63', // Pink
+    '#9c27b0'  // Purple
+  ];
+  
+  return colors[Math.abs(hash) % colors.length];
+};
+
+// Date formatting helpers
+const formatDateFull = (dateString) => {
+  if (!dateString) return 'Date inconnue';
+  const date = new Date(dateString);
+  return new Intl.DateTimeFormat('fr-FR', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  }).format(date);
+};
+
+const formatDateRelative = (dateString) => {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffTime = Math.abs(now - date);
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  
+  if (diffDays === 0) {
+    return 'aujourd\'hui';
+  } else if (diffDays === 1) {
+    return 'hier';
+  } else if (diffDays < 7) {
+    return `il y a ${diffDays} jours`;
+  } else {
+    return formatDateFull(dateString);
+  }
 };
 
 const ProjectDetails = () => {
@@ -110,7 +168,9 @@ const ProjectDetails = () => {
         const projectData = projectRes.data;
         const usersData = usersRes.data;
         
-        // Debug: Log user IDs to help with troubleshooting
+        // --- FIXED: Use isSameId for robust comparison and remove noisy logs ---
+        // If you want to keep a minimal debug, use the following and comment out in production:
+        /*
         if (projectData.comments && projectData.comments.length > 0) {
           console.log('Current user ID:', user?.id);
           console.log('Current user _id:', user?._id);
@@ -118,10 +178,12 @@ const ProjectDetails = () => {
             commentId: c._id,
             userId: c.user._id, 
             userName: c.user.name,
-            isOwner: c.user._id === user?.id || c.user._id === user?._id
+            isOwner: isSameId(c.user._id, user?.id) || isSameId(c.user._id, user?._id)
           })));
         }
-        
+        */
+        // --- END FIX ---
+
         setProject(projectData);
         setEditData(projectData);
         setUsers(usersData);
@@ -158,20 +220,31 @@ const ProjectDetails = () => {
     if (!comment.trim()) return;
 
     try {
+      setLoading(true);
       const res = await axios.post(
-        `${config.API_URL}/api/projects/${id}/comments`, 
+        `${config.API_URL}/api/projects/${id}/comments`,
         { content: comment },
         getAuthHeaders()
       );
       setProject(res.data);
       setComment('');
+      setError(null); // Réinitialise l'erreur si succès
     } catch (error) {
       console.error('Error adding comment:', error);
+      // Affiche le message d'erreur du backend s'il existe
+      if (error.response && error.response.data && error.response.data.message) {
+        setError(error.response.data.message);
+      } else {
+        setError('Erreur lors de l\'ajout du commentaire');
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleEditSubmit = async () => {
     try {
+      setLoading(true);
       const res = await axios.put(
         `${config.API_URL}/api/projects/${id}`, 
         editData,
@@ -181,6 +254,9 @@ const ProjectDetails = () => {
       setEditMode(false);
     } catch (error) {
       console.error('Error updating project:', error);
+      setError('Erreur lors de la mise à jour du projet');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -270,6 +346,7 @@ const ProjectDetails = () => {
         return;
       }
       
+      setLoading(true);
       // Ensure commentId is a string 
       const commentIdStr = typeof commentId === 'object' ? commentId.toString() : commentId;
       
@@ -279,16 +356,25 @@ const ProjectDetails = () => {
         `${config.API_URL}/api/projects/${id}/comments/${commentIdStr}`,
         getAuthHeaders()
       );
-      console.log('Delete comment response:', res.data);
-      setProject(res.data);
-      setCommentDeleteConfirmOpen(false);
-      setCommentToDelete(null);
+      
+      // Update the project state with the full updated project data
+      if (res.data && res.data._id) {
+        setProject(res.data);
+        setCommentDeleteConfirmOpen(false);
+        setCommentToDelete(null);
+      } else {
+        throw new Error('Invalid response data from server');
+      }
     } catch (error) {
       console.error('Error deleting comment:', error);
       if (error.response) {
         console.error('Server response:', error.response.data);
-        setError(error.response.data.message || 'Error deleting comment');
+        setError(error.response.data.message || 'Erreur lors de la suppression du commentaire');
+      } else {
+        setError('Erreur lors de la suppression du commentaire. Veuillez réessayer.');
       }
+    } finally {
+      setLoading(false);
     }
   };
   
@@ -305,6 +391,7 @@ const ProjectDetails = () => {
         return;
       }
 
+      setLoading(true);
       const res = await axios.put(
         `${config.API_URL}/api/projects/${id}/comments/${commentId}`,
         { content },
@@ -318,8 +405,12 @@ const ProjectDetails = () => {
       console.error('Error editing comment:', error);
       if (error.response) {
         console.error('Server response:', error.response.data);
-        setError(error.response.data.message || 'Error editing comment');
+        setError(error.response.data.message || 'Erreur lors de la modification du commentaire');
+      } else {
+        setError('Erreur lors de la modification du commentaire');
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -333,7 +424,23 @@ const ProjectDetails = () => {
     setEditingCommentContent('');
   };
 
-  if (loading) {
+  // Helper functions for permission checking
+  const isCommentOwner = (comment) => {
+    if (!user || !comment || !comment.user) return false;
+    return isSameId(comment.user._id, user.id) || isSameId(comment.user._id, user._id);
+  };
+
+  const isProjectOwner = (project) => {
+    if (!user || !project || !project.createdBy) return false;
+    return isSameId(project.createdBy._id, user.id) || isSameId(project.createdBy._id, user._id);
+  };
+
+  const hasRole = (user, roles) => {
+    if (!user || !user.role) return false;
+    return roles.includes(user.role);
+  };
+
+  if (loading && !project) {
     return (
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
         <LinearProgress />
@@ -383,31 +490,74 @@ const ProjectDetails = () => {
   );
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Paper elevation={3} sx={{ p: 4 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-          <Typography variant="h4" component="h1">
+    <Container maxWidth="lg" sx={{ 
+      mt: { xs: 2, sm: 3, md: 4 }, // Adjusted margin for mobile
+      mb: { xs: 2, sm: 3, md: 4 },
+      px: { xs: 1, sm: 2, md: 3 } // Adjusted padding for mobile
+    }}>
+      <Paper elevation={3} sx={{ 
+        p: { xs: 2, sm: 3, md: 4 }, // Adjusted padding for mobile
+        borderRadius: { xs: '12px', sm: '16px' } // Softer corners on mobile
+      }}>
+        <Box sx={{ 
+          display: 'flex', 
+          flexDirection: { xs: 'column', sm: 'row' }, // Stack vertically on mobile
+          justifyContent: 'space-between', 
+          alignItems: { xs: 'flex-start', sm: 'center' },
+          mb: { xs: 2, sm: 3 }
+        }}>
+          <Typography 
+            variant="h4" 
+            component="h1"
+            sx={{
+              fontSize: { xs: '1.5rem', sm: '2rem', md: '2.125rem' }, // Smaller font on mobile
+              mb: { xs: 1, sm: 0 } // Add margin bottom only on mobile
+            }}
+          >
             {project.title}
           </Typography>
           {canEdit && (
-            <Box>
-              <IconButton onClick={() => setEditMode(true)}>
+            <Box sx={{ 
+              display: 'flex',
+              gap: { xs: 1, sm: 2 }, // Increased touch targets spacing on mobile
+              mt: { xs: 1, sm: 0 } // Add margin top only on mobile
+            }}>
+              <IconButton 
+                onClick={() => setEditMode(true)}
+                sx={{ 
+                  padding: { xs: '12px', sm: '8px' }, // Larger touch target on mobile
+                  '& svg': { fontSize: { xs: '1.5rem', sm: '1.25rem' } } // Larger icons on mobile
+                }}
+              >
                 <EditIcon />
               </IconButton>
-              <IconButton onClick={() => setDeleteDialogOpen(true)}>
+              <IconButton 
+                onClick={() => setDeleteDialogOpen(true)}
+                sx={{ 
+                  padding: { xs: '12px', sm: '8px' },
+                  '& svg': { fontSize: { xs: '1.5rem', sm: '1.25rem' } }
+                }}
+              >
                 <DeleteIcon />
               </IconButton>
             </Box>
           )}
         </Box>
 
-        <Grid container spacing={4}>
+        <Grid container spacing={{ xs: 2, sm: 3, md: 4 }}>
           <Grid item xs={12} md={8}>
-            <Typography variant="body1" paragraph>
+            <Typography 
+              variant="body1" 
+              paragraph
+              sx={{
+                fontSize: { xs: '1rem', sm: '1rem' },
+                lineHeight: { xs: 1.6, sm: 1.75 }
+              }}
+            >
               {project.description}
             </Typography>
 
-            <Box sx={{ mb: 3 }}>
+            <Box sx={{ mb: { xs: 2, sm: 3 } }}>
               <Typography variant="h6" gutterBottom>
                 Progression
               </Typography>
@@ -454,7 +604,7 @@ const ProjectDetails = () => {
               />
             </Box>
 
-            <Box sx={{ mb: 3 }}>
+            <Box sx={{ mb: { xs: 2, sm: 3 } }}>
               <Typography 
                 variant="h6" 
                 gutterBottom
@@ -486,7 +636,13 @@ const ProjectDetails = () => {
                   />
                 )}
               </Typography>
-              <List sx={{ mb: 4 }}>
+              <List sx={{ 
+                mb: { xs: 2, sm: 4 },
+                '& .MuiListItem-root': {
+                  px: { xs: 1.5, sm: 2.5 }, // Adjusted padding for mobile
+                  py: { xs: 2, sm: 2.5 }
+                }
+              }}>
                 {project.comments && project.comments.length > 0 ? (
                   project.comments.map((comment, index) => (
                     <ListItem 
@@ -495,7 +651,7 @@ const ProjectDetails = () => {
                       sx={{
                         border: theme => `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
                         borderRadius: 3,
-                        mb: 2,
+                        mb: { xs: 1.5, sm: 2 }, // Adjusted margin for mobile
                         p: 2.5,
                         background: theme => theme.palette.mode === 'dark'
                           ? alpha(theme.palette.background.paper, 0.6)
@@ -509,6 +665,22 @@ const ProjectDetails = () => {
                           background: theme => theme.palette.mode === 'dark'
                             ? alpha(theme.palette.background.paper, 0.8)
                             : alpha(theme.palette.background.paper, 0.95)
+                        },
+                        '& .MuiListItemAvatar-root': {
+                          minWidth: { xs: '40px', sm: '56px' } // Smaller avatar area on mobile
+                        },
+                        '& .MuiAvatar-root': {
+                          width: { xs: 35, sm: 45 }, // Smaller avatar on mobile
+                          height: { xs: 35, sm: 45 }
+                        },
+                        '& .MuiListItemText-root': {
+                          mt: { xs: 0, sm: 0.5 } // Adjusted top margin for mobile
+                        },
+                        '& .MuiIconButton-root': {
+                          padding: { xs: '8px', sm: '6px' }, // Larger touch targets on mobile
+                          '& svg': {
+                            fontSize: { xs: '1.25rem', sm: '1rem' } // Larger icons on mobile
+                          }
                         }
                       }}
                     >
@@ -518,7 +690,7 @@ const ProjectDetails = () => {
                           sx={{ 
                             width: 45,
                             height: 45,
-                            bgcolor: stringToColor(comment.user.name || ''),
+                            bgcolor: getAvatarColor(comment.user.name || ''),
                             border: theme => `2px solid ${alpha(theme.palette.primary.main, 0.2)}`,
                             boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
                             transition: 'all 0.2s ease',
@@ -564,13 +736,7 @@ const ProjectDetails = () => {
                                   fontSize: '0.75rem'
                                 }}
                               >
-                                {new Date(comment.createdAt).toLocaleString('fr-FR', {
-                                  day: 'numeric',
-                                  month: 'short',
-                                  year: 'numeric',
-                                  hour: '2-digit',
-                                  minute: '2-digit'
-                                })}
+                                {formatDateRelative(comment.createdAt)}
                                 {comment.updatedAt && (
                                   <span> (modifié)</span>
                                 )}
@@ -695,18 +861,26 @@ const ProjectDetails = () => {
                 )}
               </List>
 
-              <Box 
+              {/* Comment Form */}
+              <Box
                 component="form" 
                 onSubmit={handleCommentSubmit} 
                 sx={{ 
-                  mt: 3,
-                  p: 3,
+                  mt: { xs: 2, sm: 3 },
+                  p: { xs: 2, sm: 3 },
                   borderRadius: 3,
                   border: theme => `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
                   background: theme => theme.palette.mode === 'dark'
                     ? alpha(theme.palette.background.paper, 0.4)
                     : alpha(theme.palette.background.paper, 0.6),
-                  backdropFilter: 'blur(10px)'
+                  backdropFilter: 'blur(10px)',
+                  '& .MuiTextField-root': {
+                    mb: { xs: 1.5, sm: 2 }
+                  },
+                  '& .MuiButton-root': {
+                    py: { xs: 1.5, sm: 1 }, // Taller button on mobile
+                    width: { xs: '100%', sm: 'auto' } // Full width on mobile
+                  }
                 }}
               >
                 <TextField
@@ -735,19 +909,14 @@ const ProjectDetails = () => {
                   variant="contained"
                   color="primary"
                   disabled={!comment.trim()}
-                  sx={{
+                  sx={{ 
                     borderRadius: 2,
-                    px: 3,
-                    py: 1,
                     fontWeight: 600,
                     textTransform: 'none',
-                    boxShadow: theme => `0 4px 12px ${alpha(theme.palette.primary.main, 0.2)}`,
-                    '&:hover': {
-                      boxShadow: theme => `0 6px 16px ${alpha(theme.palette.primary.main, 0.3)}`
-                    }
+                    fontSize: { xs: '0.9rem', sm: '0.875rem' }
                   }}
                 >
-                  Ajouter Commentaire
+                  Envoyer
                 </Button>
               </Box>
             </Box>
@@ -757,7 +926,7 @@ const ProjectDetails = () => {
             <Paper 
               elevation={3} 
               sx={{ 
-                p: 3,
+                p: { xs: 2, sm: 3 },
                 borderRadius: 2,
                 background: theme => theme.palette.mode === 'dark' 
                   ? `linear-gradient(145deg, ${alpha('#2a2a2a', 0.9)}, ${alpha('#1a1a1a', 0.9)})`
@@ -773,6 +942,13 @@ const ProjectDetails = () => {
                   boxShadow: theme => theme.palette.mode === 'dark'
                     ? '0 12px 40px rgba(0, 0, 0, 0.4)'
                     : '0 12px 40px rgba(0, 0, 0, 0.15)',
+                },
+                '& .MuiTypography-subtitle2': {
+                  fontSize: { xs: '0.875rem', sm: '1rem' }
+                },
+                '& .MuiAvatar-root': {
+                  width: { xs: 35, sm: 40 },
+                  height: { xs: 35, sm: 40 }
                 }
               }}
             >
@@ -821,7 +997,7 @@ const ProjectDetails = () => {
                     <Avatar 
                       alt={project.createdBy.name}
                       sx={{ 
-                        bgcolor: stringToColor(project.createdBy.name || ''),
+                        bgcolor: getAvatarColor(project.createdBy.name || ''),
                         width: 40,
                         height: 40,
                         border: theme => `2px solid ${alpha(theme.palette.primary.main, 0.2)}`
@@ -958,7 +1134,7 @@ const ProjectDetails = () => {
                         <Avatar 
                           alt={assignedUser.name}
                           sx={{ 
-                            bgcolor: stringToColor(assignedUser.name || ''),
+                            bgcolor: getAvatarColor(assignedUser.name || ''),
                             width: 35,
                             height: 35,
                             border: theme => `2px solid ${alpha(theme.palette.primary.main, 0.2)}`,
@@ -982,7 +1158,19 @@ const ProjectDetails = () => {
       </Paper>
 
       {/* Edit Dialog */}
-      <Dialog open={editMode} onClose={() => setEditMode(false)} maxWidth="md" fullWidth>
+      <Dialog 
+        open={editMode} 
+        onClose={() => setEditMode(false)} 
+        maxWidth="md" 
+        fullWidth
+        fullScreen={window.innerWidth < 600} // Full screen on mobile
+        sx={{
+          '& .MuiDialog-paper': {
+            m: { xs: 0, sm: 2 },
+            borderRadius: { xs: 0, sm: 2 }
+          }
+        }}
+      >
         <DialogTitle>Modifier le Projet</DialogTitle>
         <DialogContent>
           <Grid container spacing={2} sx={{ mt: 1 }}>
@@ -1208,7 +1396,7 @@ const ProjectDetails = () => {
                         //   }
                         // }}
                         sx={{ 
-                          bgcolor: stringToColor(option.name || '') 
+                          bgcolor: getAvatarColor(option.name || '') 
                         }}
                       >
                         {option.name ? option.name.charAt(0).toUpperCase() : 'U'}
@@ -1232,7 +1420,7 @@ const ProjectDetails = () => {
                           //     e.target.src = '';
                           //   }
                           // }}
-                          sx={{ bgcolor: stringToColor(option.name || '') }}
+                          sx={{ bgcolor: getAvatarColor(option.name || '') }}
                         >
                           {option.name ? option.name.charAt(0).toUpperCase() : 'U'}
                         </Avatar>
@@ -1269,6 +1457,13 @@ const ProjectDetails = () => {
       <Dialog
         open={deleteDialogOpen}
         onClose={() => setDeleteDialogOpen(false)}
+        sx={{
+          '& .MuiDialog-paper': {
+            width: { xs: '90%', sm: 'auto' },
+            m: { xs: 2, sm: 'auto' },
+            p: { xs: 2, sm: 1 }
+          }
+        }}
       >
         <DialogTitle>Supprimer le projet ?</DialogTitle>
         <DialogContent>
@@ -1292,9 +1487,11 @@ const ProjectDetails = () => {
         aria-describedby="alert-dialog-description"
         PaperProps={{
           sx: {
-            borderRadius: 2,
-            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
-            p: 1
+            borderRadius: { xs: 1, sm: 2 },
+            width: { xs: '90%', sm: 'auto' },
+            m: { xs: 2, sm: 'auto' },
+            p: { xs: 2, sm: 1 },
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)'
           }
         }}
       >
@@ -1339,20 +1536,4 @@ const ProjectDetails = () => {
   );
 };
 
-// Utility function to generate consistent colors from strings
-function stringToColor(string) {
-  let hash = 0;
-  for (let i = 0; i < string.length; i++) {
-    hash = string.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  
-  let color = '#';
-  for (let i = 0; i < 3; i++) {
-    const value = (hash >> (i * 8)) & 0xff;
-    color += `00${value.toString(16)}`.slice(-2);
-  }
-  
-  return color;
-}
-
-export default ProjectDetails; 
+export default ProjectDetails;

@@ -19,7 +19,9 @@ import {
   ListItemText,
   ListItemAvatar,
   Divider,
-  CircularProgress
+  CircularProgress,
+  Drawer,
+  ListItemIcon,
 } from '@mui/material';
 import {
   Dashboard as DashboardIcon,
@@ -33,10 +35,19 @@ import {
   AdminPanelSettings as SuperAdminIcon,
   Notifications as NotificationsIcon,
   CheckCircle as ReadIcon,
+  MarkChatUnread as MarkChatUnreadIcon,
+  MarkChatRead as MarkChatReadIcon,
+  DeleteOutline as DeleteOutlineIcon,
+  Menu as MenuIcon,
+  Close as CloseIcon,
+  Refresh as RefreshIcon,
+  Inbox as InboxIcon,
+  Info as InfoIcon,
 } from '@mui/icons-material';
 import { AuthContext } from '../../context/AuthContext';
 import { NotificationContext } from '../../context/NotificationContext';
 import ThemeToggle from '../common/ThemeToggle';
+import AboutDialog from '../common/AboutDialog';
 import { ThemeContext } from '../../context/ThemeContext';
 import config from '../../config';
 import { darken, lighten } from '@mui/material/styles';
@@ -108,6 +119,7 @@ const UserAvatar = styled(Avatar)(({ theme }) => ({
 const Navbar = () => {
   // Hooks
   const theme = useTheme();
+  const isDesktop = useMediaQuery((theme) => theme.breakpoints.up('md'));
   const { 
     isAuthenticated, 
     logout, 
@@ -119,8 +131,14 @@ const Navbar = () => {
     loading, 
     markAsRead, 
     markAllAsRead, 
+    markAllAsUnread, 
     formatNotificationDate, 
-    fetchNotifications 
+    fetchNotifications,
+    deleteNotification,
+    deleteAllNotifications,
+    isFetchingMore,
+    hasMore,
+    loadMoreNotifications
   } = useContext(NotificationContext);
   const { themeMode } = useContext(ThemeContext);
   const navigate = useNavigate();
@@ -128,7 +146,8 @@ const Navbar = () => {
   const [userMenuAnchor, setUserMenuAnchor] = useState(null);
   const [notificationAnchor, setNotificationAnchor] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
+  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
+  const [aboutDialogOpen, setAboutDialogOpen] = useState(false);
   const notificationRef = useRef(null);
   const notificationIconRef = useRef(null);
   const mobileMenuRef = useRef(null);
@@ -176,6 +195,11 @@ const Navbar = () => {
     handleCloseNotificationMenu();
   };
 
+  const handleDeleteNotification = (event, notificationId) => {
+    event.stopPropagation(); // Évite de déclencher le handleNotificationClick
+    deleteNotification(notificationId);
+  };
+
   // useEffect hooks go here, before any conditional returns
   useEffect(() => {
     // Add click outside listeners
@@ -198,10 +222,10 @@ const Navbar = () => {
   
   // Close mobile menu when switching from mobile to desktop view
   useEffect(() => {
-    if (!isMobile) {
+    if (!isDesktop) {
       setMobileMenuOpen(false);
     }
-  }, [isMobile]);
+  }, [isDesktop]);
 
   // Early return after all useEffect hooks
   if (!isAuthenticated && !user) {
@@ -214,6 +238,8 @@ const Navbar = () => {
   };
 
   const handleOpenAdminMenu = (event) => {
+    event.preventDefault(); // Prevent default action
+    event.stopPropagation(); // Stop event propagation
     setAdminMenuAnchor(event.currentTarget);
   };
 
@@ -226,8 +252,8 @@ const Navbar = () => {
   };
 
   const handleAdminMenuItemClick = (path) => {
-    navigate(path);
     handleCloseAdminMenu();
+    navigate(path);
   };
 
   const handleUserMenuItemClick = (path) => {
@@ -307,7 +333,215 @@ const Navbar = () => {
     setNotificationAnchor(null);
   };
 
-  return (
+  // Handle mobile drawer
+  const toggleMobileDrawer = () => {
+    setMobileDrawerOpen(!mobileDrawerOpen);
+  };
+
+  const closeMobileDrawer = () => {
+    setMobileDrawerOpen(false);
+  };
+
+  // Mobile navigation items
+  const mobileNavItems = [
+    {
+      text: 'Tableau de bord',
+      icon: <DashboardIcon />,
+      path: '/dashboard',
+      onClick: () => {
+        navigate('/dashboard');
+        closeMobileDrawer();
+      }
+    },
+    {
+      text: 'Projets',
+      icon: <ProjectIcon />,
+      path: '/projects',
+      onClick: () => {
+        navigate('/projects');
+        closeMobileDrawer();
+      }
+    },
+    // Add admin section for mobile
+    ...(isAdmin ? [
+      {
+        text: 'Nouveau Projet',
+        icon: <AddIcon />,
+        onClick: () => {
+          navigate('/create-project');
+          closeMobileDrawer();
+        }
+      },
+      {
+        text: 'Assigner Employés',
+        icon: <GroupIcon />,
+        onClick: () => {
+          navigate('/admin/assign-projects');
+          closeMobileDrawer();
+        }
+      },
+      ...(isSuperAdmin ? [{
+        text: 'Gestion des Utilisateurs',
+        icon: <SuperAdminIcon />,
+        onClick: () => {
+          navigate('/admin/user-management');
+          closeMobileDrawer();
+        }
+      }] : [])
+    ] : []),
+    {
+      text: 'Profil',
+      icon: <PersonIcon />,
+      path: '/profile',
+      onClick: () => {
+        navigate('/profile');
+        closeMobileDrawer();
+      }
+    },
+    {
+      text: 'À propos',
+      icon: <InfoIcon />,
+      onClick: () => {
+        toggleAboutDialog();
+        closeMobileDrawer();
+      }
+    }
+  ];
+
+  // Mobile drawer content
+  const mobileDrawerContent = (
+    <Box
+      sx={{
+        width: 250,
+        height: '100%',
+        bgcolor: 'background.paper',
+        display: 'flex',
+        flexDirection: 'column'
+      }}
+    >
+      <Box
+        sx={{
+          p: 2,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          borderBottom: 1,
+          borderColor: 'divider'
+        }}
+      >
+        <Typography variant="h6" component="div">
+          Menu
+        </Typography>
+        <IconButton onClick={closeMobileDrawer}>
+          <CloseIcon />
+        </IconButton>
+      </Box>
+
+      <List sx={{ flexGrow: 1 }}>
+        {/* Regular navigation items */}
+        {mobileNavItems.slice(0, 2).map((item) => (
+          <ListItem
+            button
+            key={item.text}
+            onClick={item.onClick}
+            sx={{
+              py: 1.5,
+              '&:hover': {
+                bgcolor: 'action.hover'
+              }
+            }}
+          >
+            <ListItemIcon sx={{ minWidth: 40 }}>
+              {item.icon}
+            </ListItemIcon>
+            <ListItemText primary={item.text} />
+          </ListItem>
+        ))}
+
+        {/* Admin section if user is admin */}
+        {isAdmin && (
+          <>
+            <Divider sx={{ my: 1 }} />
+            <ListItem
+              sx={{
+                py: 1,
+                px: 2,
+                bgcolor: theme => theme.palette.mode === 'dark' ? 'rgba(255, 153, 51, 0.1)' : 'rgba(0, 150, 136, 0.1)',
+              }}
+            >
+              <ListItemText 
+                primary={
+                  <Typography variant="subtitle2" color="text.secondary">
+                    {isSuperAdmin ? 'Super Admin' : 'Administration'}
+                  </Typography>
+                }
+              />
+            </ListItem>
+            {mobileNavItems.slice(2, -1).map((item) => (
+              <ListItem
+                button
+                key={item.text}
+                onClick={item.onClick}
+                sx={{
+                  py: 1.5,
+                  '&:hover': {
+                    bgcolor: 'action.hover'
+                  }
+                }}
+              >
+                <ListItemIcon sx={{ minWidth: 40 }}>
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItem>
+            ))}
+          </>
+        )}
+
+        <Divider sx={{ my: 1 }} />
+        
+        {/* Profile item */}
+        <ListItem
+          button
+          onClick={mobileNavItems[mobileNavItems.length - 1].onClick}
+          sx={{
+            py: 1.5,
+            '&:hover': {
+              bgcolor: 'action.hover'
+            }
+          }}
+        >
+          <ListItemIcon sx={{ minWidth: 40 }}>
+            {mobileNavItems[mobileNavItems.length - 1].icon}
+          </ListItemIcon>
+          <ListItemText primary={mobileNavItems[mobileNavItems.length - 1].text} />
+        </ListItem>
+      </List>
+
+      <Box sx={{ p: 2, borderTop: 1, borderColor: 'divider' }}>
+        <Button
+          fullWidth
+          variant="outlined"
+          color="error"
+          startIcon={<LogoutIcon />}
+          onClick={() => {
+            handleLogout();
+            closeMobileDrawer();
+          }}
+          sx={{ mt: 1 }}
+        >
+          Déconnexion
+        </Button>
+      </Box>
+    </Box>
+  );
+
+  // Toggle About Dialog
+  const toggleAboutDialog = () => {
+    setAboutDialogOpen(!aboutDialogOpen);
+  };
+
+  const navContent = (
     <StyledAppBar 
       position="static" 
       sx={{
@@ -315,6 +549,23 @@ const Navbar = () => {
       }}
     >
       <Toolbar>
+        {/* Mobile Menu Button */}
+        {!isDesktop && (
+          <IconButton
+            ref={hamburgerRef}
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={toggleMobileDrawer}
+            sx={{
+              mr: 2,
+              color: theme.palette.mode === 'dark' ? 'rgba(0, 0, 0, 0.87)' : 'white',
+            }}
+          >
+            <MenuIcon />
+          </IconButton>
+        )}
+
         {/* Logo */}
         <Link to="/dashboard" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
           <Box
@@ -322,7 +573,7 @@ const Navbar = () => {
             src={`${process.env.PUBLIC_URL}/images/srm-marrakech-safi-seeklogo.svg`}
             alt="SRM Logo"
             sx={{
-              height: '120px',
+              height: { xs: '60px', sm: '80px', md: '120px' }, // Responsive height
               width: 'auto',
               mr: 2,
               filter: theme => theme.palette.mode === 'dark' 
@@ -340,24 +591,114 @@ const Navbar = () => {
         {/* Theme Toggle Button */}
         <ThemeToggle />
 
+        {/* About Button */}
+        <Button
+          color="inherit"
+          onClick={toggleAboutDialog}
+          startIcon={<InfoIcon />}
+          sx={{
+            ...navButtonStyles,
+            display: { xs: 'none', md: 'flex' },
+            ml: 1
+          }}
+        >
+          À propos
+        </Button>
+
         {isAuthenticated ? (
-          // Authenticated Buttons
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Button color="inherit" component={RouterLink} to="/dashboard" startIcon={<DashboardIcon />} sx={navButtonStyles}>
-              Tableau de bord
-            </Button>
-            <Button color="inherit" component={RouterLink} to="/projects" startIcon={<ProjectIcon />} sx={navButtonStyles}>
-              Projets
-            </Button>
-            
-            {/* Notification Bell */}
+            {/* Desktop navigation */}
+            <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 1 }}>
+              <Button color="inherit" component={RouterLink} to="/dashboard" startIcon={<DashboardIcon />} sx={navButtonStyles}>
+                Tableau de bord
+              </Button>
+              <Button color="inherit" component={RouterLink} to="/projects" startIcon={<ProjectIcon />} sx={navButtonStyles}>
+                Projets
+              </Button>
+              
+              {isAdmin && isDesktop && (
+                <>
+                  <Button 
+                    color="inherit" 
+                    startIcon={<AdminIcon />} 
+                    sx={{
+                      ...navButtonStyles,
+                      bgcolor: theme => theme.palette.mode === 'dark' ? 'rgba(255, 153, 51, 0.2)' : 'rgba(0, 150, 136, 0.2)',
+                      '&:hover': {
+                        bgcolor: theme => theme.palette.mode === 'dark' ? 'rgba(255, 153, 51, 0.3)' : 'rgba(0, 150, 136, 0.3)',
+                      }
+                    }}
+                    onClick={handleOpenAdminMenu}
+                    aria-haspopup="true"
+                  >
+                    {isSuperAdmin ? 'Super Admin' : 'Administrateur'}
+                  </Button>
+                  <Menu
+                    anchorEl={adminMenuAnchor}
+                    open={Boolean(adminMenuAnchor)}
+                    onClose={handleCloseAdminMenu}
+                    MenuListProps={{
+                      'aria-labelledby': 'admin-menu',
+                    }}
+                    PaperProps={{
+                      elevation: 3,
+                      sx: {
+                        mt: 1.5,
+                        width: 240,
+                        borderRadius: 2,
+                        overflow: 'visible',
+                        '&:before': {
+                          content: '""',
+                          display: 'block',
+                          position: 'absolute',
+                          top: 0,
+                          right: 14,
+                          width: 10,
+                          height: 10,
+                          bgcolor: 'background.paper',
+                          transform: 'translateY(-50%) rotate(45deg)',
+                          zIndex: 0,
+                        },
+                        '& .MuiMenuItem-root': {
+                          py: 1.5,
+                          px: 2,
+                          whiteSpace: 'normal',
+                          '&:hover': {
+                            bgcolor: getMenuHoverColor(),
+                          }
+                        },
+                      },
+                    }}
+                    transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                    anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                  >
+                    <MenuItem onClick={() => handleAdminMenuItemClick('/create-project')}>
+                      <AddIcon fontSize="small" sx={{ mr: 1.5 }} />
+                      <Typography variant="body2" fontWeight={600}>Nouveau Projet</Typography>
+                    </MenuItem>
+                    <MenuItem onClick={() => handleAdminMenuItemClick('/admin/assign-projects')}>
+                      <GroupIcon fontSize="small" sx={{ mr: 1.5 }} />
+                      <Typography variant="body2" fontWeight={600}>Assigner Employés</Typography>
+                    </MenuItem>
+                    {isSuperAdmin && (
+                      <MenuItem onClick={() => handleAdminMenuItemClick('/admin/user-management')}>
+                        <SuperAdminIcon fontSize="small" sx={{ mr: 1.5 }} />
+                        <Typography variant="body2" fontWeight={600}>Gestion des Utilisateurs</Typography>
+                      </MenuItem>
+                    )}
+                  </Menu>
+                </>
+              )}
+            </Box>
+
+            {/* Always visible items */}
             <Tooltip title="Notifications">
               <IconButton
                 ref={notificationIconRef}
                 onClick={handleOpenNotificationMenu}
                 sx={{
                   color: theme.palette.mode === 'dark' ? 'rgba(0, 0, 0, 0.87)' : 'white',
-                  mx: 1,
+                  mx: { xs: 0.5, md: 1 },
                   transition: 'transform 0.2s',
                   '&:hover': { 
                     transform: 'scale(1.1)',
@@ -365,245 +706,25 @@ const Navbar = () => {
                   }
                 }}
               >
-                <Badge 
-                  badgeContent={unreadCount} 
-                  color="error"
-                  sx={{
-                    '& .MuiBadge-badge': {
-                      fontSize: '0.7rem',
-                      fontWeight: 'bold',
-                      animation: unreadCount > 0 ? 'pulse 2s infinite' : 'none',
-                      '@keyframes pulse': {
-                        '0%': { boxShadow: '0 0 0 0 rgba(239, 83, 80, 0.7)' },
-                        '70%': { boxShadow: '0 0 0 5px rgba(239, 83, 80, 0)' },
-                        '100%': { boxShadow: '0 0 0 0 rgba(239, 83, 80, 0)' }
-                      }
-                    }
-                  }}
-                >
+                <Badge badgeContent={unreadCount} color="error">
                   <NotificationsIcon />
                 </Badge>
               </IconButton>
             </Tooltip>
-            
-            {/* Notifications Dropdown Menu */}
-            <Menu
-              ref={notificationRef}
-              anchorEl={notificationAnchor}
-              open={Boolean(notificationAnchor)}
-              onClose={handleCloseNotificationMenu}
-              PaperProps={{
-                elevation: 3,
-                sx: {
-                  mt: 1.5,
-                  width: 360,
-                  maxHeight: 500,
-                  borderRadius: 2,
-                  overflow: 'auto',
-                  '&:before': {
-                    content: '""',
-                    display: 'block',
-                    position: 'absolute',
-                    top: 0,
-                    right: 14,
-                    width: 10,
-                    height: 10,
-                    bgcolor: 'background.paper',
-                    transform: 'translateY(-50%) rotate(45deg)',
-                    zIndex: 0,
-                  },
-                },
-              }}
-              transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-              anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-            >
-              <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(0,0,0,0.1)' }}>
-                <Typography variant="h6" fontWeight="600">Notifications</Typography>
-                {notifications.length > 0 && (
-                  <Button 
-                    size="small" 
-                    onClick={markAllAsRead}
-                    startIcon={<ReadIcon />}
-                    disabled={unreadCount === 0}
-                    sx={{
-                      textTransform: 'none',
-                      fontWeight: 'medium',
-                      fontSize: '0.8rem'
-                    }}
-                  >
-                    Tout marquer comme lu
-                  </Button>
-                )}
-              </Box>
-              
-              {loading ? (
-                <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
-                  <CircularProgress size={30} />
-                </Box>
-              ) : notifications.length > 0 ? (
-                <List sx={{ p: 0 }}>
-                  {notifications.map((notification) => (
-                    <React.Fragment key={notification._id}>
-                      <ListItem 
-                        alignItems="flex-start" 
-                        sx={{ 
-                          px: 2, 
-                          py: 1.5,
-                          cursor: 'pointer', 
-                          bgcolor: notification.read ? 'transparent' : (theme.palette.mode === 'dark' ? 'rgba(255, 153, 51, 0.08)' : 'rgba(0, 150, 136, 0.05)'),
-                          '&:hover': {
-                            bgcolor: theme.palette.mode === 'dark' ? 'rgba(255, 153, 51, 0.12)' : 'rgba(0, 150, 136, 0.08)',
-                          }
-                        }}
-                        onClick={() => handleNotificationClick(notification)}
-                      >
-                        <ListItemAvatar>
-                          <Avatar 
-                            alt={notification.sender?.name || "Système"} 
-                            src={notification.sender ? getProfilePhotoUrl(notification.sender._id) : ''}
-                            sx={{ 
-                              bgcolor: notification.sender?.name ? stringToColor(notification.sender.name) : 'primary.main',
-                              width: 40,
-                              height: 40
-                            }}
-                          >
-                            {notification.sender?.name ? notification.sender.name.charAt(0).toUpperCase() : 'S'}
-                          </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary={
-                            <Typography 
-                              variant="body1" 
-                              component="div" 
-                              sx={{ 
-                                fontWeight: notification.read ? 'normal' : 'bold',
-                                fontSize: '0.9rem',
-                                mb: 0.5
-                              }}
-                            >
-                              {notification.content}
-                            </Typography>
-                          }
-                          secondary={
-                            <Typography 
-                              variant="caption" 
-                              color="text.secondary"
-                              sx={{ display: 'block', fontSize: '0.75rem' }}
-                            >
-                              {formatNotificationDate(notification.date)}
-                            </Typography>
-                          }
-                        />
-                        {!notification.read && (
-                          <Box
-                            sx={{
-                              width: 8,
-                              height: 8,
-                              borderRadius: '50%',
-                              bgcolor: 'error.main',
-                              alignSelf: 'center',
-                              ml: 1
-                            }}
-                          />
-                        )}
-                      </ListItem>
-                      <Divider component="li" />
-                    </React.Fragment>
-                  ))}
-                </List>
-              ) : (
-                <Box sx={{ p: 3, textAlign: 'center' }}>
-                  <Typography variant="body2" color="text.secondary">
-                    Pas de notifications pour le moment
-                  </Typography>
-                </Box>
-              )}
-            </Menu>
-            
-            {isAdmin && (
-              <>
-                <Button 
-                  color="inherit" 
-                  startIcon={<AdminIcon />} 
-                  sx={{
-                    ...navButtonStyles,
-                    bgcolor: theme => theme.palette.mode === 'dark' ? 'rgba(255, 153, 51, 0.2)' : 'rgba(0, 150, 136, 0.2)',
-                    '&:hover': {
-                      bgcolor: theme => theme.palette.mode === 'dark' ? 'rgba(255, 153, 51, 0.3)' : 'rgba(0, 150, 136, 0.3)',
-                    }
-                  }}
-                  onClick={handleOpenAdminMenu}
-                  aria-haspopup="true"
-                >
-                  {isSuperAdmin ? 'Super Admin' : 'Administrateur'}
-                </Button>
-                <Menu
-                  anchorEl={adminMenuAnchor}
-                  open={Boolean(adminMenuAnchor)}
-                  onClose={handleCloseAdminMenu}
-                  MenuListProps={{
-                    'aria-labelledby': 'admin-menu',
-                  }}
-                  PaperProps={{
-                    elevation: 3,
-                    sx: {
-                      mt: 1.5,
-                      width: 240,
-                      borderRadius: 2,
-                      overflow: 'visible',
-                      '&:before': {
-                        content: '""',
-                        display: 'block',
-                        position: 'absolute',
-                        top: 0,
-                        right: 14,
-                        width: 10,
-                        height: 10,
-                        bgcolor: 'background.paper',
-                        transform: 'translateY(-50%) rotate(45deg)',
-                        zIndex: 0,
-                      },
-                      '& .MuiMenuItem-root': {
-                        py: 1.5,
-                        px: 2,
-                        whiteSpace: 'normal',
-                        '&:hover': {
-                          bgcolor: getMenuHoverColor(),
-                        }
-                      },
-                    },
-                  }}
-                  transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                  anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-                >
-                  <MenuItem onClick={() => handleAdminMenuItemClick('/create-project')}>
-                    <AddIcon fontSize="small" sx={{ mr: 1.5 }} />
-                    <Typography variant="body2" fontWeight={600}>Nouveau Projet</Typography>
-                  </MenuItem>
-                  <MenuItem onClick={() => handleAdminMenuItemClick('/admin/assign-projects')}>
-                    <GroupIcon fontSize="small" sx={{ mr: 1.5 }} />
-                    <Typography variant="body2" fontWeight={600}>Assigner Employés</Typography>
-                  </MenuItem>
-                  {isSuperAdmin && (
-                    <MenuItem onClick={() => handleAdminMenuItemClick('/admin/user-management')}>
-                      <SuperAdminIcon fontSize="small" sx={{ mr: 1.5 }} />
-                      <Typography variant="body2" fontWeight={600}>Gestion des Utilisateurs</Typography>
-                    </MenuItem>
-                  )}
-                </Menu>
-              </>
-            )}
-            
+
             <Tooltip title="Options du profil">
               <IconButton 
                 onClick={handleProfileMenuOpen}
-                sx={getUserButtonStyles()}
+                sx={{
+                  ...getUserButtonStyles(),
+                  ml: { xs: 0.5, md: 1 }
+                }}
               >
                 <UserAvatar
                   alt={user?.name || "User"}
                   sx={{ 
-                    width: 36, 
-                    height: 36, 
+                    width: { xs: 32, md: 36 }, 
+                    height: { xs: 32, md: 36 },
                     bgcolor: user?.name ? stringToColor(user.name) : 'primary.light',
                   }}
                 >
@@ -611,65 +732,6 @@ const Navbar = () => {
                 </UserAvatar>
               </IconButton>
             </Tooltip>
-            
-            <Menu
-              anchorEl={userMenuAnchor}
-              open={Boolean(userMenuAnchor)}
-              onClose={handleCloseUserMenu}
-              MenuListProps={{
-                'aria-labelledby': 'user-menu',
-              }}
-              PaperProps={{
-                elevation: 3,
-                sx: {
-                  mt: 1.5,
-                  width: 240,
-                  borderRadius: 2,
-                  overflow: 'visible',
-                  '&:before': {
-                    content: '""',
-                    display: 'block',
-                    position: 'absolute',
-                    top: 0,
-                    right: 14,
-                    width: 10,
-                    height: 10,
-                    bgcolor: 'background.paper',
-                    transform: 'translateY(-50%) rotate(45deg)',
-                    zIndex: 0,
-                  },
-                  '& .MuiMenuItem-root': {
-                    py: 1.5,
-                    px: 2,
-                    whiteSpace: 'normal',
-                    '&:hover': {
-                      bgcolor: getMenuHoverColor(),
-                    }
-                  },
-                },
-              }}
-              transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-              anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-            >
-              {user && (
-                <Box sx={{ px: 2, py: 1.5, borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
-                  <Typography variant="subtitle1" fontWeight="medium">{user.name}</Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ wordBreak: 'break-all' }}>
-                    {user.email}
-                  </Typography>
-                </Box>
-              )}
-              
-              <MenuItem onClick={() => handleUserMenuItemClick('/profile')}>
-                <SettingsIcon fontSize="small" sx={{ mr: 1.5 }} />
-                <Typography variant="body2" fontWeight={600}>Mon profil</Typography>
-              </MenuItem>
-              
-              <MenuItem onClick={handleLogout}>
-                <LogoutIcon fontSize="small" sx={{ mr: 1.5 }} />
-                <Typography variant="body2" fontWeight={600}>Déconnexion</Typography>
-              </MenuItem>
-            </Menu>
           </Box>
         ) : (
           // Unauthenticated Buttons
@@ -683,7 +745,361 @@ const Navbar = () => {
           </Box>
         )}
       </Toolbar>
+
+      {/* Mobile Drawer */}
+      <Drawer
+        anchor="left"
+        open={mobileDrawerOpen}
+        onClose={closeMobileDrawer}
+        sx={{
+          '& .MuiDrawer-paper': {
+            width: 250,
+            boxSizing: 'border-box',
+          },
+        }}
+      >
+        {mobileDrawerContent}
+      </Drawer>
+
+      {/* Notifications Menu */}
+      <Menu
+        ref={notificationRef}
+        anchorEl={notificationAnchor}
+        open={Boolean(notificationAnchor)}
+        onClose={handleCloseNotificationMenu}
+        PaperProps={{
+          elevation: 3,
+          sx: {
+            mt: 1.5,
+            width: { xs: 300, sm: 360 },
+            maxHeight: 500,
+            borderRadius: 2,
+            overflow: 'auto',
+            '&:before': {
+              content: '""',
+              display: 'block',
+              position: 'absolute',
+              top: 0,
+              right: 14,
+              width: 10,
+              height: 10,
+              bgcolor: 'background.paper',
+              transform: 'translateY(-50%) rotate(45deg)',
+              zIndex: 0,
+            },
+          },
+        }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      >
+        <Box 
+          sx={{ 
+            p: 2, 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center', 
+            borderBottom: `1px solid ${theme.palette.divider}`,
+            background: theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)'
+          }}
+        >
+          <Typography variant="h6" fontWeight="600">
+            Notifications
+            {unreadCount > 0 && (
+              <Box 
+                component="span" 
+                sx={{ 
+                  ml: 1, 
+                  py: 0.2, 
+                  px: 0.8, 
+                  borderRadius: 5, 
+                  fontSize: '0.7rem', 
+                  bgcolor: 'error.main', 
+                  color: 'white' 
+                }}
+              >
+                {unreadCount}
+              </Box>
+            )}
+          </Typography>
+          <Box sx={{ display: 'flex' }}>
+            <Tooltip title="Rafraîchir">
+              <IconButton 
+                size="small" 
+                onClick={() => fetchNotifications(1)}
+                disabled={loading}
+                sx={{ mr: 1 }}
+              >
+                <RefreshIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+            
+            {notifications.length > 0 && (
+              <>
+                <Tooltip title="Marquer tout comme non lu">
+                  <IconButton 
+                    size="small"
+                    onClick={markAllAsUnread}
+                    sx={{ mr: 1 }}
+                  >
+                    <MarkChatUnreadIcon fontSize="small" />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Tout marquer comme lu">
+                  <IconButton 
+                    size="small" 
+                    onClick={markAllAsRead}
+                    disabled={unreadCount === 0}
+                    sx={{ mr: 1 }}
+                  >
+                    <MarkChatReadIcon fontSize="small" />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Supprimer toutes les notifications">
+                  <IconButton 
+                    size="small" 
+                    onClick={deleteAllNotifications}
+                    color="error"
+                  >
+                    <DeleteOutlineIcon fontSize="small" />
+                  </IconButton>
+                </Tooltip>
+              </>
+            )}
+          </Box>
+        </Box>
+        
+        <Box sx={{ maxHeight: '400px', width: '350px', overflow: 'hidden' }}>
+          {loading && !isFetchingMore ? (
+            <Box sx={{ 
+              display: 'flex', 
+              justifyContent: 'center', 
+              alignItems: 'center',
+              p: 5
+            }}>
+              <CircularProgress size={36} />
+            </Box>
+          ) : notifications.length > 0 ? (
+            <List 
+              sx={{ 
+                p: 0, 
+                maxHeight: '400px',
+                overflowY: 'auto',
+                '&::-webkit-scrollbar': {
+                  width: '8px',
+                },
+                '&::-webkit-scrollbar-track': {
+                  background: 'transparent',
+                },
+                '&::-webkit-scrollbar-thumb': {
+                  background: theme.palette.mode === 'dark' 
+                    ? 'rgba(255,255,255,0.2)' 
+                    : 'rgba(0,0,0,0.2)',
+                  borderRadius: '4px',
+                },
+                '&::-webkit-scrollbar-thumb:hover': {
+                  background: theme.palette.mode === 'dark' 
+                    ? 'rgba(255,255,255,0.3)' 
+                    : 'rgba(0,0,0,0.3)',
+                },
+              }}
+              onScroll={(e) => {
+                const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
+                // If we're near the bottom and not already loading more
+                if (scrollHeight - scrollTop - clientHeight < 100 && hasMore && !isFetchingMore) {
+                  loadMoreNotifications();
+                }
+              }}
+            >
+              {notifications.map((notification) => (
+                <React.Fragment key={notification._id}>
+                  <ListItem 
+                    alignItems="flex-start" 
+                    sx={{ 
+                      px: 2, 
+                      py: 1.5,
+                      cursor: 'pointer', 
+                      bgcolor: notification.read 
+                        ? 'transparent' 
+                        : (theme.palette.mode === 'dark' ? 'rgba(255, 153, 51, 0.08)' : 'rgba(0, 150, 136, 0.05)'),
+                      '&:hover': {
+                        bgcolor: theme.palette.mode === 'dark' ? 'rgba(255, 153, 51, 0.12)' : 'rgba(0, 150, 136, 0.08)',
+                      },
+                      position: 'relative',
+                      transition: 'background-color 0.2s'
+                    }}
+                    onClick={() => handleNotificationClick(notification)}
+                  >
+                    <ListItemAvatar>
+                      <Avatar 
+                        alt={notification.sender?.name || "Système"} 
+                        src={notification.sender ? getProfilePhotoUrl(notification.sender._id) : ''}
+                        sx={{ 
+                          bgcolor: notification.sender?.name ? stringToColor(notification.sender.name) : 'primary.main',
+                          width: 40,
+                          height: 40
+                        }}
+                      >
+                        {notification.sender?.name ? notification.sender.name.charAt(0).toUpperCase() : 'S'}
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={
+                        <Typography 
+                          variant="body2" 
+                          component="div" 
+                          sx={{ 
+                            fontWeight: notification.read ? 'normal' : 'bold',
+                            fontSize: '0.9rem',
+                            mb: 0.5,
+                            lineHeight: 1.4
+                          }}
+                        >
+                          {notification.content}
+                        </Typography>
+                      }
+                      secondary={
+                        <Typography 
+                          variant="caption" 
+                          color="text.secondary"
+                          sx={{ display: 'block', fontSize: '0.75rem' }}
+                        >
+                          {formatNotificationDate(notification.date)}
+                        </Typography>
+                      }
+                    />
+                    {!notification.read && (
+                      <Box
+                        sx={{
+                          width: 8,
+                          height: 8,
+                          borderRadius: '50%',
+                          bgcolor: 'error.main',
+                          alignSelf: 'center',
+                          mr: 1
+                        }}
+                      />
+                    )}
+                    <Tooltip title="Supprimer">
+                      <IconButton 
+                        size="small" 
+                        onClick={(e) => handleDeleteNotification(e, notification._id)}
+                        sx={{ 
+                          color: 'text.secondary',
+                          '&:hover': { color: 'error.main' }
+                        }}
+                      >
+                        <DeleteOutlineIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                  </ListItem>
+                  <Divider component="li" />
+                </React.Fragment>
+              ))}
+              
+              {isFetchingMore && (
+                <Box sx={{ 
+                  display: 'flex', 
+                  justifyContent: 'center', 
+                  py: 2,
+                  borderTop: `1px dashed ${theme.palette.divider}`
+                }}>
+                  <CircularProgress size={24} />
+                </Box>
+              )}
+            </List>
+          ) : (
+            <Box sx={{ 
+              display: 'flex', 
+              flexDirection: 'column',
+              alignItems: 'center', 
+              justifyContent: 'center',
+              p: 4,
+              color: 'text.secondary'
+            }}>
+              <InboxIcon sx={{ fontSize: 50, mb: 2, opacity: 0.7 }} />
+              <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                Aucune notification
+              </Typography>
+              <Typography variant="body2" sx={{ mt: 1, textAlign: 'center' }}>
+                Vous recevrez des notifications pour les activités importantes du projet.
+              </Typography>
+            </Box>
+          )}
+        </Box>
+      </Menu>
+
+      {/* User Menu */}
+      <Menu
+        anchorEl={userMenuAnchor}
+        open={Boolean(userMenuAnchor)}
+        onClose={handleCloseUserMenu}
+        MenuListProps={{
+          'aria-labelledby': 'user-menu',
+        }}
+        PaperProps={{
+          elevation: 3,
+          sx: {
+            mt: 1.5,
+            width: 240,
+            borderRadius: 2,
+            overflow: 'visible',
+            '&:before': {
+              content: '""',
+              display: 'block',
+              position: 'absolute',
+              top: 0,
+              right: 14,
+              width: 10,
+              height: 10,
+              bgcolor: 'background.paper',
+              transform: 'translateY(-50%) rotate(45deg)',
+              zIndex: 0,
+            },
+            '& .MuiMenuItem-root': {
+              py: 1.5,
+              px: 2,
+              whiteSpace: 'normal',
+              '&:hover': {
+                bgcolor: getMenuHoverColor(),
+              }
+            },
+          },
+        }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      >
+        {user && (
+          <Box sx={{ px: 2, py: 1.5, borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
+            <Typography variant="subtitle1" fontWeight="medium">{user.name}</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ wordBreak: 'break-all' }}>
+              {user.email}
+            </Typography>
+          </Box>
+        )}
+        
+        <MenuItem onClick={() => handleUserMenuItemClick('/profile')}>
+          <SettingsIcon fontSize="small" sx={{ mr: 1.5 }} />
+          <Typography variant="body2" fontWeight={600}>Mon profil</Typography>
+        </MenuItem>
+        
+        <MenuItem onClick={handleLogout}>
+          <LogoutIcon fontSize="small" sx={{ mr: 1.5 }} />
+          <Typography variant="body2" fontWeight={600}>Déconnexion</Typography>
+        </MenuItem>
+      </Menu>
     </StyledAppBar>
+  );
+
+  return (
+    <>
+      {navContent}
+      
+      {/* About Dialog */}
+      <AboutDialog
+        open={aboutDialogOpen}
+        onClose={toggleAboutDialog}
+      />
+    </>
   );
 };
 

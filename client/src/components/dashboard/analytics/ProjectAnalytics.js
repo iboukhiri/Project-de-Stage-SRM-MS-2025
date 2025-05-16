@@ -42,6 +42,10 @@ const themeColors = {
     light: 'rgba(158, 158, 158, 0.6)',
     main: 'rgba(158, 158, 158, 1)',
   },
+  guarantee: {
+    light: 'rgba(156, 39, 176, 0.6)',
+    main: 'rgba(156, 39, 176, 1)',
+  },
 };
 
 // Status mapping for colors
@@ -55,6 +59,7 @@ const statusColors = {
   'En cours': themeColors.water,
   'En attente': themeColors.electricity,
   'Non démarré': themeColors.waiting,
+  'En garantie': themeColors.guarantee,
 };
 
 // Translation mapping for status labels
@@ -63,11 +68,57 @@ const statusTranslations = {
   'In Progress': 'En cours',
   'On Hold': 'En attente',
   'Not Started': 'Non démarré',
+  'En garantie': 'En garantie',
 };
 
 // Helper to translate status
 const translateStatus = (status) => {
   return statusTranslations[status] || status;
+};
+
+// Create a custom plugin to handle legend rendering
+const customLegendPlugin = {
+  id: 'customLegend',
+  afterDraw: (chart) => {
+    const ctx = chart.ctx;
+    const width = chart.width;
+    const height = chart.height;
+    const data = chart.data;
+    
+    // Get the legend items
+    const items = data.labels.map((label, index) => ({
+      text: label,
+      color: data.datasets[0].backgroundColor[index]
+    }));
+    
+    // Draw custom legend
+    const boxSize = 12;
+    const padding = 10;
+    const lineHeight = 30; // Increased spacing between items
+    const columnWidth = 140; // Width allocated for each column
+    const columns = 2; // Display in 2 columns
+    const startY = height - Math.ceil(items.length / columns) * lineHeight - padding;
+    
+    // Draw each legend item
+    items.forEach((item, i) => {
+      const column = Math.floor(i / Math.ceil(items.length / columns));
+      const row = i % Math.ceil(items.length / columns);
+      
+      const x = padding + (column * columnWidth);
+      const y = startY + (row * lineHeight);
+      
+      // Draw the color box
+      ctx.fillStyle = item.color;
+      ctx.fillRect(x, y, boxSize, boxSize);
+      
+      // Draw the text with enough space
+      ctx.fillStyle = '#666';
+      ctx.font = 'bold 13px Arial';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(item.text, x + boxSize + 8, y + (boxSize/2));
+    });
+  }
 };
 
 const ProjectAnalytics = ({ projects }) => {
@@ -78,6 +129,8 @@ const ProjectAnalytics = ({ projects }) => {
     labels: [],
     datasets: []
   });
+  const [showStatusDistributionSection, setShowStatusDistributionSection] = useState(true);
+  const [visibleStatuses, setVisibleStatuses] = useState({});
   
   const [topProjects, setTopProjects] = useState([]);
   const [animatedProgress, setAnimatedProgress] = useState({});
@@ -135,7 +188,7 @@ const ProjectAnalytics = ({ projects }) => {
     animation: {
       animateScale: true,
       animateRotate: true,
-      duration: 800,
+      duration: 300,
     },
     layout: {
       padding: {
@@ -171,22 +224,24 @@ const ProjectAnalytics = ({ projects }) => {
       }, {});
       
       // Get unique status values in French only
-      const uniqueStatuses = Object.values(statusTranslations);
+      const uniqueStatuses = Object.keys(statusTranslations).map(key => statusTranslations[key]);
+      
+      // Initialize all statuses as visible if not already set
+      if (Object.keys(visibleStatuses).length === 0) {
+        const initialVisibleStatuses = {};
+        uniqueStatuses.forEach(status => {
+          initialVisibleStatuses[status] = true;
+        });
+        setVisibleStatuses(initialVisibleStatuses);
+      }
       
       // Filter out any non-French statuses from the counts
       // This ensures only the French translations are used in the chart
       const filteredStatusCounts = {};
       Object.keys(statusCounts).forEach(status => {
-        // Only keep statuses that are in our French translations list
-        if (uniqueStatuses.includes(status)) {
+        // Only keep statuses that are in our French translations list and visible
+        if (uniqueStatuses.includes(status) && visibleStatuses[status] !== false) {
           filteredStatusCounts[status] = statusCounts[status];
-        }
-      });
-
-      // Ensure all French statuses exist in the counts, even if 0
-      uniqueStatuses.forEach(status => {
-        if (!filteredStatusCounts[status]) {
-          filteredStatusCounts[status] = 0;
         }
       });
 
@@ -256,7 +311,7 @@ const ProjectAnalytics = ({ projects }) => {
         });
       }, 100);
     }
-  }, [projects]);
+  }, [projects, visibleStatuses]);
 
   // Custom progress bar component for better visualization
   const ProgressBar = ({ project, index }) => {
@@ -409,118 +464,135 @@ const ProjectAnalytics = ({ projects }) => {
       
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
-          <Paper 
-            elevation={3} 
-            sx={{ 
-              p: 3, 
-              height: '100%', 
-              display: 'flex', 
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: 3,
-              overflow: 'hidden',
-              background: theme => theme.palette.mode === 'dark' 
-                ? 'linear-gradient(145deg, #2a2a2a 0%, #1a1a1a 100%)' 
-                : 'linear-gradient(145deg, #ffffff 0%, #f0f7ff 100%)',
-              boxShadow: theme => theme.palette.mode === 'dark'
-                ? '0 8px 16px rgba(0, 0, 0, 0.4)'
-                : '0 8px 16px rgba(160, 200, 255, 0.1)',
-              border: theme => theme.palette.mode === 'dark'
-                ? 'none'
-                : '1px solid rgba(200, 220, 255, 0.3)',
-            }}
-          >
-            <Typography 
-              variant="h6" 
+          <Box sx={{ mb: 2, display: 'flex', flexWrap: 'wrap', gap: 1, justifyContent: 'center' }}>
+            {Object.values(statusTranslations).map((status) => (
+              <Button
+                key={status}
+                variant="contained"
+                size="small"
+                style={{
+                  backgroundColor: visibleStatuses[status] === false ? 
+                    alpha(statusColors[status]?.main || themeColors.waiting.main, 0.3) : 
+                    statusColors[status]?.main || themeColors.waiting.main,
+                  color: theme.palette.getContrastText(statusColors[status]?.main || themeColors.waiting.main),
+                  textTransform: 'none',
+                  fontWeight: 'bold',
+                  opacity: visibleStatuses[status] === false ? 0.6 : 1
+                }}
+                onClick={() => {
+                  setVisibleStatuses(prev => ({
+                    ...prev,
+                    [status]: !prev[status]
+                  }));
+                }}
+              >
+                {status}
+              </Button>
+            ))}
+          </Box>
+
+          {showStatusDistributionSection && (
+            <Paper 
+              elevation={3} 
               sx={{ 
-                mb: 2,
-                color: theme => theme.palette.mode === 'dark'
-                  ? theme.palette.grey[200]
-                  : theme.palette.primary.main,
-                fontWeight: 600,
+                p: 3, 
+                height: '100%', 
+                display: 'flex', 
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 3,
+                overflow: 'hidden',
+                background: theme => theme.palette.mode === 'dark' 
+                  ? 'linear-gradient(145deg, #2a2a2a 0%, #1a1a1a 100%)' 
+                  : 'linear-gradient(145deg, #ffffff 0%, #f0f7ff 100%)',
+                boxShadow: theme => theme.palette.mode === 'dark'
+                  ? '0 8px 16px rgba(0, 0, 0, 0.4)'
+                  : '0 8px 16px rgba(160, 200, 255, 0.1)',
+                border: theme => theme.palette.mode === 'dark'
+                  ? 'none'
+                  : '1px solid rgba(200, 220, 255, 0.3)',
               }}
             >
-              Distribution par Statut
-            </Typography>
-            <Box sx={{ 
-              height: 380, 
-              width: '100%',
-              position: 'relative',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}>
-              {statusData.labels.length > 0 && (
-                <Box
-                  sx={{
-                    position: 'relative',
-                    width: '100%',
-                    height: '100%',
-                    maxWidth: 480,
-                    mx: 'auto',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    '& canvas': {
-                      filter: theme => theme.palette.mode === 'dark' 
-                        ? 'drop-shadow(0px 8px 16px rgba(255, 255, 255, 0.25))' 
-                        : 'drop-shadow(0px 8px 20px rgba(140, 180, 250, 0.3))',
-                      transition: 'all 0.3s ease',
-                      '&:hover': {
-                        transform: 'scale(1.05)',
+              <Typography 
+                variant="h6" 
+                sx={{ 
+                  mb: 2,
+                  color: theme => theme.palette.mode === 'dark'
+                    ? theme.palette.grey[200]
+                    : theme.palette.primary.main,
+                  fontWeight: 600,
+                }}
+              >
+                Distribution par Statut
+              </Typography>
+              <Box sx={{ 
+                height: 420, 
+                width: '100%',
+                position: 'relative',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}>
+                {statusData.labels.length > 0 && (
+                  <Box
+                    sx={{
+                      position: 'relative',
+                      width: '100%',
+                      height: '100%',
+                      maxWidth: 480,
+                      mx: 'auto',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      '& canvas': {
+                        filter: theme => theme.palette.mode === 'dark' 
+                          ? 'drop-shadow(0px 8px 16px rgba(255, 255, 255, 0.25))' 
+                          : 'drop-shadow(0px 8px 20px rgba(140, 180, 250, 0.3))',
+                        transition: 'all 0.3s ease',
+                        '&:hover': {
+                          transform: 'scale(1.02)',
+                        }
                       }
-                    }
-                  }}
-                >
-                  <Pie 
-                    data={statusData} 
-                    options={{
-                      ...chartOptions,
-                      maintainAspectRatio: false,
-                      responsive: true,
-                      plugins: {
-                        ...chartOptions.plugins,
-                        legend: {
-                          ...chartOptions.plugins.legend,
-                          position: 'bottom',
-                          align: 'center',
-                          labels: {
-                            ...chartOptions.plugins.legend.labels,
-                            padding: 25,
-                            font: {
-                              size: 14,
-                              weight: 600,
-                            },
-                            boxWidth: 15,
-                            boxHeight: 15,
+                    }}
+                  >
+                    <Pie 
+                      data={statusData} 
+                      options={{
+                        ...chartOptions,
+                        maintainAspectRatio: false,
+                        responsive: true,
+                        plugins: {
+                          ...chartOptions.plugins,
+                          legend: {
+                            display: false, // Hide default legend
                           },
                         },
-                      },
-                      cutout: '35%', // Smaller hole = bigger pie
-                      radius: '90%', // Larger radius = bigger pie
-                      animation: {
-                        animateScale: true,
-                        animateRotate: true,
-                        duration: 1000,
-                      },
-                      layout: {
-                        padding: {
-                          top: 5,
-                          bottom: 0,
-                          left: 5,
-                          right: 5
-                        }
-                      },
-                    }}
-                    id="project-status-chart"
-                    key={`pie-chart-${statusData.labels.join('-')}`}
-                  />
-                </Box>
-              )}
-            </Box>
-          </Paper>
+                        cutout: '35%', // Smaller hole = bigger pie
+                        radius: '90%', // Larger radius
+                        animation: {
+                          animateScale: true,
+                          animateRotate: true,
+                          duration: 300,
+                        },
+                        layout: {
+                          padding: {
+                            top: 5,
+                            bottom: 5,
+                            left: 5,
+                            right: 5
+                          }
+                        },
+                      }}
+                      id="project-status-chart"
+                      key={`pie-chart-${statusData.labels.join('-')}`}
+                    />
+                  </Box>
+                )}
+              </Box>
+            </Paper>
+          )}
         </Grid>
         
         <Grid item xs={12} md={6}>

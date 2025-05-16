@@ -5,10 +5,11 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { CustomThemeProvider } from './context/ThemeContext';
 import { AuthProvider } from './context/AuthContext';
 import NotificationProvider from './context/NotificationContext';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 // Styles
 import './styles/auth.css';
+import './styles/custom.css';
 
 // Components
 import Navbar from './components/layout/Navbar';
@@ -25,6 +26,8 @@ import AdminRoute from './components/routing/AdminRoute';
 import SuperAdminDashboard from './components/dashboard/SuperAdminDashboard';
 import SuperAdminRoute from './components/routing/SuperAdminRoute';
 import UserManagement from './components/admin/UserManagement';
+import AboutPage from './components/common/AboutPage';
+import Footer from './components/layout/Footer';
 
 function App() {
   return (
@@ -50,16 +53,29 @@ function AppRoutes() {
   // Style for the wrapper box that will apply the scaling
   const scaledContentStyle = {
     width: '125%', // Compensate for the 80% scale to maintain full width
-    height: '125%', // Compensate for the 80% scale to maintain full height
+    height: 'auto', // Let height adjust naturally 
     transform: 'scale(0.8)',
     transformOrigin: 'top left',
     position: 'relative',
-    overflow: 'hidden',
-    paddingBottom: '3rem', // Add extra padding at bottom to prevent cutoff
+    overflow: 'visible',
+    paddingBottom: '0.5rem', // Reduced padding at bottom
+    margin: 0,
+    '& .MuiContainer-root': {
+      paddingBottom: '1rem !important',
+      marginBottom: 0
+    },
     '& .MuiTabs-root, & .MuiTab-root': {
       // Override Tab-specific styles when scaled
       transformOrigin: 'top left',
       marginBottom: 0
+    },
+    // Ensure tab content is properly clickable and visible
+    '& [role="tabpanel"]': {
+      pointerEvents: 'auto',
+      minHeight: '400px', // Reduced minimum height
+      '& canvas': {
+        pointerEvents: 'auto'
+      }
     }
   };
 
@@ -68,84 +84,93 @@ function AppRoutes() {
       {!isAuthPage && <Navbar />}
       
       {/* Apply scaling to non-auth pages */}
-      <Box 
-        sx={isAuthPage ? {} : scaledContentStyle}
-        className={isAuthPage ? '' : 'scaled-container'}
+      <Box
+        sx={isAuthPage ? {} : { ...scaledContentStyle, display: 'flex', flexDirection: 'column' }}
+        className={isAuthPage ? '' : 'scaled-container container-fix'}
       >
-        <Routes>
-          {/* Redirect root to login */}
-          <Route path="/" element={<Navigate to="/login" />} />
-          
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          
-          {/* Dashboard route now at /dashboard */}
-          <Route
-            path="/superadmin"
-            element={
-              <SuperAdminRoute>
-                <Dashboard />
-              </SuperAdminRoute>
-            }
-          />
-          <Route
-            path="/dashboard"
-            element={
-              <PrivateRoute>
-                <Dashboard />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/projects"
-            element={
-              <PrivateRoute>
-                <ProjectList />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/projects/:id"
-            element={
-              <PrivateRoute>
-                <ProjectDetails />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/create-project"
-            element={
-              <AdminRoute>
-                <CreateProject />
-              </AdminRoute>
-            }
-          />
-          <Route
-            path="/admin/assign-projects"
-            element={
-              <AdminRoute>
-                <ProjectAssignment />
-              </AdminRoute>
-            }
-          />
-          <Route
-            path="/admin/user-management"
-            element={
-              <SuperAdminRoute>
-                <UserManagement />
-              </SuperAdminRoute>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <PrivateRoute>
-                <Profile />
-              </PrivateRoute>
-            }
-          />
-          <Route path="*" element={<Navigate to="/login" />} />
-        </Routes>
+        <Box component="main" sx={{ flex: 1 }}>
+          <Routes>
+            {/* Redirect root to login */}
+            <Route path="/" element={<Navigate to="/login" />} />
+            
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            
+            {/* Dashboard route now at /dashboard */}
+            <Route
+              path="/superadmin"
+              element={
+                <SuperAdminRoute>
+                  <Dashboard />
+                </SuperAdminRoute>
+              }
+            />
+            <Route
+              path="/dashboard"
+              element={
+                <PrivateRoute>
+                  <Dashboard />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/projects"
+              element={
+                <PrivateRoute>
+                  <ProjectList />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/projects/:id"
+              element={
+                <PrivateRoute>
+                  <ProjectDetails />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/create-project"
+              element={
+                <AdminRoute>
+                  <CreateProject />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path="/admin/assign-projects"
+              element={
+                <AdminRoute>
+                  <ProjectAssignment />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path="/admin/user-management"
+              element={
+                <SuperAdminRoute>
+                  <UserManagement />
+                </SuperAdminRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <PrivateRoute>
+                  <Profile />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/about"
+              element={
+                <AboutPage />
+              }
+            />
+            <Route path="*" element={<Navigate to="/login" />} />
+          </Routes>
+        </Box>
+        {!isAuthPage && <Footer />}
       </Box>
     </>
   );

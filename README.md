@@ -1,126 +1,180 @@
-# Projet de Stage SRM-MS 2025
+========================================================================
+#                      PROJET DE STAGE SRM-MS 2025                     #
+========================================================================
 
-Une application moderne de gestion de projets construite avec React et Node.js, avec une interface utilisateur élégante basée sur Material-UI et des fonctionnalités avancées de visualisation de données.
+# SRM Project Tracker
 
-## Fonctionnalités principales
+A modern project management application built with the MERN stack (MongoDB, Express.js, React, Node.js), designed to efficiently track and manage projects with advanced visualization features and role-based access control.
 
-- 🔐 Authentification utilisateur (Connexion/Inscription)
-- 🌓 Basculement entre thème clair/sombre
-- 📊 Tableau de bord interactif avec statistiques en temps réel
-- 📱 Conception responsive adaptée à tous les appareils
-- 📈 Visualisations et graphiques améliorés
-  - Taux de complétion des projets
-  - Tendances d'achèvement
-  - Analyse de progression
-- 📋 Gestion complète des projets
-  - Création et édition de projets
-  - Attribution d'utilisateurs
-  - Suivi de progression détaillé
-  - Système de commentaires
-- 👥 Gestion des utilisateurs avec rôles différenciés
-- 🛠️ Interface d'administration spécialisée
+## 🚀 Features
 
-## Améliorations récentes
+### 📊 Dashboard & Visualization
+- Interactive dashboard with real-time project statistics
+- Advanced data visualizations (completion rates, trends, progress analysis)
+- Customizable reports and metrics
 
-- ✅ Refonte complète des graphiques de tendance
-- ✅ Améliorations visuelles pour les indicateurs de performance
-- ✅ Interface administrateur avec notifications spécifiques
-- ✅ Optimisation de la performance et de l'expérience utilisateur
-- ✅ Ajout de fonctionnalités de filtrage et tri avancés
+### 📝 Project Management
+- Complete project lifecycle management
+- Progress tracking with customizable status options
+- Warranty period tracking and automatic status updates
+- Project filtering and sorting capabilities
 
-## Stack technique
+### 💬 Comments & Collaboration
+- Role-based comment system
+- Edit and delete comments with proper permissions
+- Real-time notifications for comment activities
+- @mentions and collaborative discussions
 
-- **Frontend:**
-  - React
-  - Material-UI 
-  - React Router
-  - Axios
-  - Chart.js pour les visualisations
-  - Context API pour la gestion d'état
+### 👥 User Management
+- Comprehensive role-based access control:
+  - Super Admin: Full system access
+  - Admin: Manage users and projects
+  - Manager: Oversee multiple projects
+  - Employee: Work on assigned projects
+  - User: Basic access to assigned projects
+- User profile management
+- Activity tracking and logs
 
-- **Backend:**
-  - Node.js
-  - Express
-  - MongoDB
-  - JWT pour l'authentification
+### 🔔 Notifications
+- Real-time notification system
+- Project deadline reminders
+- Progress milestone updates
+- Comment and mention alerts
 
-## Configuration de GitHub
+### 🌓 User Experience
+- Responsive design for all devices
+- Light/dark mode toggle
+- Modern Material-UI interface
+- Optimized performance
 
-1. Créer un nouveau repository sur GitHub:
-   - Accédez à [GitHub](https://github.com) et connectez-vous
-   - Cliquez sur "New repository"
-   - Nommez votre repository (ex: "Project-de-Stage-SRM-MS-2025")
-   - Choisissez une visibilité (publique ou privée)
-   - Ne pas initialiser avec README, .gitignore ou licence car le projet en contient déjà
-   - Cliquez sur "Create repository"
+## 🛠️ Technology Stack
 
-2. Initialiser le repository local et pousser vers GitHub:
+### Frontend
+- React.js with hooks and context API
+- Material-UI component library
+- Chart.js for data visualization
+- Axios for API communication
+- React Router for navigation
+
+### Backend
+- Node.js with Express.js
+- MongoDB with Mongoose ORM
+- JWT authentication
+- RESTful API architecture
+- Multer for file uploads
+
+## 📋 Installation
+
+### Prerequisites
+- Node.js (v14.x or higher)
+- MongoDB (v4.x or higher)
+- npm or yarn
+
+### Setup Instructions
+
+1. **Clone the repository**
 ```bash
-# Si le dossier n'est pas déjà initialisé comme repository Git
-git init
-
-# Ajouter tous les fichiers pour commit
-git add .
-
-# Créer le premier commit
-git commit -m "Initial commit"
-
-# Ajouter le remote URL (remplacez USERNAME par votre nom d'utilisateur GitHub)
-git remote add origin https://github.com/USERNAME/Project-de-Stage-SRM-MS-2025.git
-
-# Pousser vers GitHub
-git push -u origin master
+git clone https://github.com/your-username/srm-project-tracker.git
+cd srm-project-tracker
 ```
 
-## Installation
-
-1. Cloner le dépôt:
+2. **Backend Setup**
 ```bash
-git clone https://github.com/VOTRE-USERNAME/Project-de-Stage-SRM-MS-2025.git
-cd Project-de-Stage-SRM-MS-2025
-```
-
-2. Installer les dépendances du backend et du frontend:
-```bash
-# Installer les dépendances du backend
+# Install server dependencies
 npm install
 
-# Installer les dépendances du frontend
+# Create environment file (copy from example)
+cp .env.example .env
+
+# Configure your environment variables
+# Edit the .env file with your MongoDB URI and JWT secret
+```
+
+3. **Frontend Setup**
+```bash
+# Navigate to client directory
 cd client
+
+# Install client dependencies
 npm install
+
+# Return to root directory
+cd ..
 ```
 
-3. Créer un fichier `.env` dans le répertoire racine avec les variables suivantes:
-```env
-MONGODB_URI=votre_uri_mongodb
-JWT_SECRET=votre_secret_jwt
-PORT=5001
-```
-
-4. Démarrer les serveurs de développement:
+4. **Running the Application**
 ```bash
-# Démarrer le backend et le frontend simultanément (depuis le répertoire racine)
+# Run backend and frontend concurrently (from root directory)
 npm run dev:full
 
-# Ou démarrer séparément:
-# Backend (depuis le répertoire racine)
+# Or run separately:
+# Backend only
 npm run dev
 
-# Frontend (depuis le répertoire client)
+# Frontend only
 cd client
 npm start
 ```
 
-## Prérequis système
+5. **Initial Setup**
+```bash
+# After running the application for the first time, use the registration page to create your first account
+# Then use MongoDB Compass or a similar tool to change the role of your first user to 'superadmin'
+```
 
-- Node.js version: 14.x ou supérieure
-- MongoDB: 4.x ou supérieure
-- npm: 6.x ou supérieure
+## 🔐 Access Control & Permissions
 
-## Contributions
+| Feature | Super Admin | Admin | Manager | Employee | User |
+|---------|-------------|-------|---------|----------|------|
+| View Dashboard | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Create Project | ✅ | ✅ | ✅ | ❌ | ❌ |
+| Edit Any Project | ✅ | ✅ | ✅ | ❌ | ❌ |
+| Edit Assigned Project | ✅ | ✅ | ✅ | ✅ | ❌ |
+| Delete Project | ✅ | ✅ | ❌ | ❌ | ❌ |
+| Add Comment | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Edit Own Comment | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Edit Any Comment | ✅ | ✅ | ✅ | ❌ | ❌ |
+| Delete Own Comment | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Delete Any Comment | ✅ | ✅ | ✅ | ❌ | ❌ |
+| Manage Users | ✅ | ✅ | ❌ | ❌ | ❌ |
+| View Statistics | ✅ | ✅ | ✅ | ❌ | ❌ |
 
-Ce projet a été développé dans le cadre d'un stage professionnel. Les contributions sont les bienvenues via pull requests.
+## 📁 Project Structure
 
-## Licence
+```
+srm-project-tracker/
+├── client/                  # React frontend
+│   ├── public/              # Public assets
+│   ├── src/                 # Source code
+│       ├── components/      # React components
+│       ├── context/         # Context API stores
+│       ├── styles/          # CSS and styling
+│       └── utils/           # Utility functions
+│   └── package.json         # Frontend dependencies
+├── server/                  # Node.js backend
+│   ├── src/
+│   │   ├── models/          # Mongoose models
+│   │   ├── routes/          # API routes
+│   │   ├── middleware/      # Custom middleware
+│   │   ├── utils/           # Utility functions
+│   │   ├── config.js        # Configuration
+│   │   └── server.js        # Main server file
+│   └── .env.example         # Example environment variables
+├── uploads/                 # File uploads directory
+├── .env.example             # Example environment variables
+├── .gitignore               # Git ignore rules
+├── package.json             # Backend dependencies
+└── README.md                # Project documentation
+```
 
-Ce projet est sous licence MIT - voir le fichier LICENSE pour plus de détails. 
+## 📜 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 👨‍💻 Developer
+
+- Your Name - [GitHub Profile](https://github.com/your-username) 
