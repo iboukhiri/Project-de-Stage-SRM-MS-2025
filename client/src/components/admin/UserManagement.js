@@ -54,12 +54,12 @@ const roleMapping = {
     icon: <SuperAdminIcon fontSize="small" />
   },
   'admin': {
-    label: 'Administrateur',
-    color: 'warning',
-    icon: <AdminIcon fontSize="small" />
+    label: 'Chef de Projet',
+    color: 'primary',
+    icon: <ManagerIcon fontSize="small" />
   },
   'manager': {
-    label: 'Gestionnaire',
+    label: 'Chef de Projet',
     color: 'primary',
     icon: <ManagerIcon fontSize="small" />
   },
@@ -547,8 +547,8 @@ const UserManagement = () => {
               onChange={handleEditInputChange}
               label="Rôle"
             >
-              <MenuItem value="user">Utilisateur</MenuItem>
-              <MenuItem value="admin">Administrateur</MenuItem>
+              <MenuItem value="employee">Employé</MenuItem>
+              <MenuItem value="manager">Chef de Projet</MenuItem>
               <MenuItem value="superadmin">Super Administrateur</MenuItem>
             </Select>
           </FormControl>

@@ -244,17 +244,74 @@ const ProjectDetails = () => {
 
   const handleEditSubmit = async () => {
     try {
+      // Validation des données
+      if (!editData.title?.trim()) {
+        setError('Le titre du projet est requis');
+        return;
+      }
+
+      if (!editData.description?.trim()) {
+        setError('La description du projet est requise');
+        return;
+      }
+
+      // Préparation des données pour l'API
+      const projectData = {
+        ...editData,
+        title: editData.title.trim(),
+        description: editData.description.trim(),
+        assignedTo: selectedUsers.map(user => user._id),
+        progress: Number(editData.progress) || 0,
+        status: editData.status || 'Non démarré'
+      };
+
+      console.log('Envoi des données de mise à jour:', projectData);
+
       setLoading(true);
       const res = await axios.put(
         `${config.API_URL}/api/projects/${id}`, 
-        editData,
+        projectData,
         getAuthHeaders()
       );
+
+      if (!res.data) {
+        throw new Error('Réponse invalide du serveur');
+      }
+
+      console.log('Mise à jour réussie:', res.data);
+      
+      // Mise à jour de l'état local
       setProject(res.data);
       setEditMode(false);
+
+      // Mise à jour des utilisateurs assignés
+      if (res.data.assignedTo && users.length > 0) {
+        const assignedUserObjects = res.data.assignedTo.map(assignedUser => {
+          if (assignedUser._id && assignedUser.name) {
+            return assignedUser;
+          }
+          const userId = typeof assignedUser === 'object' ? assignedUser._id : assignedUser;
+          return users.find(user => user._id === userId) || null;
+        }).filter(Boolean);
+        setSelectedUsers(assignedUserObjects);
+      }
+
+      setError(null);
     } catch (error) {
-      console.error('Error updating project:', error);
-      setError('Erreur lors de la mise à jour du projet');
+      console.error('Erreur détaillée lors de la mise à jour:', error);
+      
+      if (error.response) {
+        // Erreur avec réponse du serveur
+        const errorMessage = error.response.data?.message || 'Erreur lors de la mise à jour du projet';
+        console.error('Réponse du serveur:', error.response.data);
+        setError(errorMessage);
+      } else if (error.request) {
+        // Erreur de réseau
+        setError('Erreur de connexion. Veuillez vérifier votre connexion internet.');
+      } else {
+        // Autre type d'erreur
+        setError('Une erreur inattendue s\'est produite lors de la mise à jour du projet.');
+      }
     } finally {
       setLoading(false);
     }
@@ -478,15 +535,11 @@ const ProjectDetails = () => {
     );
   }
 
-  // Check if user can edit (based on role and project ownership)
+  // Update canEdit logic to allow manager and admin to edit any project
   const canEdit = user && (
-    // Own project - anyone can edit their own project
-    (project.createdBy && (isSameId(user.id, project.createdBy._id) || isSameId(user._id, project.createdBy._id))) ||
-    // Superadmin can edit any project
     user.role === 'superadmin' ||
-    // Admin can only edit regular users' projects, not other admins'
-    (user.role === 'admin' && project.createdBy && 
-     project.createdBy.role !== 'admin' && project.createdBy.role !== 'superadmin')
+    user.role === 'admin' ||
+    user.role === 'manager'
   );
 
   return (

@@ -14,7 +14,7 @@ const checkAndUpdateGuaranteePhases = async () => {
     const projectsToEnterGuarantee = await Project.find({
       progress: 100,
       status: { $nin: ['En garantie', 'Terminé'] },
-      guaranteeDays: { $gt: 0 }
+      guaranteeMonths: { $gt: 0 }
     });
 
     // 2. Trouver tous les projets dont la date de fin de garantie est dépassée
@@ -31,9 +31,9 @@ const checkAndUpdateGuaranteePhases = async () => {
       project.status = 'En garantie';
       
       // Calculer la date de fin de garantie si ce n'est pas déjà fait
-      if (!project.guaranteeEndDate && project.guaranteeDays > 0) {
+      if (!project.guaranteeEndDate && project.guaranteeMonths > 0) {
         const today = new Date();
-        project.guaranteeEndDate = new Date(today.setDate(today.getDate() + project.guaranteeDays));
+        project.guaranteeEndDate = new Date(today.setMonth(today.getMonth() + project.guaranteeMonths));
       }
       
       await project.save();

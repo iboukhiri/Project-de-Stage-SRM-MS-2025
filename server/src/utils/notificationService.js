@@ -112,20 +112,17 @@ const createRoleChangeNotification = async (adminId, userId, newRole) => {
 
     let roleFrench;
     switch (newRole) {
-      case 'admin':
-        roleFrench = 'Administrateur';
-        break;
       case 'superadmin':
         roleFrench = 'Super Administrateur';
         break;
       case 'manager':
-        roleFrench = 'Gestionnaire';
+        roleFrench = 'Chef de Projet';
         break;
       case 'employee':
         roleFrench = 'Employé';
         break;
       default:
-        roleFrench = 'Utilisateur';
+        roleFrench = 'Employé';
     }
 
     const content = `${admin.name} a changé votre rôle à "${roleFrench}"`;

@@ -41,13 +41,16 @@ router.get('/:id', auth, async (req, res) => {
 // Create new project
 router.post('/', auth, async (req, res) => {
   try {
+    if (req.user.role !== 'superadmin' && req.user.role !== 'manager' && req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Accès non autorisé' });
+    }
     const {
       title,
       description,
       startDate,
       endDate,
       assignedTo,
-      guaranteeDays
+      guaranteeMonths
     } = req.body;
 
     const project = new Project({
@@ -57,7 +60,7 @@ router.post('/', auth, async (req, res) => {
       endDate,
       createdBy: req.user.id,
       assignedTo,
-      guaranteeDays: guaranteeDays || 0
+      guaranteeMonths: guaranteeMonths || 0
     });
 
     await project.save();
@@ -82,19 +85,23 @@ router.post('/', auth, async (req, res) => {
 // Update project
 router.put('/:id', auth, async (req, res) => {
   try {
+    if (req.user.role !== 'superadmin' && req.user.role !== 'manager' && req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Accès non autorisé' });
+    }
     let project = await Project.findById(req.params.id);
     if (!project) return res.status(404).json({ msg: 'Project not found' });
 
-    // Only allow creator, superadmin, or admin (with exceptions) to edit
+    // Only allow creator, superadmin, manager, or admin to edit
     if (
       project.createdBy.toString() !== req.user.id && // Not the creator
-      req.user.role !== 'superadmin' && // Not a superadmin (superadmins can edit any project)
-      !(req.user.role === 'admin' && project.createdBy.role !== 'admin') // Admin can't edit other admin's projects
+      req.user.role !== 'superadmin' && // Not a superadmin
+      req.user.role !== 'manager' && // Not a manager
+      req.user.role !== 'admin' // Not an admin
     ) {
       return res.status(401).json({ msg: 'Not authorized to edit this project' });
     }
 
-    const { title, description, status, progress, startDate, endDate, assignedTo, guaranteeDays } = req.body;
+    const { title, description, status, progress, startDate, endDate, assignedTo, guaranteeMonths } = req.body;
 
     // Build project object
     const projectFields = {};
@@ -105,7 +112,7 @@ router.put('/:id', auth, async (req, res) => {
     if (startDate) projectFields.startDate = startDate;
     if (endDate) projectFields.endDate = endDate;
     if (assignedTo) projectFields.assignedTo = assignedTo;
-    if (guaranteeDays !== undefined) projectFields.guaranteeDays = guaranteeDays;
+    if (guaranteeMonths !== undefined) projectFields.guaranteeMonths = guaranteeMonths;
 
     // Check if assignedTo has changed
     const assignmentChanged = assignedTo && 
@@ -123,13 +130,30 @@ router.put('/:id', auth, async (req, res) => {
     );
 
     // Create notification if assignedTo has changed
-    if (assignmentChanged) {
-      await notificationService.createProjectAssignmentNotification(
-        project._id,
-        assignedTo,
-        req.user.id,
-        project.title
-      );
+    if (assignmentChanged && Array.isArray(assignedTo)) {
+      // Find newly assigned users (not already in project.assignedTo)
+      const oldAssigned = (project.assignedTo || []).map(id => id.toString());
+      const newAssigned = assignedTo.map(id => id.toString());
+      const newUsers = newAssigned.filter(id => !oldAssigned.includes(id));
+      for (const userId of newUsers) {
+        if (userId !== req.user.id) { // Don't notify self
+          await notificationService.createProjectAssignmentNotification(
+            project._id,
+            userId,
+            req.user.id,
+            project.title
+          );
+        }
+      }
+    } else if (assignmentChanged && assignedTo && !Array.isArray(assignedTo)) {
+      if (assignedTo.toString() !== req.user.id) {
+        await notificationService.createProjectAssignmentNotification(
+          project._id,
+          assignedTo,
+          req.user.id,
+          project.title
+        );
+      }
     }
 
     // Create notification if status has changed
@@ -182,13 +206,13 @@ router.post('/:id/comments', auth, async (req, res) => {
     // Create notification for all assigned users who aren't the commenter or owner
     if (project.assignedTo && project.assignedTo.length > 0) {
       for (const assignedUser of project.assignedTo) {
-        if (assignedUser.toString() !== req.user.id && 
-            assignedUser.toString() !== project.createdBy.toString()) {
+        const assignedId = assignedUser.toString();
+        if (assignedId !== req.user.id && assignedId !== project.createdBy.toString()) {
           await notificationService.createCommentNotification(
             project._id,
             project.comments[0]._id,
             req.user.id,
-            assignedUser,
+            assignedId,
             project.title
           );
         }
@@ -211,6 +235,9 @@ router.post('/:id/comments', auth, async (req, res) => {
 // Delete project
 router.delete('/:id', auth, async (req, res) => {
   try {
+    if (req.user.role !== 'superadmin' && req.user.role !== 'manager' && req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Accès non autorisé' });
+    }
     const project = await Project.findById(req.params.id);
     if (!project) {
       return res.status(404).json({ msg: 'Project not found' });
@@ -219,8 +246,9 @@ router.delete('/:id', auth, async (req, res) => {
     // Check project ownership or admin rights
     if (
       project.createdBy.toString() !== req.user.id && // Not the creator
-      req.user.role !== 'superadmin' && // Not a superadmin (superadmins can delete any project)
-      !(req.user.role === 'admin' && project.createdBy.role !== 'admin') // Admin can't delete other admin's projects
+      req.user.role !== 'superadmin' && // Not a superadmin
+      req.user.role !== 'manager' && // Not a manager
+      req.user.role !== 'admin' // Not an admin
     ) {
       return res.status(401).json({ msg: 'Not authorized to delete this project' });
     }

@@ -1,0 +1,5601 @@
+Rapport de Stage
+Développement d’une Application de Gestion de
+Projets
+Avec la Stack MERN
+STAGE EFFECTUÉ DU 1ER MAI AU 7 JUIN 2025
+
+Réalisé par :
+Iliass Boukhiri
+Étudiant deuxième année de DUT en
+génie informatique à l’École
+
+Encadré par :
+Mme. Sedraoui Fatima Ezzahra
+Responsable Développement
+SRM Marrakech-Safi
+
+supérieure de technologie de Khénifra
+
+SRM Marrakech-Safi
+Direction Régionale - Branch de Safi
+Services publics et gestion des ressources
+
+“L’innovation consiste à transformer des idées en valeur pour
+l’entreprise et les consommateurs, à créer de la valeur et à
+développer la croissance.”
+— Albert Einstein
+
+2025
+
+À propos de ce document
+Ce rapport présente le travail réalisé durant un stage de deux mois (maijuin 2025) au sein de SRM Marrakech-Safi. Il détaille la conception et le
+développement d’une application web de gestion de projets utilisant la
+stack MERN (MongoDB, Express, React, Node.js).
+Le document s’adresse à la fois aux évaluateurs académiques et aux
+membres de SRM Marrakech-Safi, présentant les aspects techniques et
+organisationnels du projet, ainsi que les compétences acquises durant
+cette expérience professionnelle.
+
+1
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+Table des matières
+Table des matières
+
+2
+
+Table des figures
+
+5
+
+Liste des tableaux
+
+6
+
+Remerciements
+
+6
+
+1 Introduction
+
+7
+
+1.1
+
+Contexte du Stage . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+8
+
+Stack Technologique . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+8
+
+1.2 Objectifs du Stage . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+8
+
+1.3 Structure du Rapport . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+9
+
+2 Présentation de SRM Marrakech-Safi
+2.1
+
+10
+
+Historique et Missions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+10
+
+2.2 Organisation Interne . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+11
+
+3 Problématique et Cahier des Charges
+3.1
+
+12
+
+Problématique . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+12
+
+3.2 Besoin Fonctionnel . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+13
+
+3.3 Besoin Non Fonctionnel . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+13
+
+4 Benchmarking des Solutions Techniques
+4.1
+
+14
+
+Comparaison des Technologies . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+14
+
+Justification du Choix de MERN . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+14
+
+5 Architecture de l’Application
+
+15
+
+5.1 Architecture Générale . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+15
+
+5.2 Flux de Données . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+16
+
+Optimisations du Flux de Données . . . . . . . . . . . . . . . . . . . . . . . . .
+
+17
+
+Sécurisation du Flux de Données . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+17
+
+6 Mise en Œuvre
+6.1
+
+18
+
+Développement du Backend . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+18
+
+Architecture du Backend . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+18
+
+2
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+Modèles de Données . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+18
+
+API RESTful . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+20
+
+Middleware d’Authentification . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+21
+
+Contrôleurs . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+22
+
+6.2 Développement du Frontend
+
+. . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+24
+
+Architecture des Composants . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+24
+
+Gestion de l’État avec Context API . . . . . . . . . . . . . . . . . . . . . . . .
+
+26
+
+Interface Utilisateur avec Material-UI . . . . . . . . . . . . . . . . . . . . . . .
+
+27
+
+Visualisation de Données . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+30
+
+Optimisation des Performances . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+32
+
+6.3 Intégration et Déploiement . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+32
+
+Communication Frontend-Backend . . . . . . . . . . . . . . . . . . . . . . . .
+
+32
+
+Sécurité des Communications . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+34
+
+Environnement de Développement Intégré . . . . . . . . . . . . . . . . . . .
+
+35
+
+Stratégie de Déploiement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+35
+
+Configuration de Nginx . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+37
+
+7 Défis Rencontrés et Solutions
+7.1
+
+7.2
+
+38
+
+Défis Techniques . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+38
+
+Implémentation du Système RBAC . . . . . . . . . . . . . . . . . . . . . . . .
+
+38
+
+Optimisation des Performances de la Base de Données . . . . . . . . . . .
+
+40
+
+Gestion des Notifications en Temps Réel . . . . . . . . . . . . . . . . . . . . .
+
+42
+
+Défis Organisationnels . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+43
+
+Recueil des Besoins Métier . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+44
+
+Adaptation à l’Environnement Technique Existant . . . . . . . . . . . . . . .
+
+44
+
+Formation des Utilisateurs . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+44
+
+Gestion du Temps et des Priorités . . . . . . . . . . . . . . . . . . . . . . . . .
+
+45
+
+8 Tests et Validation
+
+46
+
+8.1 Tests Unitaires . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+46
+
+Tests Unitaires du Backend . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+46
+
+Tests Unitaires du Frontend
+
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+49
+
+8.2 Tests d’Intégration . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+50
+
+Tests API End-to-End . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+51
+
+8.3 Tests Utilisateurs . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+54
+
+Méthodologie des Tests Utilisateurs . . . . . . . . . . . . . . . . . . . . . . . .
+
+54
+
+Résultats et Améliorations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+55
+
+8.4 Tests de Performance . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+56
+
+Méthodologie et Outils
+
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+56
+
+Résultats et Optimisations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+56
+
+9 Fonctionnalités Implémentées
+
+57
+
+9.1 Authentification et Gestion des Utilisateurs . . . . . . . . . . . . . . . . . . . .
+
+3
+
+57
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+9.2 Gestion des Projets . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+57
+
+9.3 Visualisation de Données et Analytics . . . . . . . . . . . . . . . . . . . . . . .
+
+58
+
+Technologies de Visualisation . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+59
+
+Tableaux de Bord Interactifs . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+61
+
+9.4 Tableaux de Bord et Analyses . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+61
+
+9.5 Notifications et Alertes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+61
+
+9.6 Contrôle d’Accès Basé sur les Rôles . . . . . . . . . . . . . . . . . . . . . . . .
+
+61
+
+Architecture du Système de Notifications . . . . . . . . . . . . . . . . . . . .
+
+61
+
+Interface Utilisateur des Notifications . . . . . . . . . . . . . . . . . . . . . . .
+
+62
+
+Alertes pour les Échéances . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+63
+
+10 Points Forts Techniques
+
+63
+
+10.1 Architecture Modulaire . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+63
+
+10.2 Sécurité et Performance . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+63
+
+10.3 Optimisation des Requêtes MongoDB . . . . . . . . . . . . . . . . . . . . . .
+
+64
+
+10.4 Tâches Planifiées avec Node-cron
+
+. . . . . . . . . . . . . . . . . . . . . . . .
+
+64
+
+10.5 Intégration Continue . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+64
+
+10.6 Méthodologie de Développement . . . . . . . . . . . . . . . . . . . . . . . .
+
+64
+
+Approche Agile et Sprints . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+64
+
+Gestion de Version avec Git . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+64
+
+Revue de Code et Tests . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+64
+
+11 Modèles de Données Détaillés
+
+64
+
+12 API et Endpoints
+
+66
+
+13 Perspectives et Améliorations Futures
+
+67
+
+13.1 Vision Stratégique . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+67
+
+13.2 Évolutions Techniques Planifiées . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+67
+
+Application Mobile Cross-Platform . . . . . . . . . . . . . . . . . . . . . . . . .
+
+67
+
+Intelligence Artificielle et Analyses Prédictives . . . . . . . . . . . . . . . . . .
+
+68
+
+Intégration avec d’Autres Systèmes . . . . . . . . . . . . . . . . . . . . . . . .
+
+68
+
+13.3 Roadmap de Développement . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+69
+
+13.4 Impact Métier Attendu . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+69
+
+14 Extraits de Code Backend
+
+70
+
+15 Conclusion et Perspectives
+
+71
+
+15.1 Bilan du Stage . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+71
+
+15.2 Perspectives . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+71
+
+Feuille de Route . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+72
+
+Glossaire
+
+73
+
+A Annexes
+
+73
+
+4
+
+A.1 Captures d’Écran de l’Application . . . . . . . . . . . . . . . . . . . . . . . .
+
+75
+
+A.2 Technologies Utilisées . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+75
+
+A.3 Diagramme d’Architecture Détaillé . . . . . . . . . . . . . . . . . . . . . . . .
+
+75
+
+A.4 Glossaire Technique . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+75
+
+Notes Finales
+
+76
+
+Bibliographie
+
+77
+
+Bibliographie
+
+77
+Exemple de Graphique : Aperçu du tableau de bord
+FIGURE 0.1 – Aperçu de démonstration de l’interface
+
+Indicateur
+
+Valeur
+
+Projets initiaux
+Taux de complétion
+Utilisateurs actifs
+
+5
+85%
+12
+
+TABLE 0.1 – Tableau d’exemple d’indicateurs clés
+
+Table des figures
+0.1 Aperçu de démonstration de l’interface . . . . . . . . . . . . . . . . . . . . . . .
+
+5
+
+1.1
+
+Node.js - Environnement d’exécution JavaScript côté serveur . . . . . . . . . .
+
+8
+
+1.2 MongoDB - Base de données NoSQL orientée documents . . . . . . . . . . . .
+
+8
+
+5.1
+
+Capture d’écran du tableau de bord principal de l’application . . . . . . . .
+
+16
+
+7.1
+
+Interface de l’application avec tooltips d’aide contextuelle . . . . . . . . . . .
+
+45
+
+7.2
+
+Tableau de suivi des tâches du projet . . . . . . . . . . . . . . . . . . . . . . . . .
+
+45
+
+8.1
+
+Interface utilisateur testée lors des sessions d’évaluation . . . . . . . . . . . . .
+
+55
+
+9.1 Tableau de bord principal . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+58
+
+9.2 Tableau de bord analytique avec visualisation des données . . . . . . . . . .
+
+58
+
+15.1 Interface utilisateur avec potentiel d’évolution . . . . . . . . . . . . . . . . . . .
+
+72
+
+A.1 Tableau de bord principal de l’application . . . . . . . . . . . . . . . . . . . . .
+
+74
+
+5
+
+A.2 Liste des projets . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+74
+
+A.3 Détail d’un projet . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+74
+
+A.4 Architecture de l’application MERN . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+76
+
+Liste des tableaux
+0.1 Tableau d’exemple d’indicateurs clés . . . . . . . . . . . . . . . . . . . . . . . .
+
+5
+
+4.1
+
+Comparaison des stacks technologiques . . . . . . . . . . . . . . . . . . . . . .
+
+15
+
+8.1
+
+Évolution de la satisfaction utilisateur suite aux tests . . . . . . . . . . . . . . . .
+
+56
+
+8.2 Amélioration des performances après optimisation . . . . . . . . . . . . . . . .
+
+56
+
+12.1 Principaux Endpoints de l’API . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+66
+
+13.1 Roadmap de développement sur 24 mois . . . . . . . . . . . . . . . . . . . . . .
+
+69
+
+Remerciements
+
+Je tiens à exprimer ma profonde gratitude à toutes les personnes qui
+m’ont soutenu et accompagné durant ce stage au sein de SRM
+Marrakech-Safi.
+
+6
+
+ŵ
+
+Encadrement académique
+À Monsieur Moulay Hafid Aabidi, mon encadrant académique,
+pour ses conseils précieux, sa disponibilité constante et son suivi
+rigoureux tout au long de ce stage.
+
+Ÿ
+
+Encadrement professionnel
+À Madame Sedraoui Fatima Ezzahra, mon encadrante en entreprise, pour son accueil chaleureux, son expertise technique et sa
+confiance dans la réalisation de ce projet.
+
+Je souhaite également remercier :
+— L’ensemble de l’équipe du département informatique de SRM Marrakech-Safi
+pour leur collaboration active et leur soutien au quotidien.
+— Mes camarades de promotion pour nos échanges d’expériences enrichissants.
+— Mes professeurs pour la qualité de leur enseignement qui m’a permis d’aborder
+ce stage avec les compétences nécessaires.
+— Ma famille pour son soutien indéfectible tout au long de mes études.
+
+Ce stage a constitué une étape fondamentale dans
+mon parcours professionnel, me permettant de confronter mes connaissances théoriques aux réalités du terrain et d’acquérir une expérience précieuse dans
+le développement d’applications web modernes.
+
+Chapitre 1
+
+Introduction
+Information Importante
+Ce rapport présente le travail réalisé durant un stage de deux mois au sein de SRM
+Marrakech-Safi, portant sur le développement d’une application web de gestion
+de projets utilisant la stack MERN (MongoDB, Express, React, Node.js).
+
+7
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+1.1 Contexte du Stage
+Le stage effectué au sein de SRM Marrakech-Safi, une entreprise publique multiservice
+au Maroc, s’inscrit dans le cadre de ma formation académique. Ce stage, d’une durée
+de deux mois, du 1er mai au 7 juin 2025, m’a permis de mettre en pratique mes compétences en développement web à travers la réalisation d’une application de gestion
+de projets pour le département informatique.
+
+FIGURE 1.2 – MongoDB - Base de données
+NoSQL orientée documents
+
+FIGURE 1.1 – Node.js - Environnement
+d’exécution JavaScript côté serveur
+
+Stack Technologique
+Pour le développement de cette application, j’ai utilisé la stack MERN, qui est un ensemble de technologies JavaScript open-source populaires :
+— MongoDB : Base de données NoSQL orientée documents, permettant une flexibilité dans la structure des données et facilitant l’évolution du schéma.
+— Express.js : Framework minimaliste pour Node.js, utilisé pour construire l’API RESTful
+qui sert d’interface entre le frontend et la base de données.
+— React.js : Bibliothèque JavaScript pour la création d’interfaces utilisateur interactives, utilisant une approche déclarative et componentisée.
+— Node.js : Environnement d’exécution JavaScript côté serveur, permettant de créer
+des applications réseau évolutives.
+Ce choix technologique a été motivé par la cohérence linguistique (JavaScript à tous
+les niveaux), la flexibilité du modèle de données et la performance globale de la stack
+pour les applications web modernes.
+
+1.2 Objectifs du Stage
+Note
+L’objectif principal de ce stage était de concevoir et développer une application
+web basée sur la stack MERN pour faciliter la gestion des projets au sein de SRM
+Marrakech-Safi.
+
+8
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+Cette application répond à un besoin crucial exprimé par le département informatique
+qui devait jusqu’alors gérer ses projets via des outils disparates (tableurs Excel, calendriers partagés, courriels), rendant diﬀicile le suivi en temps réel et la coordination entre
+les différentes équipes. Le nombre croissant de projets techniques (mise à niveau des infrastructures, déploiements d’applications, maintenance) nécessitait une solution centralisée pour améliorer l’eﬀicacité opérationnelle et la visibilité sur l’avancement des
+tâches.
+En choisissant une architecture MERN, nous avons opté pour une solution moderne,
+performante et flexible, capable de s’adapter aux besoins futurs de l’entreprise. Cette
+stack technologique offre plusieurs avantages clés dans ce contexte :
+— Facilité de développement : JavaScript comme langage unique pour le frontend
+et le backend
+— Performances : NodeJS pour les opérations asynchrones et MongoDB pour la flexibilité du schéma de données
+— Scalabilité : Architecture qui permet une évolution progressive selon les besoins
+— Écosystème riche : Large communauté et nombreuses bibliothèques disponibles
+Plus précisément, l’application devait répondre à plusieurs sous-objectifs :
+— Authentification sécurisée : Mettre en place un système d’identification robuste
+pour garantir que seuls les utilisateurs autorisés accèdent à l’application, avec
+des niveaux d’accès différenciés selon les rôles (administrateurs, chefs de projet,
+employés).
+— Suivi des projets : Offrir une interface permettant de créer, mettre à jour et suivre
+l’avancement des projets en temps réel, avec des fonctionnalités comme l’attribution de tâches et le suivi des échéances.
+— Analyses et tableaux de bord : Fournir des visualisations graphiques et des rapports pour aider les décideurs à évaluer la performance des projets et à identifier
+les éventuels goulets d’étranglement.
+— Notifications : Implémenter un système de notifications pour alerter les utilisateurs
+des mises à jour importantes, des échéances approchantes ou des nouvelles
+tâches assignées.
+— Accessibilité et ergonomie : Concevoir une interface utilisateur intuitive et accessible, adaptée aux différents profils d’utilisateurs au sein de l’entreprise.
+Ces objectifs ont guidé l’ensemble du processus de développement, depuis l’analyse
+des besoins jusqu’à la mise en production de l’application. Ils reflètent également les
+priorités de SRM Marrakech-Safi en matière de digitalisation et d’amélioration de la gestion interne.
+
+1.3 Structure du Rapport
+Ce rapport est structuré en plusieurs chapitres couvrant la présentation de l’entreprise,
+la problématique, l’analyse des besoins, l’architecture technique, la mise en œuvre, les
+défis rencontrés, les tests effectués et une conclusion générale.
+9
+
+1. Introduction - Présentation du contexte et des objectifs
+2. Présentation de SRM Marrakech-Safi - Historique et organisation
+3. Problématique - Besoins et cahier des charges
+4. Architecture - Architecture technique de la solution
+5. Mise en œuvre - Développement et déploiement
+6. Défis & Solutions - Problèmes rencontrés et solutions apportées
+7. Tests - Validation et performances
+8. Conclusion - Bilan et perspectives
+
+Chapitre 2
+
+Présentation de SRM Marrakech-Safi
+2.1 Historique et Missions
+SRM Marrakech-Safi est une entreprise publique multiservice opérant dans la région de
+Marrakech-Safi, avec une branche à Safi. Elle est chargée de la gestion de services essentiels tels que la distribution d’eau, l’assainissement, la gestion des déchets et d’autres
+services publics vitaux pour la population locale.
+Fondée dans le cadre des efforts de décentralisation et de modernisation des services
+publics au Maroc, SRM Marrakech-Safi joue un rôle stratégique dans le développement
+régional. L’entreprise s’engage à assurer la continuité et la qualité des services tout
+en adoptant des technologies modernes pour optimiser ses opérations. Ses missions
+incluent :
+La création de SRM Marrakech-Safi s’inscrit dans une vision nationale de régionalisation
+avancée initiée par le gouvernement marocain. Cette stratégie vise à rapprocher les
+services publics des citoyens tout en améliorant leur eﬀicacité grâce à une gestion
+plus autonome et adaptée aux spécificités locales. L’entreprise a été constituée suite
+à la fusion de plusieurs régies locales préexistantes, apportant avec elle un héritage de
+savoir-faire technique et une connaissance approfondie du territoire.
+Dans un contexte de croissance démographique et d’urbanisation rapide de la région,
+SRM Marrakech-Safi fait face à des défis considérables en termes d’extension et de modernisation des réseaux, d’optimisation des ressources et d’amélioration continue de
+la qualité de service. L’adoption des technologies numériques représente un axe stra10
+
+tégique majeur pour relever ces défis, d’où l’importance accordée au département
+informatique et à ses projets.
+Les principales missions de l’entreprise comprennent :
+— La gestion durable des ressources en eau et des infrastructures d’assainissement.
+— La collecte, le traitement et la valorisation des déchets pour minimiser l’impact
+environnemental.
+— La coordination avec les autorités locales pour répondre aux besoins spécifiques
+de la population.
+— L’innovation dans les processus internes pour améliorer l’eﬀicacité et réduire les
+coûts.
+Le siège de l’entreprise est situé à Marrakech, avec des branches opérationnelles comme
+celle de Safi, où j’ai effectué mon stage. Cette branche dessert une population importante et gère des projets d’infrastructure critiques pour la région. Mon stage s’est déroulé
+au sein du département informatique de la branche de Safi, un département clé dans
+la transformation numérique de l’entreprise.
+
+2.2
+
+Organisation Interne
+
+L’entreprise est structurée en plusieurs départements, dont le département informatique où j’ai effectué mon stage. Ce département est responsable de la maintenance
+des systèmes d’information, du développement de solutions numériques pour les différents services, et de la sécurisation des données de l’entreprise.
+Le département informatique est organisé en plusieurs équipes spécialisées :
+— Équipe infrastructure : Responsable de la gestion des serveurs, des réseaux et des
+équipements matériels.
+— Équipe développement : Chargée de concevoir et de mettre en œuvre des applications internes, comme celle sur laquelle j’ai travaillé.
+— Équipe support : Fournit une assistance technique aux employés et résout les problèmes liés aux systèmes d’information.
+— Équipe sécurité : S’assure que les données et les systèmes sont protégés contre
+les cybermenaces.
+Durant mon stage, j’ai principalement collaboré avec l’équipe développement, sous
+la supervision de Madame Sedraoui Fatima Ezzahra. Cette équipe travaille sur divers
+projets de digitalisation, allant de la gestion des ressources humaines à l’optimisation des
+processus opérationnels. Mon projet, une application de gestion de projets, s’inscrivait
+directement dans cette dynamique de transformation numérique, visant à améliorer la
+coordination et la visibilité des initiatives internes.
+L’organisation hiérarchique de SRM Marrakech-Safi favorise une communication fluide
+entre les départements, bien que des défis subsistent en raison de la taille de l’entreprise
+et de la diversité des services gérés. Mon expérience au sein du département informa-
+
+11
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+tique m’a permis de comprendre l’importance d’une collaboration inter-équipes pour
+mener à bien un projet.
+
+Chapitre 3
+
+Problématique et Cahier des Charges
+3.1 Problématique
+Le département informatique de SRM Marrakech-Safi faisait face à des défis liés à la
+gestion manuelle des projets, entraînant des retards et un manque de visibilité sur l’avancement des tâches.
+Avant la mise en place de cette application, le département informatique rencontrait
+plusieurs problèmes majeurs dans la gestion de ses projets :
+— Fragmentation des données : Les informations relatives aux projets étaient dispersées entre différents outils (tableurs Excel, emails, documents Word), ce qui compliquait considérablement la consolidation des données et l’obtention d’une vue
+d’ensemble.
+— Suivi en temps réel diﬀicile : L’absence d’un système centralisé rendait presque
+impossible le suivi en temps réel de l’avancement des projets, obligeant les responsables à organiser fréquemment des réunions chronophages.
+— Communication ineﬀicace : Les membres de l’équipe n’avaient pas de plateforme commune pour échanger sur les projets, ce qui entraînait souvent des malentendus et des retards dans la transmission des informations critiques.
+— Allocation des ressources sous-optimale : Sans visibilité claire sur la charge de
+travail et la disponibilité des équipes, l’allocation des ressources se faisait souvent
+de manière intuitive plutôt que basée sur des données objectives.
+— Diﬀiculté à générer des rapports d’activité : La production de rapports fiables pour
+la direction nécessitait un travail manuel considérable et était sujette à erreurs.
+Ces diﬀicultés avaient un impact direct sur l’eﬀicacité opérationnelle du département
+et, par extension, sur l’ensemble de l’entreprise qui dépend fortement de ses services
+informatiques pour son fonctionnement quotidien.
+
+12
+
+3.2
+
+Besoin Fonctionnel
+
+L’application devait permettre la création, le suivi et la gestion des projets, avec des
+tableaux de bord pour les analyses et des notifications pour les échéances.
+
+3.3
+
+Besoin Non Fonctionnel
+
+L’application devait être sécurisée, performante et accessible à différents rôles (administrateurs, chefs de projet, employés).
+— Sécurité : Implémentation d’un système d’authentification robuste basé sur JWT,
+avec une gestion précise des rôles et permissions pour garantir que chaque utilisateur n’accède qu’aux ressources autorisées. Protection contre les attaques
+courantes (XSS, CSRF, injection SQL) à travers des validations strictes et l’utilisation
+de bibliothèques sécurisées.
+— Performance : Temps de réponse rapides (moins de 500ms) pour les opérations
+courantes, optimisation des requêtes à la base de données avec indexation appropriée, mise en cache des données fréquemment consultées, et chargement
+paresseux des composants React pour un démarrage rapide de l’application.
+— Accessibilité : Interface utilisateur intuitive adaptée aux différents niveaux techniques des utilisateurs, respect des standards d’accessibilité WCAG 2.1 niveau AA,
+compatibilité avec les lecteurs d’écran, et support des raccourcis clavier pour
+une navigation eﬀicace.
+— Compatibilité : Fonctionnement optimal sur les navigateurs modernes (Chrome,
+Firefox, Edge, Safari), design responsive pour s’adapter aux différentes tailles d’écran
+(desktop, tablette) pour permettre un usage flexible en bureau ou en déplacement.
+— Maintenabilité : Code modulaire et bien documenté, utilisation de patterns de
+conception standards, tests automatisés avec une couverture de code d’au
+moins 70%, et documentation technique complète pour faciliter l’évolution future du système.
+— Scalabilité : Architecture permettant d’ajouter de nouvelles fonctionnalités sans
+refonte majeure, capacité à gérer une augmentation du volume de données et
+d’utilisateurs, et séparation claire des responsabilités entre les composants.
+Ces exigences non fonctionnelles ont guidé les choix technologiques et architecturaux
+tout au long du projet, assurant que l’application réponde non seulement aux besoins
+métier mais aussi aux standards de qualité logicielle attendus dans un environnement
+
+13
+
+professionnel comme celui de SRM Marrakech-Safi.
+
+Chapitre 4
+
+Benchmarking des Solutions
+Techniques
+4.1 Comparaison des Technologies
+Une analyse comparative a été réalisée pour choisir la stack MERN, en raison de sa
+flexibilité, de sa communauté active et de sa compatibilité avec les besoins du projet.
+
+Justification du Choix de MERN
+La stack MERN s’est démarquée pour plusieurs raisons stratégiques :
+— Uniformité du langage : L’utilisation de JavaScript sur toute la pile technologique
+a facilité le développement et la maintenance, permettant une meilleure cohérence et réutilisation du code.
+— Modèle de données flexible : MongoDB permet d’adapter facilement le schéma
+de données aux évolutions futures des besoins, sans migrations complexes comme
+ce serait le cas avec une base de données relationnelle.
+— Architecture orientée API : Express.js facilite la création d’APIs RESTful robustes, permettant une séparation claire entre le backend et le frontend, et ouvrant la voie
+à de futures applications mobiles ou intégrations tierces.
+— Écosystème React : La bibliothèque React offre une approche componentisée
+qui améliore la maintenabilité et les performances, avec un vaste écosystème
+de composants réutilisables.
+— Support de l’asynchrone : Node.js excelle dans le traitement des opérations asynchrones, idéal pour une application de gestion de projet où plusieurs utilisateurs
+interagissent simultanément.
+Cette analyse comparative a été validée avec l’équipe technique de SRM MarrakechSafi, en tenant compte des compétences disponibles et des perspectives d’évolution
+
+14
+
+Rapport de Stage
+
+Iliass Boukhiri
+TABLE 4.1 – Comparaison des stacks technologiques
+
+Critère
+
+MERN
+
+Langage princi- JavaScript (unifié
+pal
+frontend/backend)
+Base de don- MongoDB (NoSQL,
+nées
+flexible)
+Facilité
+d’ap- Élevée (un seul lanprentissage
+gage)
+Performance
+Bonne
+(Node.js
+asynchrone)
+Communauté
+Très active et innovante
+Flexibilité
+du Excellente (NoSQL)
+schéma
+Temps de déve- Rapide
+loppement
+Scalabilité
+Horizontale
+Déploiement
+Sécurité
+Adéquation au
+projet
+
+LAMP
+
+Django
+
+PHP (backend)
+JavaScript
+(frontend)
+MySQL (SQL, relationnel)
+Moyenne
+(deux
+écosystèmes)
+Moyenne (PHP synchrone)
+Active et établie
+
+Python (backend)
+JavaScript
+(frontend)
+PostgreSQL/MySQL
+(SQL, relationnel)
+Moyenne
+(deux
+écosystèmes)
+Bonne (Python optimisé)
+Active et structurée
+Limitée (SQL)
+Limitée (ORM sur
+SQL)
+Moyen
+Rapide avec scaffolding
+Verticale principa- Mixte
+lement
+Conteneurisation
+Hébergement tra- Conteneurisation
+facile
+ditionnel
+possible
+Bonne avec confi- Très bonne par dé- Excellente par déguration
+faut
+faut
+La stack MERN a été choisie pour ce projet en raison de son
+unification du langage JavaScript (frontend/backend), la
+flexibilité de MongoDB pour l’évolution du schéma de données, et l’excellent écosystème de packages npm disponibles.
+
+à long terme de l’application.
+
+Chapitre 5
+
+Architecture de l’Application
+5.1 Architecture Générale
+L’application suit une architecture client-serveur avec une séparation claire entre le
+frontend (React) et le backend (Node.js/Express), connectés à une base de données
+MongoDB.
+15
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+Cette architecture présente plusieurs avantages majeurs dans le contexte de SRM MarrakechSafi :
+— Séparation des préoccupations : En distinguant clairement le frontend du backend, l’architecture permet une maintenance plus aisée et une évolution indépendante des différentes couches de l’application.
+— Scalabilité horizontale : Le choix de Node.js pour le backend permet de gérer
+eﬀicacement de nombreuses connexions simultanées, tandis que MongoDB peut
+être facilement répliqué pour répondre à une augmentation de la charge.
+— API RESTful : L’interface entre le frontend et le backend est basée sur des principes REST, facilitant l’intégration future avec d’autres systèmes ou applications
+mobiles.
+— Déploiement flexible : Les différents composants peuvent être déployés indépendamment, permettant une stratégie de mise à jour progressive sans interruption
+de service.
+
+FIGURE 5.1 – Capture d’écran du tableau de bord principal de l’application
+
+Note
+L’architecture MERN permet une séparation claire des responsabilités tout en
+maintenant une cohérence technologique avec JavaScript comme langage
+commun entre le frontend et le backend.
+
+5.2
+
+Flux de Données
+
+Dans l’application MERN, les données suivent un flux bien défini :
+1. Interaction utilisateur : L’utilisateur interagit avec l’interface React, déclenchant
+des actions (clic sur un bouton, soumission d’un formulaire, etc.)
+2. Gestion d’état locale : Le composant React met à jour son état local via useState
+ou useReducer pour les changements d’interface immédiats
+3. Propagation vers le Context API : Pour les données partagées entre composants,
+l’action est propagée au Context API qui gère l’état global de l’application
+16
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+4. Requête API : Le Context déclenche une requête HTTP via Axios vers le backend
+Express, avec authentification JWT dans les en-têtes
+5. Middleware Express : La requête est d’abord traitée par des middlewares (authentification, validation, logging) avant d’atteindre le contrôleur
+6. Contrôleur : Le contrôleur Express traite la logique métier, effectue les validations
+nécessaires et prépare les opérations de base de données
+7. Modèle Mongoose : Les modèles Mongoose exécutent les requêtes MongoDB
+(CRUD), avec validation des données selon le schéma défini
+8. Base de données : MongoDB stocke ou récupère les données demandées, exécutant des index si nécessaire pour optimiser les performances
+9. Retour au client : Les données sont retournées au frontend via la réponse HTTP,
+généralement au format JSON
+10. Mise à jour du Context : Le Context API est mis à jour avec les nouvelles données,
+déclenchant une re-render des composants concernés
+11. Rendu React : Les composants React se mettent à jour en fonction du nouvel état,
+aﬀichant les données actualisées à l’utilisateur
+
+Optimisations du Flux de Données
+Pour garantir des performances optimales, plusieurs stratégies ont été mises en place :
+— Mémoïsation React : Utilisation de React.memo, useMemo et useCallback pour
+éviter les rendus inutiles et optimiser les performances frontend
+— Débouncing : Implémentation de techniques de debounce sur les formulaires de
+recherche pour limiter le nombre de requêtes API
+— Pagination côté serveur : Limitation du nombre d’éléments retournés par requête
+pour gérer eﬀicacement les grands volumes de données
+— Mise en cache : Stratégie de mise en cache des données fréquemment consultées pour réduire les appels au backend
+— Chargement progressif : Loading states et Skeleton UI pour améliorer l’expérience
+utilisateur pendant le chargement des données
+— Validation préemptive : Validation des données côté client avant envoi au serveur pour réduire les allers-retours inutiles
+Cette architecture de flux de données permet une séparation claire des responsabilités,
+facilite la maintenance et assure une expérience utilisateur fluide même lors d’opérations complexes sur les projets.
+
+Sécurisation du Flux de Données
+La sécurité a été une préoccupation centrale dans la conception du flux de données :
+— Authentification JWT : Vérification systématique de la validité du token JWT pour
+chaque requête API
+
+17
+
+— Sanitization : Nettoyage des inputs utilisateur côté serveur pour prévenir les injections NoSQL et XSS
+— Rate limiting : Limitation du nombre de requêtes par utilisateur pour prévenir les
+attaques par force brute
+— Contrôle d’accès RBAC : Vérification granulaire des permissions basée sur les rôles
+à chaque point d’accès API
+— Audit trail : Journalisation des modifications importantes pour assurer la traçabilité
+des actions
+Cette approche multicouche de la sécurité assure que les données sensibles sont protégées tout au long de leur cycle de vie dans l’application.
+
+Chapitre 6
+
+Mise en Œuvre
+6.1 Développement du Backend
+Le backend a été développé avec Node.js et Express, avec des endpoints pour la gestion des utilisateurs, des projets et des notifications.
+
+Architecture du Backend
+Le backend suit une architecture MVC (Modèle-Vue-Contrôleur) adaptée au contexte
+d’une API RESTful :
+— Modèles : Définition des schémas Mongoose pour les utilisateurs, projets et notifications
+— Contrôleurs : Logique métier pour traiter les requêtes et produire les réponses
+— Routes : Configuration des endpoints API et liaison avec les contrôleurs
+— Middleware : Fonctionnalités transversales comme l’authentification et la validation
+
+Modèles de Données
+Les modèles Mongoose ont été soigneusement conçus pour représenter les entités principales du système. Voici un extrait du modèle de projet :
+1
+2
+
+const mongoose = require ('mongoose ');
+const Schema = mongoose . Schema ;
+
+18
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+3
+
+// Définition du schéma de projet
+const projectSchema = new Schema ({
+6
+// Propriétés de base du projet
+7
+title : {
+8
+type: String ,
+9
+required : true ,
+10
+trim: true
+11
+},
+12
+description : {
+13
+type: String ,
+14
+required : true
+15
+},
+16
+status : {
+17
+type: String ,
+18
+enum: ['Not Started ', 'In Progress ', 'On Hold ', 'Completed '],
+19
+default : 'Not Started '
+20
+},
+21
+progress : {
+22
+type: Number ,
+23
+min: 0,
+24
+max: 100 ,
+25
+default : 0
+26
+},
+4
+5
+
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+
+// Dates importantes
+startDate : {
+type: Date ,
+required : true
+},
+endDate : {
+type: Date ,
+required : true
+},
+
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+
+// Relations avec d'autres entités
+createdBy : {
+type: Schema . Types .ObjectId ,
+ref: 'User ',
+required : true
+},
+assignedTo : [{
+type: Schema . Types .ObjectId ,
+ref: 'User '
+}],
+
+48
+49
+50
+
+// Commentaires imbriqués
+comments : [{
+
+19
+
+Rapport de Stage
+
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+
+Iliass Boukhiri
+
+text: String ,
+createdBy : {
+type: Schema . Types .ObjectId ,
+ref: 'User '
+},
+createdAt : {
+type: Date ,
+default : Date.now
+}
+}],
+
+61
+
+// Timestamps automatiques
+createdAt : {
+64
+type: Date ,
+65
+default : Date.now
+66
+},
+67
+updatedAt : {
+68
+type: Date ,
+69
+default : Date.now
+70
+}
+71 }, { timestamps : true });
+62
+63
+
+72
+
+// Index pour optimiser les recherches fréquentes
+projectSchema . index ({ status : 1 });
+75 projectSchema . index ({ createdBy : 1 });
+76 projectSchema . index ({ assignedTo : 1 });
+73
+74
+
+77
+78
+
+module . exports = mongoose . model ('Project ', projectSchema );
+Listing 6.1 – Modèle de projet avec Mongoose
+
+API RESTful
+L’API expose des endpoints suivant les principes REST pour chaque entité. L’authentification est gérée via JWT (JSON Web Tokens) et les autorisations sont vérifiées par un
+middleware basé sur les rôles.
+const
+2 const
+3 const
+4 const
+5 const
+1
+
+express = require ('express ');
+router = express . Router ();
+projectController = require ( '../ controllers / projectController ');
+authMiddleware = require ( '../ middleware / authMiddleware ');
+roleCheck = require ( '../ middleware /roleCheck ');
+
+6
+7
+
+// Routes publiques - aucune dans ce cas
+
+8
+
+// Routes protégées par authentification
+10 router .use( authMiddleware );
+9
+
+11
+
+20
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+// Routes accessibles à tous les utilisateurs authentifiés
+13 router .get('/', projectController . getProjects );
+14 router .get ( '/:id ', projectController . getProjectById );
+12
+
+15
+
+// Routes nécessitant des rôles spécifiques
+17 router .post ('/',
+18
+roleCheck (['admin ', 'manager ']) ,
+19
+projectController . createProject
+20 );
+16
+
+21
+
+router .put ( '/:id ',
+23
+roleCheck (['admin ', 'manager ']) ,
+24
+projectController . updateProject
+25 );
+22
+
+26
+
+router .patch ( '/: id/status ',
+28
+roleCheck (['admin ', 'manager ', 'employee ']) ,
+29
+projectController . updateStatus
+30 );
+27
+
+31
+
+router .patch ( '/: id/progress ',
+33
+roleCheck (['admin ', 'manager ', 'employee ']) ,
+34
+projectController . updateProgress
+35 );
+32
+
+36
+
+router .post ( '/: id/comments ',
+projectController . addComment
+39 );
+37
+38
+
+40
+
+router . delete ( '/:id ',
+42
+roleCheck (['admin ']) ,
+43
+projectController . deleteProject
+44 );
+41
+
+45
+46
+
+module . exports = router ;
+Listing 6.2 – Configuration des routes pour les projets
+
+Middleware d’Authentification
+La sécurité est un aspect crucial de l’application. Le middleware d’authentification
+vérifie la validité du JWT fourni dans les en-têtes de la requête :
+const jwt = require (' jsonwebtoken ');
+2 const User = require ( '../ models /User ');
+1
+
+3
+
+module . exports = async (req , res , next) => {
+5
+try {
+4
+
+21
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+// Récupération du token depuis l'en -tête
+const token = req. header (' Authorization '). replace (' Bearer ', '');
+
+6
+7
+8
+
+if (! token ) {
+return res. status (401) .json ({ message : 'Authentification requise '
+});
+}
+
+9
+10
+
+11
+12
+
+// Vérification du token
+const decoded = jwt. verify (token , process .env. JWT_SECRET );
+
+13
+14
+15
+
+// Recherche de l' utilisateur
+const user = await User. findById ( decoded .id). select ('-password ');
+
+16
+17
+18
+
+if (! user) {
+return res. status (401) .json ({ message : 'Utilisateur non trouvé ' });
+}
+
+19
+20
+21
+22
+
+if (! user. active ) {
+return res. status (403) .json ({ message : 'Compte désactivé ' });
+}
+
+23
+24
+25
+26
+
+// Attachement des infos utilisateur à la requête
+req.user = user;
+req.token = token ;
+
+27
+28
+29
+30
+
+next ();
+} catch ( error ) {
+res. status (401) .json ({ message : 'Token non valide ' });
+}
+
+31
+32
+33
+34
+35
+
+};
+Listing 6.3 – Middleware d’authentification JWT
+
+Contrôleurs
+Les contrôleurs contiennent la logique métier pour chaque opération. Voici un exemple
+simplifié du contrôleur pour la création de projets :
+1
+2
+
+const Project = require ( '../ models /Project ');
+const Notification = require ( '../ models / Notification ');
+
+3
+
+// Création d'un nouveau projet
+exports . createProject = async (req , res) => {
+6
+try {
+7
+const { title , description , startDate , endDate , assignedTo } = req.
+body;
+4
+5
+
+8
+
+22
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+// Validation des données d' entrée
+if (! title || ! description || ! startDate || ! endDate ) {
+return res. status (400) .json ({
+message : 'Veuillez fournir toutes les informations requises '
+});
+}
+
+9
+10
+11
+12
+13
+14
+15
+
+// Création du projet
+const newProject = new Project ({
+title ,
+description ,
+startDate ,
+endDate ,
+createdBy : req.user._id ,
+assignedTo : assignedTo || []
+});
+
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+
+const savedProject = await newProject .save ();
+
+26
+27
+
+// Création de notifications pour les membres assignés
+if ( assignedTo && assignedTo . length > 0) {
+const notifications = assignedTo .map( userId => ({
+user: userId ,
+message : `Vous avez été assigné au projet "${ title }"`,
+type: 'info ',
+relatedProject : savedProject ._id
+}));
+
+28
+29
+30
+31
+32
+33
+34
+35
+36
+
+await Notification . insertMany ( notifications );
+
+37
+
+}
+
+38
+39
+
+res. status (201) .json( savedProject );
+} catch ( error ) {
+console . error (' Erreur lors de la création du projet :', error );
+res. status (500) .json ({ message : 'Erreur serveur ' });
+}
+
+40
+41
+42
+43
+44
+45
+
+};
+Listing 6.4 – Extrait du contrôleur de projets
+
+Le backend a été développé avec une attention particulière à la performance, notamment grâce à l’utilisation d’index MongoDB pour les requêtes fréquentes et à l’optimisation des opérations de jointure (populate) pour limiter les temps de réponse.
+
+23
+
+Rapport de Stage
+
+6.2
+
+Iliass Boukhiri
+
+Développement du Frontend
+
+Le frontend, basé sur React, offre une interface utilisateur intuitive avec des composants
+pour les tableaux de bord, les listes de projets et les formulaires.
+
+Architecture des Composants
+L’application frontend a été structurée selon les principes de composants React, favorisant la réutilisabilité et la maintenabilité. L’architecture générale comprend plusieurs
+niveaux de composants :
+— Composants de pages : Intègrent les différentes parties de l’interface pour former
+des vues complètes
+— Composants de fonctionnalités : Encapsulent une logique métier spécifique
+— Composants UI : Éléments d’interface réutilisables
+— Composants de contexte : Gèrent l’état global et les données partagées
+Voici un exemple de structure de composant pour la liste des projets :
+import React , { useState , useEffect , useContext } from 'react ';
+2 import { Box , Typography , Grid , CircularProgress , Button } from '@mui/
+material ';
+3 import { Add as AddIcon } from '@mui/icons -material ';
+4 import { useNavigate } from 'react -router -dom ';
+1
+
+5
+
+import
+import
+8 import
+9 import
+10 import
+6
+7
+
+ProjectCard from '../ components / ProjectCard ';
+ProjectFilter from '../ components / ProjectFilter ';
+EmptyState from '../ components / common / EmptyState ';
+{ ProjectContext } from '../ contexts / ProjectContext ';
+{ AuthContext } from '../ contexts / AuthContext ';
+
+11
+
+const ProjectList = () => {
+const [filters , setFilters ] = useState ({
+14
+status : '',
+15
+search : '',
+16
+sortBy : 'createdAt ',
+17
+sortDir : 'desc '
+18
+});
+12
+13
+
+19
+20
+
+21
+22
+
+const { projects , loading , error , fetchProjects } = useContext (
+ProjectContext );
+const { user } = useContext ( AuthContext );
+const navigate = useNavigate ();
+
+23
+24
+25
+26
+
+useEffect (() => {
+fetchProjects ( filters );
+}, [ filters ]);
+
+27
+28
+
+const handleFilterChange = ( newFilters ) => {
+
+24
+
+Rapport de Stage
+setFilters ({ ... filters , ... newFilters });
+
+29
+30
+
+Iliass Boukhiri
+
+};
+
+31
+32
+
+const canCreateProject = ['admin ', 'manager ']. includes (user.role);
+
+33
+34
+35
+36
+
+37
+38
+39
+
+return (
+<Box sx ={{ p: 3 }}>
+<Box sx ={{ display : 'flex ', justifyContent : 'space -between ', mb: 3
+}}>
+<Typography variant =" h4" component =" h1">
+Projets
+</ Typography >
+
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+
+{ canCreateProject && (
+<Button
+variant =" contained "
+color =" primary "
+startIcon ={< AddIcon />}
+onClick ={() => navigate ('/ projects /new ')}
+>
+Nouveau Projet
+</Button >
+)}
+</Box >
+
+52
+53
+54
+55
+56
+
+<ProjectFilter
+filters ={ filters }
+onFilterChange ={ handleFilterChange }
+/>
+
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+
+{ loading ? (
+<Box sx ={{ display : 'flex ', justifyContent : 'center ', p: 4 }}>
+<CircularProgress />
+</Box >
+) : error ? (
+<Typography color =" error ">{ error }</ Typography >
+) : projects . length === 0 ? (
+<EmptyState
+message =" Aucun projet trouvé "
+description =" Ajustez vos filtres ou créez un nouveau projet "
+/>
+) : (
+<Grid container spacing ={3} >
+{ projects .map( project => (
+<Grid item xs ={12} sm ={6} md ={4} key ={ project ._id}>
+<ProjectCard project ={ project } />
+</Grid >
+))}
+
+25
+
+Rapport de Stage
+</Grid >
+
+76
+
+)}
+</Box >
+
+77
+78
+
+);
+
+79
+80
+
+Iliass Boukhiri
+
+};
+
+81
+82
+
+export default ProjectList ;
+Listing 6.5 – Structure du composant ProjectList
+
+Gestion de l’État avec Context API
+Plutôt que d’utiliser une bibliothèque comme Redux, j’ai opté pour le Context API natif
+de React pour gérer l’état global de l’application. Cette approche offre un bon équilibre entre simplicité et performances pour une application de cette échelle.
+1
+2
+
+import React , { createContext , useState , useCallback } from 'react ';
+import api from '../ utils /api ';
+
+3
+4
+
+export const ProjectContext = createContext ();
+
+5
+
+export const ProjectProvider = ({ children }) => {
+7
+const [projects , setProjects ] = useState ([]);
+8
+const [loading , setLoading ] = useState ( false );
+9
+const [error , setError ] = useState (null);
+6
+
+10
+11
+12
+13
+
+const fetchProjects = useCallback ( async ( filters = {}) => {
+setLoading (true);
+setError (null);
+
+14
+15
+16
+17
+18
+19
+20
+21
+
+try {
+// Construction des paramètres de requête
+const params = new URLSearchParams ();
+if ( filters . status ) params . append ('status ', filters . status );
+if ( filters . search ) params . append ('search ', filters . search );
+if ( filters . sortBy ) params . append ('sortBy ', filters . sortBy );
+if ( filters . sortDir ) params . append ('sortDir ', filters . sortDir );
+
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+
+const response = await api.get (`/ projects ?${ params }`);
+setProjects ( response .data);
+} catch (err) {
+setError (' Erreur lors du chargement des projets ');
+console . error (err);
+} finally {
+setLoading ( false );
+}
+}, []);
+
+32
+
+26
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+const createProject = useCallback ( async ( projectData ) => {
+setLoading (true);
+setError (null);
+
+33
+34
+35
+36
+
+try {
+const response = await api.post ('/ projects ', projectData );
+setProjects (prev => [ response .data , ... prev ]);
+return response .data;
+} catch (err) {
+setError (' Erreur lors de la création du projet ');
+console . error (err);
+throw err;
+} finally {
+setLoading ( false );
+}
+}, []);
+
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+
+// Autres méthodes : updateProject , deleteProject , etc.
+
+50
+51
+
+return (
+<ProjectContext . Provider
+value ={{
+projects ,
+loading ,
+error ,
+fetchProjects ,
+createProject ,
+// Autres méthodes
+}}
+>
+{ children }
+</ ProjectContext .Provider >
+);
+
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+
+};
+Listing 6.6 – Implémentation du contexte pour les projets
+
+Interface Utilisateur avec Material-UI
+Pour l’interface utilisateur, j’ai utilisé la bibliothèque Material-UI (MUI) qui offre des composants React pré-conçus suivant les principes du Material Design. Voici un exemple
+de composant de carte de projet :
+import React from 'react ';
+import { Card , CardContent , CardActions , Typography ,
+3
+Chip , LinearProgress , Box , IconButton } from '@mui/material ';
+4 import { Edit , Visibility } from '@mui/icons -material ';
+5 import { useNavigate } from 'react -router -dom ';
+1
+2
+
+27
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+import { format } from 'date -fns ';
+7 import { fr } from 'date -fns/locale ';
+6
+
+8
+9
+10
+
+import StatusBadge from './ StatusBadge ';
+import UserAvatar from './ UserAvatar ';
+
+11
+
+const ProjectCard = ({ project }) => {
+const navigate = useNavigate ();
+14
+const { _id , title , status , progress , startDate , endDate , assignedTo }
+= project ;
+12
+13
+
+15
+16
+17
+
+18
+
+// Calcul des dates en format lisible
+const formattedStartDate = format (new Date( startDate ), 'dd MMM yyyy ', {
+locale : fr });
+const formattedEndDate = format (new Date( endDate ), 'dd MMM yyyy ', {
+locale : fr });
+
+19
+20
+21
+22
+23
+
+// Calcul des jours restants
+const today = new Date ();
+const end = new Date( endDate );
+const daysRemaining = Math.ceil (( end - today ) / (1000 * 60 * 60 * 24));
+
+24
+25
+26
+
+27
+28
+
+29
+30
+31
+32
+33
+
+return (
+<Card sx ={{ height : '100%', display : 'flex ', flexDirection : 'column '
+}}>
+<CardContent sx ={{ flexGrow : 1 }}>
+<Box sx ={{ display : 'flex ', justifyContent : 'space -between ', mb:
+2 }}>
+<Typography variant =" h6" component =" h2" noWrap >
+{ title }
+</ Typography >
+<StatusBadge status ={ status } />
+</Box >
+
+34
+35
+36
+
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+
+<Box sx ={{ mt: 2 }}>
+<Typography variant =" body2 " color =" text. secondary " gutterBottom
+>
+Progression
+</ Typography >
+<LinearProgress
+variant =" determinate "
+value ={ progress }
+sx ={{ height : 8, borderRadius : 5 }}
+/>
+<Typography variant =" body2 " align =" right " sx ={{ mt: 0.5 }}>
+{ progress }%
+</ Typography >
+</Box >
+
+28
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+48
+49
+50
+51
+52
+
+<Box sx ={{ mt: 2 }}>
+<Typography variant =" body2 " color =" text. secondary ">
+Période : { formattedStartDate } - { formattedEndDate }
+</ Typography >
+
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+
+{ daysRemaining > 0 ? (
+<Chip
+size =" small "
+label ={`${ daysRemaining } jours restants `}
+color ={ daysRemaining < 5 ? " warning " : " primary "}
+sx ={{ mt: 1 }}
+/>
+) : (
+<Chip
+size =" small "
+label =" Échéance dépassée "
+color =" error "
+sx ={{ mt: 1 }}
+/>
+)}
+</Box >
+
+70
+71
+72
+73
+
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+
+{ assignedTo && assignedTo . length > 0 && (
+<Box sx ={{ mt: 2 }}>
+<Typography variant =" body2 " color =" text. secondary "
+gutterBottom >
+Membres assignés
+</ Typography >
+<Box sx ={{ display : 'flex ', gap: 0.5 }}>
+{ assignedTo . slice (0, 3).map(user => (
+<UserAvatar key ={ user._id} user ={ user} size =" small " />
+))}
+{ assignedTo . length > 3 && (
+<Chip
+size =" small "
+label ={ `+${ assignedTo . length - 3} `}
+/>
+)}
+</Box >
+</Box >
+)}
+</ CardContent >
+
+90
+91
+92
+93
+94
+
+<CardActions sx ={{ justifyContent : 'flex -end ' }}>
+<IconButton
+size =" small "
+onClick ={() => navigate (`/ projects /${_id }`)}
+
+29
+
+Rapport de Stage
+aria - label =" Voir les détails "
+
+95
+
+>
+
+96
+
+<Visibility />
+</ IconButton >
+<IconButton
+size =" small "
+onClick ={() => navigate (`/ projects /${_id }/ edit `)}
+aria - label =" Modifier "
+>
+<Edit />
+</ IconButton >
+</ CardActions >
+</Card >
+
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+
+);
+
+108
+109
+
+Iliass Boukhiri
+
+};
+
+110
+111
+
+export default ProjectCard ;
+Listing 6.7 – Composant de carte de projet
+
+Visualisation de Données
+Une partie essentielle de l’application était la visualisation des données de projet. J’ai
+utilisé Chart.js via la bibliothèque react-chartjs-2 pour implémenter divers graphiques
+dans le tableau de bord :
+import
+2 import
+3 import
+4 import
+1
+
+React , { useContext } from 'react ';
+{ Doughnut } from 'react -chartjs -2 ';
+{ Chart as ChartJS , ArcElement , Tooltip , Legend } from 'chart .js ';
+{ Box , Card , CardContent , Typography } from '@mui/material ';
+
+5
+6
+
+import { ProjectContext } from '../ contexts / ProjectContext ';
+
+7
+8
+9
+
+// Enregistrement des composants Chart .js nécessaires
+ChartJS . register ( ArcElement , Tooltip , Legend );
+
+10
+
+// Configuration des couleurs par statut
+12 const statusColors = {
+13
+'Not Started ': '#ff6384 ',
+14
+'In Progress ': '#36 a2eb ',
+15
+'On Hold ': '#ffce56 ',
+16
+'Completed ': '#4bc0c0 '
+17 };
+11
+
+18
+
+const ProjectStatusChart = () => {
+20
+const { projects } = useContext ( ProjectContext );
+19
+
+21
+22
+
+// Préparation des données pour le graphique
+
+30
+
+Rapport de Stage
+
+23
+24
+25
+26
+
+Iliass Boukhiri
+
+const statusCounts = projects . reduce ((acc , project ) => {
+acc[ project . status ] = (acc[ project . status ] || 0) + 1;
+return acc;
+}, {});
+
+27
+28
+29
+30
+31
+32
+33
+
+34
+35
+36
+37
+
+const data = {
+labels : Object .keys( statusCounts ),
+datasets : [
+{
+data: Object . values ( statusCounts ),
+backgroundColor : Object .keys( statusCounts ).map( status =>
+statusColors [ status ]) ,
+borderWidth : 1
+}
+]
+};
+
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+
+56
+57
+58
+59
+60
+61
+62
+
+const options = {
+responsive : true ,
+maintainAspectRatio : false ,
+plugins : {
+legend : {
+position : 'bottom ',
+labels : {
+padding : 20,
+boxWidth : 12
+}
+},
+tooltip : {
+callbacks : {
+label : ( context ) => {
+const label = context . label || '';
+const value = context .raw || 0;
+const total = context . dataset .data. reduce ((acc , val) => acc +
+val , 0);
+const percentage = Math. round (( value / total ) * 100);
+return `${ label }: ${ value } (${ percentage }%) `;
+}
+}
+}
+}
+};
+
+63
+64
+65
+66
+67
+68
+
+return (
+<Card sx ={{ height : '100% ' }}>
+<CardContent >
+<Typography variant =" h6" component =" h2" gutterBottom >
+Projets par statut
+
+31
+
+Rapport de Stage
+</ Typography >
+<Box sx ={{ height : 250 , position : 'relative ' }}>
+<Doughnut data ={ data} options ={ options } />
+</Box >
+</ CardContent >
+</Card >
+
+69
+70
+71
+72
+73
+74
+
+);
+
+75
+76
+
+Iliass Boukhiri
+
+};
+
+77
+78
+
+export default ProjectStatusChart ;
+Listing 6.8 – Composant de graphique de statut des projets
+
+Optimisation des Performances
+Plusieurs techniques ont été employées pour optimiser les performances de l’application frontend :
+— Mémoïsation : Utilisation de React.memo, useMemo et useCallback pour éviter les
+rendus inutiles
+— Chargement paresseux : Implémentation du chargement différé des composants lourds avec React.lazy et Suspense
+— Pagination côté serveur : Limitation du nombre d’éléments chargés à la fois pour
+les listes volumineuses
+— Optimisation des images : Redimensionnement et compression des ressources
+graphiques
+Ces optimisations ont permis d’obtenir une application réactive même sur des appareils
+moins puissants ou avec une connexion réseau limitée.
+
+6.3
+
+Intégration et Déploiement
+
+L’intégration des deux parties a été réalisée avec des tests continus, et l’application a
+été déployée sur un serveur local pour des démonstrations.
+
+Communication Frontend-Backend
+La communication entre le frontend React et le backend Express a été mise en place
+à l’aide d’Axios, une bibliothèque client HTTP. Une configuration centrale a été créée
+pour gérer toutes les requêtes API :
+1
+
+import axios from 'axios ';
+
+2
+3
+4
+
+// URL de base de l'API
+const baseURL = process .env. REACT_APP_API_URL || 'http :// localhost :5000/
+api ';
+
+5
+
+32
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+// Instance Axios avec configuration par défaut
+7 const api = axios . create ({
+8
+baseURL ,
+9
+timeout : 15000 ,
+10
+headers : {
+11
+'Content -Type ': 'application /json '
+12
+}
+13 });
+6
+
+14
+
+// Intercepteur pour les requêtes sortantes
+api. interceptors . request .use(
+17
+( config ) => {
+18
+// Récupération du token depuis le stockage local
+19
+const token = localStorage . getItem ('token ');
+15
+16
+
+20
+
+// Ajout du token à l'en -tête Authorization si disponible
+if (token ) {
+config . headers . Authorization = `Bearer ${ token }`;
+}
+
+21
+22
+23
+24
+25
+
+return config ;
+
+26
+
+},
+(error) => Promise . reject ( error )
+
+27
+28
+29
+
+);
+
+30
+
+// Intercepteur pour les réponses entrantes
+api. interceptors . response .use(
+33
+( response ) => response ,
+34
+(error) => {
+35
+// Gestion spécifique des erreurs d' authentification
+36
+if (error . response && error . response . status === 401) {
+37
+// Suppression du token et redirection vers la page de connexion
+38
+localStorage . removeItem ('token ');
+39
+window . location .href = '/ login ? sessionExpired =true ';
+40
+}
+31
+32
+
+41
+
+// Gestion des erreurs réseau
+if (! error . response ) {
+console . error (' Erreur réseau :', error );
+}
+
+42
+43
+44
+45
+46
+
+return Promise . reject ( error );
+
+47
+
+}
+
+48
+49
+
+);
+
+50
+51
+
+export default api;
+Listing 6.9 – Configuration Axios pour les requêtes API
+
+33
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+Cette abstraction de la couche de communication a permis une maintenance plus
+facile et une gestion cohérente des erreurs à travers l’application.
+
+Sécurité des Communications
+Plusieurs mesures ont été prises pour sécuriser les communications entre le frontend et
+le backend :
+— CORS (Cross-Origin Resource Sharing) : Configuration stricte pour limiter les domaines autorisés à accéder à l’API
+— Protection CSRF : Mise en place de jetons spécifiques pour les requêtes modifiant
+des données
+— En-têtes de sécurité : Utilisation de Helmet.js pour configurer les en-têtes HTTP de
+sécurité
+— Limitation de débit : Implémentation de rate limiting pour prévenir les attaques
+par force brute
+const
+2 const
+3 const
+4 const
+5 const
+6 const
+1
+
+express = require ('express ');
+helmet = require ('helmet ');
+cors = require ('cors ');
+rateLimit = require ('express -rate -limit ');
+mongoSanitize = require ('express -mongo -sanitize ');
+xss = require ('xss -clean ');
+
+7
+8
+
+const app = express ();
+
+9
+
+// Protection contre les injections NoSQL
+11 app.use( mongoSanitize ());
+10
+
+12
+13
+14
+
+// Protection contre les attaques XSS
+app.use(xss ());
+
+15
+16
+17
+
+// Configurtion des en - têtes de sécurité
+app.use( helmet ());
+
+18
+
+// Configuration CORS restrictive
+app.use(cors ({
+21
+origin : process .env. CLIENT_URL || 'http :// localhost :3000 ' ,
+22
+methods : ['GET ', 'POST ', 'PUT ', 'DELETE ', 'PATCH '],
+23
+allowedHeaders : ['Content -Type ', 'Authorization '],
+24
+credentials : true
+25 }));
+19
+20
+
+26
+
+// Limitation de débit pour prévenir les attaques par force brute
+const limiter = rateLimit ({
+29
+windowMs : 15 * 60 * 1000 , // 15 minutes
+30
+max: 100 , // limite chaque IP à 100 requêtes par fenêtre
+31
+standardHeaders : true ,
+27
+28
+
+34
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+legacyHeaders : false ,
+33
+message : 'Trop de requêtes , veuillez réessayer plus tard '
+34 });
+35 app.use ('/ api/', limiter );
+32
+
+36
+37
+
+// ... configuration des routes et middleware ...
+
+38
+39
+
+module . exports = app;
+Listing 6.10 – Configuration de sécurité du serveur Express
+
+Environnement de Développement Intégré
+Durant le développement, un environnement intégré a été configuré pour permettre le
+travail simultané sur le frontend et le backend :
+— Utilisation de concurrently pour exécuter les serveurs frontend et backend en
+parallèle
+— Configuration de proxy dans le package.json du frontend pour rediriger les requêtes API vers le backend
+— Mode de développement avec rechargement à chaud (hot reloading) pour les
+deux parties
+1
+
+{
+"name ": "srm -project - management ",
+" version ": "1.0.0" ,
+" scripts ": {
+" start ": "node server / index .js",
+" server ": " nodemon server / index .js",
+" client ": "npm start --prefix client ",
+"dev ": " concurrently \" npm run server \" \" npm run client \"" ,
+" build ": "npm run build --prefix client ",
+"install -all ": "npm install && npm install --prefix client "
+},
+" dependencies ": {
+" concurrently ": "^7.6.0" ,
+" nodemon ": "^2.0.20"
+// ... autres dépendances
+}
+
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+
+}
+Listing 6.11 – Configuration de développement dans package.json
+
+Stratégie de Déploiement
+Pour le déploiement de l’application dans l’environnement de démonstration de SRM
+Marrakech-Safi, une approche en plusieurs étapes a été adoptée :
+35
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+1. Build du frontend : Génération des fichiers statiques optimisés avec npm run build
+2. Configuration du serveur : Installation de Node.js, MongoDB et des dépendances
+nécessaires
+3. Déploiement du backend : Configuration avec PM2 pour la gestion des processus
+4. Serveur web : Installation de Nginx comme proxy inverse et pour servir les fichiers
+statiques
+5. Automatisation : Scripts de déploiement pour simplifier les mises à jour
+1
+
+#!/ bin/bash
+
+2
+
+# Variables de configuration
+4 APP_DIR ="/ var/www/srm -project - manager "
+5 REPO =" https :// github .com/srm -ms/project - manager .git"
+6 BRANCH =" main"
+3
+
+7
+8
+
+echo " Déploiement de l' application de gestion de projets SRM ..."
+
+9
+
+# Mise à jour du code depuis le dépôt Git
+11 if [ -d " $APP_DIR " ]; then
+12
+echo "Mise à jour du code existant ..."
+13
+cd $APP_DIR
+14
+git pull origin $BRANCH
+15 else
+16
+echo " Clonage du dépôt ..."
+17
+git clone -b $BRANCH $REPO $APP_DIR
+18
+cd $APP_DIR
+19 fi
+10
+
+20
+
+# Installation des dépendances backend
+22 echo " Installation des dépendances backend ..."
+23 npm install --production
+21
+
+24
+
+# Installation des dépendances frontend et build
+echo " Installation des dépendances frontend et build ..."
+27 cd client
+28 npm install --production
+29 npm run build
+30 cd ..
+25
+26
+
+31
+
+# Redémarrage du service avec PM2
+33 echo " Redémarrage de l' application ..."
+34 pm2 restart srm -project - manager || pm2 start server / index .js --name srm project - manager
+32
+
+35
+36
+
+echo " Déploiement terminé avec succès !"
+Listing 6.12 – Script shell de déploiement
+
+36
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+Configuration de Nginx
+Un serveur web Nginx a été configuré pour servir l’application et agir comme proxy
+inverse pour le backend :
+server {
+2
+listen 80;
+3
+server_name projets .srm -ms. local ;
+1
+
+4
+
+# Redirection vers HTTPS
+return 301 https :// $host$request_uri ;
+
+5
+6
+7
+
+}
+
+8
+
+server {
+10
+listen 443 ssl;
+11
+server_name projets .srm -ms. local ;
+9
+
+12
+13
+14
+15
+16
+17
+
+# Configuration SSL
+ssl_certificate /etc/ssl/ certs /srm -ms.crt;
+ssl_certificate_key /etc/ssl/ private /srm -ms.key;
+ssl_protocols TLSv1 .2 TLSv1 .3;
+ssl_prefer_server_ciphers on;
+
+18
+19
+20
+21
+
+# Répertoire racine pour les fichiers statiques du frontend
+root /var/www/srm -project - manager / client / build ;
+index index .html;
+
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+
+# Proxy inverse pour les requêtes API
+location /api {
+proxy_pass http :// localhost :5000;
+proxy_http_version 1.1;
+proxy_set_header Upgrade $http_upgrade ;
+proxy_set_header Connection 'upgrade ';
+proxy_set_header Host $host ;
+proxy_cache_bypass $http_upgrade ;
+proxy_set_header X-Real -IP $remote_addr ;
+proxy_set_header X-Forwarded -For $proxy_add_x_forwarded_for ;
+proxy_set_header X-Forwarded - Proto $scheme ;
+}
+
+35
+36
+37
+38
+39
+40
+
+# Gestion des assets statiques avec mise en cache
+location ~* \.( js|css|png|jpg|jpeg|gif|ico|svg)$ {
+expires 30d;
+add_header Cache - Control "public , no - transform ";
+}
+
+41
+42
+43
+44
+
+# Toutes les autres routes sont gérées par le frontend ( React Router )
+location / {
+try_files $uri $uri/ / index .html;
+
+37
+
+}
+
+45
+46
+
+# Logs
+access_log /var/log/ nginx /srm -project -manager - access .log;
+error_log /var/log/ nginx /srm -project -manager - error .log;
+
+47
+48
+49
+50
+
+}
+Listing 6.13 – Configuration Nginx pour l’application
+
+Cette configuration a permis de servir l’application de manière sécurisée et performante sur l’infrastructure locale de SRM Marrakech-Safi pour les tests et les démonstrations.
+
+Chapitre 7
+
+Défis Rencontrés et Solutions
+7.1 Défis Techniques
+Un défi majeur était la gestion des rôles et des permissions, résolu par l’implémentation
+d’un système RBAC (Role-Based Access Control).
+
+Implémentation du Système RBAC
+La mise en place d’un système de contrôle d’accès basé sur les rôles (RBAC) a constitué
+l’un des défis techniques les plus importants du projet. En effet, les besoins exprimés par
+SRM Marrakech-Safi requéraient une granularité fine des permissions selon les différents
+profils d’utilisateurs (superadmin, admin, manager, employee, user).
+Pour résoudre ce défi, j’ai conçu une architecture à deux niveaux :
+1. Niveau backend : Middleware de vérification des rôles pour chaque endpoint de
+l’API
+2. Niveau frontend : Composants conditionnels et routes protégées adaptées au rôle
+de l’utilisateur
+Voici un extrait du middleware de vérification des rôles implémenté sur le backend :
+1
+2
+
+const roleCheck = ( allowedRoles ) => {
+return (req , res , next) => {
+
+38
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+// Vérification que l' utilisateur est connecté (via middleware d'
+authentification préalable )
+if (! req.user) {
+return res. status (401) .json ({ message : 'Non authentifié ' });
+}
+
+3
+
+4
+5
+6
+7
+
+// Vérification du rôle de l' utilisateur
+const { role } = req.user;
+
+8
+9
+10
+
+if (! allowedRoles . includes (role)) {
+return res. status (403) .json ({
+message : 'Accès refusé - Vous n\'avez pas les permissions
+nécessaires '
+});
+}
+
+11
+12
+13
+
+14
+15
+16
+
+// Si le rôle est autorisé , continuer
+next ();
+
+17
+18
+
+};
+
+19
+20
+
+};
+
+21
+22
+
+module . exports = roleCheck ;
+Listing 7.1 – Middleware de vérification des rôles
+
+Sur le frontend, j’ai créé un composant de route protégée pour contrôler l’accès aux
+différentes sections de l’application :
+import React from 'react ';
+import { Navigate } from 'react -router -dom ';
+3 import { useAuth } from '../ hooks /useAuth ';
+1
+2
+
+4
+
+const ProtectedRoute = ({ children , requiredRoles = [] }) => {
+6
+const { user , isAuthenticated , loading } = useAuth ();
+5
+
+7
+8
+9
+10
+11
+
+// Afficher un indicateur de chargement pendant la vérification
+if ( loading ) {
+return <div > Chargement ... </div >;
+}
+
+12
+13
+
+14
+15
+16
+
+// Si l' utilisateur n'est pas authentifié , rediriger vers la page de
+connexion
+if (! isAuthenticated ) {
+return <Navigate to ="/ login " replace />;
+}
+
+17
+18
+19
+
+// Si aucun rôle spécifique n'est requis , autoriser l' accès
+if ( requiredRoles . length === 0) {
+
+39
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+return children ;
+
+20
+
+}
+
+21
+22
+
+// Vérifier si l' utilisateur a un rôle autorisé
+if (! requiredRoles . includes (user.role)) {
+return <Navigate to ="/ unauthorized " replace />;
+}
+
+23
+24
+25
+26
+27
+
+// Si toutes les vérifications sont passées , afficher le contenu
+protégé
+return children ;
+
+28
+
+29
+30
+
+};
+
+31
+32
+
+export default ProtectedRoute ;
+Listing 7.2 – Composant de route protégée par rôle
+
+Cette approche a permis d’obtenir un système de contrôle d’accès cohérent et sécurisé qui répond aux exigences organisationnelles de SRM Marrakech-Safi.
+
+Optimisation des Performances de la Base de Données
+Un autre défi technique important concernait les performances de la base de données,
+particulièrement pour les requêtes complexes impliquant plusieurs collections MongoDB.
+Au fur et à mesure que le volume de données augmentait lors des tests, certaines opérations devenaient de plus en plus lentes.
+Pour résoudre ce problème, j’ai mis en place plusieurs stratégies d’optimisation :
+— Indexation stratégique : Création d’index sur les champs fréquemment utilisés
+dans les requêtes et les jointures
+— Agrégation optimisée : Utilisation du pipeline d’agrégation MongoDB pour traiter
+les données côté serveur
+— Pagination : Implémentation de la pagination pour limiter la taille des résultats
+— Projection sélective : Récupération uniquement des champs nécessaires dans
+les requêtes
+Voici un exemple d’optimisation d’une requête d’analyse des projets :
+// Requête d' agrégation pour obtenir la distribution des projets par
+statut et par mois
+2 const projectAnalytics = await Project . aggregate ([
+3
+// Filtrage initial par date
+4
+{
+5
+$match : {
+6
+createdAt : {
+7
+$gte: new Date( startDate ),
+8
+$lte: new Date( endDate )
+9
+}
+1
+
+40
+
+Rapport de Stage
+}
+
+10
+11
+
+Iliass Boukhiri
+
+},
+
+12
+13
+14
+15
+16
+17
+18
+19
+
+// Ajout d'un champ pour le mois de création
+{
+$addFields : {
+month : { $month : " $createdAt " },
+year: { $year : " $createdAt " }
+}
+},
+
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+
+// Groupement par statut et mois
+{
+$group : {
+_id: {
+status : " $status ",
+month : " $month ",
+year: " $year "
+},
+count : { $sum: 1 },
+projects : {
+$push : {
+_id: "$_id",
+title : " $title ",
+progress : " $progress "
+}
+}
+}
+},
+
+39
+40
+41
+42
+43
+44
+45
+46
+
+// Tri des résultats
+{
+$sort : {
+"_id.year ": 1,
+"_id. month ": 1
+}
+},
+
+47
+
+// Limitation du nombre de résultats pour éviter une surcharge
+{ $limit : 100 }
+50 ]);
+48
+49
+
+Listing 7.3 – Pipeline d’agrégation MongoDB optimisé
+
+Cette approche a permis de réduire significativement les temps de réponse pour les
+requêtes complexes, passant de plusieurs secondes à moins de 500ms dans la plupart
+des cas.
+
+41
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+Gestion des Notifications en Temps Réel
+La mise en place d’un système de notifications en temps réel représentait également
+un défi technique important. Les utilisateurs devaient être alertés des changements importants (assignation à un projet, modification de statut, etc.) sans avoir à rafraîchir
+l’application.
+Pour répondre à ce besoin, j’ai implémenté une solution basée sur une combinaison
+de :
+— Stockage des notifications : Persistance dans MongoDB pour garantir la fiabilité
+— Mécanisme de polling intelligent : Requêtes périodiques optimisées pour limiter
+la charge serveur
+— Système de marquage : Suivi des notifications lues/non lues
+import { useState , useEffect , useCallback , useContext } from 'react ';
+2 import { AuthContext } from '../ contexts / AuthContext ';
+3 import api from '../ utils /api ';
+1
+
+4
+
+export const useNotifications = () => {
+6
+const [ notifications , setNotifications ] = useState ([]);
+7
+const [ unreadCount , setUnreadCount ] = useState (0);
+8
+const [loading , setLoading ] = useState (true);
+9
+const [error , setError ] = useState (null);
+10
+const { user } = useContext ( AuthContext );
+5
+
+11
+12
+13
+14
+
+// Fonction pour récupérer les notifications
+const fetchNotifications = useCallback ( async () => {
+if (! user) return ;
+
+15
+16
+17
+18
+
+try {
+const response = await api.get ('/ notifications ');
+setNotifications ( response .data);
+
+19
+20
+21
+
+22
+
+// Calcul du nombre de notifications non lues
+const unread = response .data. filter ( notification => ! notification .
+read). length ;
+setUnreadCount ( unread );
+
+23
+24
+25
+26
+
+27
+28
+29
+30
+
+setLoading ( false );
+} catch (err) {
+console . error (' Erreur lors de la récupération des notifications :',
+err);
+setError (' Impossible de charger les notifications ');
+setLoading ( false );
+}
+}, [user ]);
+
+31
+32
+
+// Fonction pour marquer une notification comme lue
+
+42
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+const markAsRead = useCallback ( async ( notificationId ) => {
+try {
+await api. patch (`/ notifications /${ notificationId }/ read `);
+
+33
+34
+35
+36
+
+// Mise à jour locale de l'état
+setNotifications (prev =>
+prev.map( notification =>
+notification ._id === notificationId
+? { ... notification , read: true }
+: notification
+)
+);
+
+37
+38
+39
+40
+41
+42
+43
+44
+45
+
+setUnreadCount (prev => Math.max (0, prev - 1));
+} catch (err) {
+console . error (' Erreur lors du marquage de la notification :', err);
+}
+}, []);
+
+46
+47
+48
+49
+50
+51
+
+// Polling intelligent des notifications
+useEffect (() => {
+if (! user) return ;
+
+52
+53
+54
+55
+
+// Première récupération
+fetchNotifications ();
+
+56
+57
+58
+
+// Mise en place du polling avec intervalle adaptatif
+// Plus fréquent s'il y a des notifications non lues
+const interval = setInterval (() => {
+fetchNotifications ();
+}, unreadCount > 0 ? 30000 : 60000) ; // 30s ou 1min selon le cas
+
+59
+60
+61
+62
+63
+64
+
+return () => clearInterval ( interval );
+}, [ fetchNotifications , unreadCount , user ]);
+
+65
+66
+67
+
+return { notifications , unreadCount , loading , error , markAsRead };
+
+68
+69
+
+};
+Listing 7.4 – Hook React pour la gestion des notifications
+
+Cette solution a permis d’offrir une expérience utilisateur fluide avec des notifications
+quasi-instantanées, tout en maintenant une charge serveur raisonnable.
+
+7.2 Défis Organisationnels
+La coordination avec l’équipe pour recueillir les besoins a nécessité plusieurs itérations,
+mais a finalement conduit à une meilleure compréhension des attentes.
+43
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+Recueil des Besoins Métier
+L’un des principaux défis organisationnels a été de comprendre en profondeur les besoins et les processus métier du département informatique de SRM Marrakech-Safi. Les
+premières sessions de recueil des besoins ont révélé des attentes parfois contradictoires
+entre les différents acteurs (direction, chefs de projet, techniciens).
+Pour surmonter ce défi, j’ai mis en place une méthodologie structurée :
+1. Entretiens individuels : Sessions avec chaque partie prenante pour comprendre
+leurs besoins spécifiques
+2. Ateliers collectifs : Réunions de groupe pour harmoniser les attentes et établir des
+priorités
+3. Prototypage rapide : Création de maquettes interactives pour valider les concepts
+4. Développement itératif : Cycles courts de développement avec feedback régulier
+Cette approche a permis de converger progressivement vers une vision partagée du
+produit final, tout en intégrant les besoins spécifiques de chaque profil d’utilisateur.
+
+Adaptation à l’Environnement Technique Existant
+L’intégration de la nouvelle application dans l’écosystème technique préexistant de
+SRM Marrakech-Safi a constitué un autre défi organisationnel majeur. L’infrastructure
+informatique comportait des contraintes spécifiques :
+— Serveurs sous Windows Server avec des configurations restrictives
+— Politiques de sécurité strictes limitant certaines communications réseau
+— Absence d’environnement de conteneurisation (Docker)
+— Processus d’approbation formel pour tout nouveau déploiement
+Pour m’adapter à ces contraintes, j’ai dû :
+— Documenter précisément les prérequis techniques et les étapes d’installation
+— Simplifier le processus de déploiement pour réduire les dépendances externes
+— Prévoir des solutions de contournement pour les limitations de l’infrastructure
+— Collaborer étroitement avec l’équipe infrastructure pour adapter la solution
+
+Formation des Utilisateurs
+La formation des futurs utilisateurs de l’application représentait un enjeu crucial pour
+l’adoption du nouvel outil. La diversité des profils (techniques et non techniques) nécessitait une approche de formation adaptée.
+Pour relever ce défi, j’ai élaboré :
+— Documentation utilisateur multiniveau : Guides adaptés aux différents profils (administrateurs, managers, employés)
+— Vidéos tutorielles : Captures d’écran commentées des principales fonctionnalités
+44
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+— Sessions de formation en présentiel : Ateliers pratiques par groupe de 5-6 personnes
+— Système d’aide contextuelle : Tooltips et messages d’aide intégrés dans l’application
+
+FIGURE 7.1 – Interface de l’application avec tooltips d’aide contextuelle
+
+Ces différentes ressources de formation ont contribué à faciliter l’appropriation de l’outil
+par les utilisateurs finaux et à réduire la résistance au changement.
+
+Gestion du Temps et des Priorités
+La contrainte de temps (deux mois de stage) combinée à l’ampleur du projet a nécessité une gestion rigoureuse des priorités. La méthodologie agile adoptée a permis
+de :
+— Hiérarchiser les fonctionnalités selon leur valeur métier
+— Définir un MVP (Minimum Viable Product) réaliste pour la durée du stage
+— Planifier les itérations en tenant compte des contraintes de validation
+— Anticiper les dépendances et les risques potentiels
+Un tableau Kanban a été utilisé pour visualiser l’avancement et faciliter la communication avec les parties prenantes :
+
+FIGURE 7.2 – Tableau de suivi des tâches du projet
+
+45
+
+Cette approche structurée de la gestion du temps et des priorités a été déterminante
+pour atteindre les objectifs du stage dans le délai imparti.
+
+Chapitre 8
+
+Tests et Validation
+8.1 Tests Unitaires
+Des tests unitaires ont été effectués sur les endpoints du backend pour garantir leur bon
+fonctionnement.
+
+Tests Unitaires du Backend
+Pour assurer la fiabilité du code backend, j’ai mis en place des tests unitaires en utilisant Jest comme framework de test et Supertest pour simuler les requêtes HTTP. Cette
+approche a permis de vérifier que chaque composant du backend fonctionnait correctement de manière isolée.
+Les tests unitaires ont principalement ciblé :
+— Les contrôleurs API et leur logique métier
+— Les middlewares d’authentification et d’autorisation
+— Les opérations CRUD sur les modèles
+— Les validations de données et les traitements d’erreurs
+Voici un exemple de test unitaire pour la route d’authentification :
+const
+2 const
+3 const
+4 const
+5 const
+1
+
+request = require ('supertest ');
+mongoose = require ('mongoose ');
+app = require ( '../app ');
+User = require ( '../ models /User ');
+bcrypt = require ('bcryptjs ');
+
+6
+
+describe ('Auth API ', () => {
+8
+beforeAll ( async () => {
+9
+// Connexion à la base de données de test
+10
+await mongoose . connect ( process .env. MONGODB_URI_TEST , {
+11
+useNewUrlParser : true ,
+12
+useUnifiedTopology : true ,
+13
+});
+7
+
+14
+
+46
+
+Rapport de Stage
+
+15
+16
+17
+
+Iliass Boukhiri
+
+// Nettoyage de la collection utilisateurs
+await User. deleteMany ({});
+});
+
+18
+19
+20
+21
+22
+
+afterAll ( async () => {
+// Déconnexion de la base de données après les tests
+await mongoose . connection . close ();
+});
+
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+
+describe ('POST /api/auth/register ', () => {
+it(' devrait créer un nouvel utilisateur ', async () => {
+const res = await request (app)
+.post ('/ api/auth/register ')
+.send ({
+name: 'Test User ',
+email : 'test@example .com ',
+password : 'password123 ',
+role: 'employee '
+});
+
+34
+35
+36
+37
+38
+39
+40
+41
+
+expect (res. statusCode ). toEqual (201);
+expect (res.body). toHaveProperty ('token ');
+expect (res.body.user). toHaveProperty ('name ', 'Test User ');
+expect (res.body.user). toHaveProperty ('email ', 'test@example .com ');
+expect (res.body.user). toHaveProperty ('role ', 'employee ');
+expect (res.body.user).not. toHaveProperty ('password ');
+});
+
+42
+43
+
+44
+45
+46
+47
+48
+49
+50
+51
+
+it(' devrait retourner une erreur si l\' email existe déjà ', async ()
+=> {
+// Création préalable d'un utilisateur
+const user = new User ({
+name: 'Existing User ',
+email : 'existing@example .com ',
+password : await bcrypt .hash(' password123 ', 10) ,
+role: 'employee '
+});
+await user.save ();
+
+52
+53
+54
+55
+56
+57
+58
+59
+60
+
+const res = await request (app)
+.post ('/ api/auth/register ')
+.send ({
+name: 'Another User ',
+email : 'existing@example .com ',
+password : 'password123 ',
+role: 'employee '
+});
+
+61
+
+47
+
+Rapport de Stage
+
+62
+63
+64
+65
+66
+
+Iliass Boukhiri
+
+expect (res. statusCode ). toEqual (400);
+expect (res.body). toHaveProperty ('message ');
+expect (res.body. message ). toMatch (/ email .* existe déjà/i);
+});
+});
+
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+
+describe ('POST /api/auth/login ', () => {
+beforeEach ( async () => {
+// Création d'un utilisateur pour les tests de connexion
+const hashedPassword = await bcrypt .hash(' password123 ', 10);
+await User. create ({
+name: 'Login Test ',
+email : 'login@example .com ',
+password : hashedPassword ,
+role: 'manager '
+});
+});
+
+79
+80
+81
+82
+83
+84
+85
+86
+
+it(' devrait connecter un utilisateur existant ', async () => {
+const res = await request (app)
+.post ('/ api/auth/login ')
+.send ({
+email : 'login@example .com ',
+password : 'password123 '
+});
+
+87
+88
+89
+90
+91
+92
+
+expect (res. statusCode ). toEqual (200);
+expect (res.body). toHaveProperty ('token ');
+expect (res.body.user). toHaveProperty ('email ', 'login@example .com ');
+expect (res.body.user). toHaveProperty ('role ', 'manager ');
+});
+
+93
+94
+
+95
+96
+97
+98
+99
+100
+
+it(' devrait refuser la connexion avec un mot de passe incorrect ',
+async () => {
+const res = await request (app)
+.post ('/ api/auth/login ')
+.send ({
+email : 'login@example .com ',
+password : 'wrongpassword '
+});
+
+101
+
+expect (res. statusCode ). toEqual (401);
+expect (res.body). toHaveProperty ('message ');
+104
+expect (res.body. message ). toMatch (/ identifiants .* invalides /i);
+105
+});
+106
+});
+107 });
+102
+103
+
+48
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+Listing 8.1 – Test unitaire de la route d’authentification
+
+La mise en place de ces tests unitaires a permis de détecter et corriger rapidement
+plusieurs bugs potentiels, notamment dans la gestion des cas limites et des situations
+d’erreur. Au total, plus de 50 tests unitaires ont été développés, couvrant environ 80%
+du code backend.
+
+Tests Unitaires du Frontend
+Pour le frontend, les tests unitaires ont été réalisés avec Jest et React Testing Library. Ces
+tests se sont concentrés sur :
+— Les composants React individuels
+— Les hooks personnalisés
+— Les fonctions utilitaires
+— Les reducers et les fonctions de gestion d’état
+import
+import
+3 import
+4 import
+1
+2
+
+React from 'react ';
+{ render , screen , fireEvent } from '@testing - library /react ';
+{ BrowserRouter } from 'react -router -dom ';
+ProjectCard from './ ProjectCard ';
+
+5
+
+// Mock du hook de navigation
+7 jest.mock('react -router -dom ', () => ({
+8
+... jest. requireActual ('react -router -dom ') ,
+9
+useNavigate : () => jest.fn () ,
+10 }));
+6
+
+11
+
+describe (' ProjectCard Component ', () => {
+const mockProject = {
+14
+_id: 'project123 ',
+15
+title : 'Projet de test ',
+16
+description : 'Description du projet de test ',
+17
+status : 'In Progress ',
+18
+progress : 65,
+19
+startDate : '2025 -05 -10 T00 :00:00.000Z',
+20
+endDate : '2025 -06 -10 T00 :00:00.000Z',
+21
+assignedTo : [
+22
+{ _id: 'user1 ', name: 'User One ' },
+23
+{ _id: 'user2 ', name: 'User Two ' }
+24
+]
+25
+};
+12
+13
+
+26
+27
+28
+29
+
+test(' affiche correctement les informations du projet ', () => {
+render (
+<BrowserRouter >
+
+49
+
+Rapport de Stage
+<ProjectCard project ={ mockProject } />
+</ BrowserRouter >
+
+30
+31
+32
+
+Iliass Boukhiri
+
+);
+
+33
+34
+35
+
+// Vérification du titre
+expect ( screen . getByText (' Projet de test ')). toBeInTheDocument ();
+
+36
+37
+38
+
+// Vérification du statut
+expect ( screen . getByText ('En cours ')). toBeInTheDocument ();
+
+39
+40
+41
+
+// Vérification de la progression
+expect ( screen . getByText ( '65% ')). toBeInTheDocument ();
+
+42
+43
+44
+
+45
+
+// Vérification des dates
+expect ( screen . getByText (/10 mai 2025 - 10 juin 2025/ i)).
+toBeInTheDocument ();
+});
+
+46
+47
+48
+49
+50
+51
+52
+
+test(' affiche le nombre correct d\' utilisateurs assignés ', () => {
+render (
+<BrowserRouter >
+<ProjectCard project ={ mockProject } />
+</ BrowserRouter >
+);
+
+53
+54
+55
+
+// Vérification du texte " Membres assignés "
+expect ( screen . getByText (' Membres assignés ')). toBeInTheDocument ();
+
+56
+
+// Vérification de la présence des avatars ( implémentation simplifiée
+)
+58
+const avatarContainer = screen . getByText (' Membres assignés ').
+parentElement ;
+59
+expect ( avatarContainer . querySelectorAll ('[data - testid =" user - avatar
+"] ')). toHaveLength (2);
+60
+});
+61 });
+57
+
+Listing 8.2 – Test unitaire d’un composant React
+
+Ces tests unitaires ont été particulièrement utiles pour garantir que les composants d’interface utilisateur se comportaient comme prévu dans différentes conditions, et pour
+détecter les régressions lors des modifications du code.
+
+8.2
+
+Tests d’Intégration
+
+Des tests d’intégration ont vérifié la communication entre le frontend et le backend.
+
+50
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+Tests API End-to-End
+Les tests d’intégration ont joué un rôle crucial dans la validation du bon fonctionnement
+de l’application dans son ensemble. J’ai utilisé Supertest pour simuler des séquences
+complètes d’opérations API, permettant de vérifier que les différentes parties du système communiquaient correctement.
+Ces tests ont couvert des scénarios complexes tels que :
+— Le cycle de vie complet d’un projet (création, mise à jour, commentaires, suppression)
+— L’authentification et la gestion des sessions
+— Les interactions entre les notifications et les actions sur les projets
+— Les opérations sur plusieurs ressources interdépendantes
+const
+2 const
+3 const
+4 const
+5 const
+6 const
+1
+
+request = require ('supertest ');
+mongoose = require ('mongoose ');
+app = require ( '../app ');
+User = require ( '../ models /User ');
+Project = require ( '../ models /Project ');
+Notification = require ( '../ models / Notification ');
+
+7
+
+describe ('Flux de gestion de projet ', () => {
+9
+let adminToken , managerToken , employeeToken ;
+10
+let adminId , managerId , employeeId ;
+11
+let projectId ;
+8
+
+12
+13
+14
+15
+16
+17
+18
+
+// Configuration initiale avec création des utilisateurs de test
+beforeAll ( async () => {
+await mongoose . connect ( process .env. MONGODB_URI_TEST );
+await User. deleteMany ({});
+await Project . deleteMany ({});
+await Notification . deleteMany ({});
+
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+
+// Création d'un admin
+const adminRes = await request (app)
+.post ('/ api/auth/register ')
+.send ({
+name: 'Admin Test ',
+email : 'admin@test .com ',
+password : 'password123 ',
+role: 'admin '
+});
+adminToken = adminRes .body. token ;
+adminId = adminRes .body.user._id;
+
+31
+32
+33
+34
+35
+
+// Création d'un manager
+const managerRes = await request (app)
+.post ('/ api/auth/register ')
+.send ({
+
+51
+
+Rapport de Stage
+
+36
+37
+38
+39
+40
+41
+42
+
+Iliass Boukhiri
+
+name: 'Manager Test ',
+email : 'manager@test .com ',
+password : 'password123 ',
+role: 'manager '
+});
+managerToken = managerRes .body. token ;
+managerId = managerRes .body.user._id;
+
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+
+// Création d'un employé
+const employeeRes = await request (app)
+.post ('/ api/auth/register ')
+.send ({
+name: 'Employee Test ',
+email : 'employee@test .com ',
+password : 'password123 ',
+role: 'employee '
+});
+employeeToken = employeeRes .body. token ;
+employeeId = employeeRes .body.user._id;
+});
+
+56
+57
+58
+59
+
+afterAll ( async () => {
+await mongoose . connection . close ();
+});
+
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+
+test ( '1. Le manager peut créer un projet ', async () => {
+const res = await request (app)
+.post ('/ api/projects ')
+.set(' Authorization ', `Bearer ${ managerToken }`)
+.send ({
+title : 'Projet d\' intégration ',
+description : 'Projet pour tests d\' intégration ',
+startDate : '2025 -05 -15 ' ,
+endDate : '2025 -05 -30 ' ,
+status : 'Not Started ',
+assignedTo : [ employeeId ]
+});
+
+73
+74
+75
+76
+
+expect (res. statusCode ). toEqual (201) ;
+expect (res.body). toHaveProperty ('_id ');
+expect (res.body. title ). toEqual (' Projet d\' intégration ');
+
+77
+78
+79
+
+projectId = res.body._id;
+});
+
+80
+81
+
+82
+
+test ( '2. L\' employé reçoit une notification d\' assignation ', async ()
+=> {
+const res = await request (app)
+
+52
+
+Rapport de Stage
+
+83
+84
+
+Iliass Boukhiri
+
+.get ('/ api/ notifications ')
+.set(' Authorization ', `Bearer ${ employeeToken }`);
+
+85
+86
+87
+
+expect (res. statusCode ). toEqual (200) ;
+expect (res.body. length ). toBeGreaterThan (0);
+
+88
+89
+90
+91
+92
+93
+
+const assignmentNotification = res.body.find(n =>
+n. message . includes ('assigné ') && n. relatedProject === projectId
+);
+expect ( assignmentNotification ). toBeDefined ();
+});
+
+94
+95
+
+96
+97
+98
+99
+100
+101
+102
+
+test ( '3. L\' employé peut mettre à jour le statut du projet ', async ()
+=> {
+const res = await request (app)
+.patch (`/ api/ projects /${ projectId }/ status `)
+.set(' Authorization ', `Bearer ${ employeeToken }`)
+.send ({
+status : 'In Progress ',
+progress : 25
+});
+
+103
+104
+105
+106
+107
+
+expect (res. statusCode ). toEqual (200) ;
+expect (res.body. status ). toEqual ('In Progress ');
+expect (res.body. progress ). toEqual (25);
+});
+
+108
+109
+
+110
+111
+112
+
+test ( '4. Le manager reçoit une notification de mise à jour ', async ()
+=> {
+const res = await request (app)
+.get ('/ api/ notifications ')
+.set(' Authorization ', `Bearer ${ managerToken }`);
+
+113
+114
+115
+116
+117
+118
+
+const statusNotification = res.body.find(n =>
+n. message . includes ('statut ') && n. relatedProject === projectId
+);
+expect ( statusNotification ). toBeDefined ();
+});
+
+119
+120
+
+121
+122
+123
+124
+125
+126
+
+test ( '5. L\' employé peut ajouter un commentaire au projet ', async () =>
+{
+const res = await request (app)
+.post (`/ api/ projects /${ projectId }/ comments `)
+.set(' Authorization ', `Bearer ${ employeeToken }`)
+.send ({
+text: 'Commentaire de test pour le projet '
+});
+
+127
+
+53
+
+Rapport de Stage
+
+128
+129
+130
+
+131
+
+Iliass Boukhiri
+
+expect (res. statusCode ). toEqual (200) ;
+expect (res.body. comments . length ). toEqual (1);
+expect (res.body. comments [0]. text). toEqual (' Commentaire de test pour
+le projet ');
+});
+
+132
+133
+134
+135
+136
+137
+
+test ( '6. Seul l\'admin peut supprimer le projet ', async () => {
+// L' employé ne devrait pas pouvoir supprimer
+const empRes = await request (app)
+. delete (`/ api/ projects /${ projectId }`)
+.set(' Authorization ', `Bearer ${ employeeToken }`);
+
+138
+139
+
+expect ( empRes . statusCode ). toEqual (403) ;
+
+140
+141
+142
+143
+144
+
+// L' admin devrait pouvoir supprimer
+const adminRes = await request (app)
+. delete (`/ api/ projects /${ projectId }`)
+.set(' Authorization ', `Bearer ${ adminToken }`);
+
+145
+146
+
+expect ( adminRes . statusCode ). toEqual (200) ;
+
+147
+148
+149
+150
+151
+
+// Vérification que le projet a bien été supprimé
+const checkRes = await request (app)
+.get (`/ api/ projects /${ projectId }`)
+.set(' Authorization ', `Bearer ${ adminToken }`);
+
+152
+
+expect ( checkRes . statusCode ). toEqual (404) ;
+154
+});
+155 });
+153
+
+Listing 8.3 – Test d’intégration d’un flux complet de gestion de projet
+
+Ces tests d’intégration ont été particulièrement utiles pour identifier des problèmes subtils liés à la coordination entre les différentes parties du système, comme des incohérences dans la gestion des notifications ou des problèmes de mise à jour d’état.
+
+8.3
+
+Tests Utilisateurs
+
+Des sessions de test avec les employés de SRM Marrakech-Safi ont permis de recueillir
+des retours pour améliorer l’interface.
+
+Méthodologie des Tests Utilisateurs
+Pour valider l’expérience utilisateur et l’utilisabilité de l’application, j’ai organisé plusieurs
+sessions de tests avec les futurs utilisateurs de SRM Marrakech-Safi. Ces tests ont été
+structurés en suivant une méthodologie rigoureuse :
+
+54
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+1. Sélection des participants : Un panel représentatif des différents profils d’utilisateurs
+(managers, employés techniques, personnel administratif)
+2. Définition des scénarios de test : Liste de tâches concrètes à accomplir dans l’application
+3. Observation directe : Suivi des interactions utilisateur sans intervention
+4. Méthode du ”think aloud” : Les participants verbalisent leurs pensées pendant
+qu’ils utilisent l’application
+5. Questionnaires post-test : Évaluation structurée de l’expérience utilisateur
+
+FIGURE 8.1 – Interface utilisateur testée lors des sessions d’évaluation
+
+Résultats et Améliorations
+Les tests utilisateurs ont révélé plusieurs points d’amélioration qui ont été intégrés dans
+les itérations suivantes du développement :
+— Simplification du processus de création de projet : Réduction du nombre de
+champs obligatoires et ajout d’une aide contextuelle
+— Amélioration de la visibilité des notifications : Redesign de l’indicateur de notification et ajout d’alertes visuelles
+— Optimisation des tableaux de bord : Réorganisation des éléments selon la fréquence d’utilisation identifiée lors des tests
+— Simplification de la navigation : Ajout d’un fil d’Ariane et amélioration de la structure des menus
+Le tableau suivant présente l’évolution du score de satisfaction utilisateur avant et après
+les améliorations :
+Ces améliorations ont contribué à augmenter significativement l’acceptation de l’outil
+par les utilisateurs finaux et à faciliter son adoption au sein de l’organisation.
+55
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+TABLE 8.1 – Évolution de la satisfaction utilisateur suite aux tests
+
+8.4
+
+Critère
+
+Avant
+
+Après
+
+Facilité d’utilisation
+Compréhension des fonctionnalités
+Satisfaction visuelle
+Eﬀicacité perçue
+
+6.5/10
+7.2/10
+7.8/10
+6.9/10
+
+8.7/10
+8.9/10
+9.1/10
+8.5/10
+
+Tests de Performance
+
+Pour garantir que l’application réponde aux attentes en termes de rapidité et d’eﬀicacité, des tests de performance ont également été conduits.
+
+Méthodologie et Outils
+Les tests de performance ont été réalisés à l’aide de plusieurs outils complémentaires :
+— Apache JMeter : Pour simuler une charge utilisateur importante et mesurer les
+temps de réponse
+— Lighthouse (Chrome DevTools) : Pour évaluer les performances frontend (First Contentful Paint, Time to Interactive, etc.)
+— MongoDB Compass : Pour analyser les performances des requêtes à la base de
+données
+— React Profiler : Pour identifier les composants gourmands en ressources
+
+Résultats et Optimisations
+Les tests ont permis d’identifier plusieurs axes d’amélioration :
+— Optimisation des requêtes MongoDB : Ajout d’index composites pour améliorer
+les temps de réponse des requêtes complexes
+— Mise en cache côté client : Implémentation d’un système de mise en cache des
+données fréquemment utilisées
+— Chargement paresseux des composants : Utilisation de React.lazy et Suspense
+pour différer le chargement des composants non critiques
+— Compression des ressources statiques : Configuration de la compression gzip/brotli sur le serveur nginx
+Ces optimisations ont permis d’améliorer considérablement les performances de l’application, comme le montre le tableau suivant :
+TABLE 8.2 – Amélioration des performances après optimisation
+
+Métrique
+
+Avant
+
+Après
+
+Temps de réponse moyen (API)
+First Contentful Paint
+Time to Interactive
+Taille du bundle JS
+
+350ms
+1.8s
+3.2s
+1.2MB
+
+120ms
+0.9s
+1.6s
+450KB
+
+56
+
+Ces améliorations ont contribué à une expérience utilisateur fluide même dans des
+conditions réseau non optimales, un aspect crucial pour une utilisation quotidienne de
+l’application au sein de SRM Marrakech-Safi.
+
+Chapitre 9
+
+Fonctionnalités Implémentées
+Dans cette section, nous détaillons les principales fonctionnalités développées au cours
+du stage :
+
+9.1 Authentification et Gestion des Utilisateurs
+Le système d’authentification repose sur JSON Web Tokens (JWT) pour assurer la sécurité.
+Les utilisateurs bénéficient des rôles suivants : superadmin, admin, manager, employé,
+et utilisateur simple. L’interface permet la gestion complète des comptes, avec activation/désactivation et historisation des connexions.
+const authMiddleware = (req , res , next) => {
+2
+const token = req. headers . authorization ?. split (' ')[1];
+3
+if (! token ) return res. status (401) .json ({ error : 'Token manquant ' });
+4
+try {
+5
+const decoded = jwt. verify (token , process .env. JWT_SECRET );
+6
+req.user = decoded ;
+7
+next ();
+8
+} catch (err) {
+9
+res. status (403) .json ({ error : 'Token invalide ' });
+10
+}
+11 };
+1
+
+Listing 9.1 – Middleware d’authentification JWT
+
+9.2
+
+Gestion des Projets
+
+L’utilisateur peut créer, modifier et suivre l’avancement des projets. Chaque projet inclut
+un titre, une description détaillée, une date de début, une date de fin et un indicateur
+de progression en pourcentage. L’aﬀichage se fait sous forme de liste ou de tableau
+de bord.
+57
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+FIGURE 9.1 – Tableau de bord principal
+
+9.3
+
+Visualisation de Données et Analytics
+
+Une des fonctionnalités les plus appréciées par les utilisateurs est la section d’analyse
+et de visualisation des données. Cette fonctionnalité permet aux managers et administrateurs de bénéficier d’une vue d’ensemble sur l’état des projets.
+
+FIGURE 9.2 – Tableau de bord analytique avec visualisation des données
+
+Tableau de bord analytique
+— Suivi des tendances : Graphiques d’évolution du nombre de projets par
+statut à travers le temps
+— Analyse de performance : Indicateurs de complétion des projets par rapport aux délais initiaux
+— Répartition de charge : Visualisation de l’allocation des ressources entre
+membres d’équipe
+— Prévisions : Projection des dates d’achèvement basée sur le rythme actuel
+d’avancement
+
+58
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+Technologies de Visualisation
+Pour implémenter ces fonctionnalités d’analyse, j’ai utilisé la bibliothèque Chart.js qui
+offre un excellent équilibre entre esthétique, performance et personnalisation. L’intégration avec React a été réalisée via le wrapper react-chartjs-2, permettant une mise à
+jour réactive des graphiques en fonction des changements de données.
+import React , { useEffect , useState } from 'react ';
+import { Line } from 'react -chartjs -2 ';
+3 import {
+4
+Chart as ChartJS ,
+5
+CategoryScale ,
+6
+LinearScale ,
+7
+PointElement ,
+8
+LineElement ,
+9
+Title ,
+10
+Tooltip ,
+11
+Legend
+12 } from 'chart .js ';
+13 import api from '../ utils /api ';
+1
+2
+
+14
+
+// Enregistrement des composants Chart .js
+ChartJS . register (
+17
+CategoryScale ,
+18
+LinearScale ,
+19
+PointElement ,
+20
+LineElement ,
+21
+Title ,
+22
+Tooltip ,
+23
+Legend
+24 );
+15
+16
+
+25
+
+const ProjectTrendsChart = () => {
+27
+const [chartData , setChartData ] = useState (null);
+28
+const [loading , setLoading ] = useState (true);
+26
+
+29
+30
+31
+32
+33
+34
+
+useEffect (() => {
+const fetchTrendData = async () => {
+try {
+const res = await api.get('/ analytics /project - trends ');
+const { labels , datasets } = processData (res.data);
+
+35
+36
+37
+38
+39
+40
+41
+
+setChartData ({
+labels ,
+datasets : datasets .map( dataset => ({
+... dataset ,
+tension : 0.3 ,
+borderWidth : 2,
+
+59
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+pointRadius : 3,
+pointHoverRadius : 5
+}))
+});
+} catch (error ) {
+console . error ('Error fetching trend data:', error );
+} finally {
+setLoading ( false );
+}
+
+42
+43
+44
+45
+46
+47
+48
+49
+50
+
+};
+
+51
+52
+
+fetchTrendData ();
+}, []);
+
+53
+54
+55
+
+const options = {
+responsive : true ,
+maintainAspectRatio : false ,
+plugins : {
+legend : {
+position : 'bottom ',
+labels : {
+usePointStyle : true ,
+boxWidth : 10
+}
+},
+title : {
+display : true ,
+text: 'Évolution des projets par statut '
+}
+}
+};
+
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+
+if ( loading || ! chartData ) {
+return <div className ="chart - loading ">Chargement des données ... </div
+>;
+}
+
+74
+75
+
+76
+77
+
+return (
+<div className ="chart - container " style ={{ height : '400 px ' }}>
+<Line data ={ chartData } options ={ options } />
+</div >
+);
+
+78
+79
+80
+81
+82
+83
+
+};
+
+84
+85
+
+export default ProjectTrendsChart ;
+Listing 9.2 – Implémentation d’un graphique d’analyse de tendances
+
+60
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+Tableaux de Bord Interactifs
+Les tableaux de bord interactifs permettent aux utilisateurs de filtrer et d’explorer les
+données selon différentes dimensions :
+— Filtrage temporel : Sélection de périodes spécifiques (aujourd’hui, semaine, mois,
+trimestre)
+— Filtrage par département : Vue consolidée ou détaillée par équipe
+— Métriques configurables : Personnalisation des indicateurs aﬀichés
+— Export de rapports : Génération de PDFs avec les graphiques et métriques sélectionnés
+Ces visualisations de données permettent aux décideurs de SRM Marrakech-Safi d’identifier rapidement les tendances, les goulets d’étranglement, et d’optimiser l’allocation
+des ressources en fonction des priorités organisationnelles.
+
+9.4
+
+Tableaux de Bord et Analyses
+
+Des graphiques interactifs, réalisés avec Chart.js, offrent une vue synthétique des performances des projets. Les rapports statistiques peuvent être exportés en PDF.
+
+9.5
+
+Notifications et Alertes
+
+Un module de notifications en temps réel alerte les utilisateurs par email et via l’interface
+web lors des échéances importantes ou des nouvelles assignations.
+
+9.6
+
+Contrôle d’Accès Basé sur les Rôles
+
+La gestion des permissions est centralisée via un système RBAC customisé, garantissant
+que chaque acteur ne voit que ce qui lui est autorisé.
+
+Architecture du Système de Notifications
+Le système de notifications a été conçu pour être fiable, extensible et non-intrusif :
+— Modèle dédié : Un schéma Mongoose spécifique stocke les notifications avec
+des champs pour le destinataire, le message, le type, la référence à l’entité concernée et l’état de lecture
+— Génération événementielle : Les notifications sont générées automatiquement
+lors d’événements clés (assignation à un projet, modification de statut, approche
+d’échéance)
+— Distribution multi-canal : Selon l’importance, les notifications sont envoyées via
+l’interface web et/ou par email
+— Marquage intelligent : Système de marquage comme lu/non-lu avec possibilité
+de marquer tout comme lu en un clic
+
+61
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+Voici un extrait du code pour le contrôleur de notifications :
+// Création d'une notification système
+exports . createSystemNotification = async (userId , message , type ,
+relatedProject = null) => {
+3
+try {
+4
+const notification = new Notification ({
+5
+user: userId ,
+6
+message ,
+7
+type , // 'info ', 'warning ', ou 'alert '
+8
+relatedProject ,
+9
+read: false ,
+10
+createdAt : Date.now ()
+11
+});
+1
+2
+
+12
+
+await notification .save ();
+
+13
+14
+
+// Si notification critique , envoyer également par email
+if (type === 'alert ') {
+const user = await User. findById ( userId );
+await emailService . sendNotificationEmail (
+user.email ,
+'Alerte importante - Gestion de projets SRM ',
+message ,
+relatedProject
+);
+}
+
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+
+return notification ;
+} catch ( error ) {
+console . error ('Erreur lors de la création de notification :', error );
+throw error ;
+}
+
+26
+27
+28
+29
+30
+31
+
+};
+Listing 9.3 – Contrôleur de notifications
+
+Interface Utilisateur des Notifications
+L’interface utilisateur des notifications a été soigneusement conçue pour être à la fois
+informative et non intrusive :
+— Centre de notifications : Accessible depuis la barre de navigation avec un compteur des notifications non lues
+— Icône animée : Animation subtile pour signaler l’arrivée d’une nouvelle notification sans perturber l’utilisateur
+— Code couleur : Différenciation visuelle selon le type de notification (information,
+avertissement, alerte)
+62
+
+— Actions contextuelles : Possibilité d’agir directement depuis la notification (voir le
+projet, marquer comme terminé, etc.)
+— Mode silencieux : Option permettant aux utilisateurs de configurer leurs préférences de notification
+
+Alertes pour les Échéances
+Un système dédié surveille les dates d’échéance des projets et tâches pour alerter de
+manière proactive :
+— Tâche planifiée : Script node-cron exécuté quotidiennement pour vérifier les projets approchant de leur date limite
+— Alertes graduelles : Notifications envoyées à 7 jours, 3 jours et 1 jour avant l’échéance
+— Escalade : Si un projet dépasse sa date d’échéance sans être complété, une
+alerte est envoyée au manager et à l’administrateur
+— Tableau de bord : Section dédiée sur le tableau de bord principal présentant les
+projets à risque ou en retard
+Cette implémentation a significativement amélioré la réactivité des équipes et réduit
+le nombre de projets dépassant leur date d’échéance, contribuant directement à l’efficacité opérationnelle de SRM Marrakech-Safi.
+
+Chapitre 10
+
+Points Forts Techniques
+10.1 Architecture Modulaire
+Le code est structuré en modules indépendants pour le frontend (React) et le backend
+(Express), facilitant la maintenance et les évolutions futures.
+
+10.2
+
+Sécurité et Performance
+
+L’utilisation de Helmet sur Express, de bcrypt pour le hachage des mots de passe et
+d’indexations MongoDB assure la robustesse et la rapidité des requêtes.
+
+63
+
+10.3
+
+Optimisation des Requêtes MongoDB
+
+Des indexes sur les champs souvent filtrés (status, assignedTo) permettent de réduire le
+temps de réponse sur les listes de projets.
+
+10.4
+
+Tâches Planifiées avec Node-cron
+
+Des scripts automatiques gèrent les rappels et l’archivage des projets en garantie, exécutés quotidiennement.
+
+10.5
+
+Intégration Continue
+
+Le pipeline CI/CD sur GitHub Actions réalise des tests automatisés et des déploiements
+sur le serveur de démonstration.
+
+10.6
+
+Méthodologie de Développement
+
+Approche Agile et Sprints
+Le projet a été découpé en sprints hebdomadaires de 1 semaine, avec revue de backlog et démonstration à chaque fin de sprint.
+
+Gestion de Version avec Git
+Chaque fonctionnalité a été développée dans une branche dédiée. Les pull requests
+ont été revues par des pairs avant intégration.
+
+Revue de Code et Tests
+Les tests unitaires (Jest) et d’intégration (Supertest) assurent la non-régression. Les revues
+de code renforcent la qualité.
+
+Chapitre 11
+
+Modèles de Données Détaillés
+Cette section présente les schémas Mongoose utilisés pour définir les collections principales.
+
+64
+
+const userSchema = new Schema ({
+2
+name: { type: String , required : true },
+3
+email : { type: String , required : true , unique : true },
+4
+password : { type: String , required : true },
+5
+role: { type: String , enum: [' superadmin ','admin ','manager ','employee
+','user '], required : true },
+6
+active : { type: Boolean , default : true },
+7
+createdAt : { type: Date , default : Date.now },
+8 });
+1
+
+Listing 11.1 – Schéma Utilisateur (User)
+
+const projectSchema = new Schema ({
+2
+title : { type: String , required : true },
+3
+description : String ,
+4
+status : { type: String , enum: ['Not Started ','In Progress ','On Hold ','
+Completed '], default : 'Not Started ' },
+5
+progress : { type: Number , min: 0, max: 100 },
+6
+startDate : Date ,
+7
+endDate : Date ,
+8
+assignedTo : [{ type: ObjectId , ref: 'User ' }],
+9
+comments : [{ text: String , createdAt : Date }],
+10 });
+1
+
+Listing 11.2 – Schéma Projet (Project)
+
+const notificationSchema = new Schema ({
+user: { type: ObjectId , ref: 'User ', required : true },
+3
+message : { type: String , required : true },
+4
+type: { type: String , enum: ['info ','warning ','alert '], default : 'info '
+},
+5
+relatedProject : { type: ObjectId , ref: 'Project ' },
+6
+read: { type: Boolean , default : false },
+7
+createdAt : { type: Date , default : Date.now }
+8 });
+1
+2
+
+Listing 11.3 – Schéma Notification
+
+65
+
+Chapitre 12
+
+API et Endpoints
+L’application expose un ensemble d’endpoints REST pour interagir avec le backend. Le
+tableau suivant récapitule les routes principales :
+TABLE 12.1 – Principaux Endpoints de l’API
+
+Méthode
+
+URL
+
+Description
+
+GET
+
+/api/auth/login
+
+Authentification
+utilisateur
+
+POST
+
+/api/auth/register
+
+Création
+
+d’un
+
+compte
+
+utili-
+
+sateur
+
+(admin
+
+only)
+POST
+
+/api/projects
+
+Création
+
+d’un
+
+projet
+GET
+
+/api/projects
+
+Liste des projets
+
+GET
+
+/api/projects/ :id
+
+Détails d’un projet
+
+PATCH
+
+/api/projects/ :id/status
+
+Mise à jour du
+statut du projet
+
+DELETE
+
+/api/projects/ :id
+
+Suppression
+d’un projet
+
+66
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+Chapitre 13
+
+Perspectives et Améliorations Futures
+13.1 Vision Stratégique
+L’application développée pendant ce stage constitue une première étape dans un
+écosystème plus large de digitalisation pour SRM Marrakech-Safi. La vision à long terme
+comprend une plateforme intégrée de gestion des opérations couvrant l’ensemble des
+départements.
+Note
+La conception modulaire de l’application permet son extension progressive sans
+refonte majeure, grâce à l’architecture orientée services et l’API RESTful.
+
+13.2
+
+Évolutions Techniques Planifiées
+
+Parmi les principales évolutions techniques envisagées :
+
+Application Mobile Cross-Platform
+Une application mobile React Native est prévue pour fin 2025, offrant un accès terrain
+aux fonctionnalités clés :
+— Architecture : Réutilisation de la logique métier du frontend web grâce à des
+hooks React partagés
+— Fonctionnalités offline : Synchronisation bidirectionnelle avec stockage local pour
+travailler sans connexion
+— Notifications push : Intégration des services Firebase Cloud Messaging et Apple
+Push Notification
+— Capture in-situ : Fonctionnalités de capture photo et document pour documenter l’avancement sur site
+// Dans le gestionnaire de synchronisation
+const syncProjectsToServer = async () => {
+3
+// Récupérer les modifications locales
+4
+const pendingChanges = await localDB . getChanges ();
+1
+2
+
+67
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+5
+
+// Vérifier la connexion réseau
+if ( isOnline ()) {
+try {
+// Envoyer les modifications au serveur par lots
+for ( const batch of chunkArray ( pendingChanges , 20)) {
+await api. syncBatch ( batch );
+}
+
+6
+7
+8
+9
+10
+11
+12
+13
+
+// Marquer comme synchronisé
+await localDB . markSynced ();
+
+14
+15
+16
+
+// Récupérer les nouvelles données du serveur
+const serverData = await api. getLatestChanges ( lastSyncTimestamp );
+await localDB . updateFromServer ( serverData );
+
+17
+18
+19
+20
+
+return { success : true , syncedItems : pendingChanges . length };
+} catch ( error ) {
+// Gérer les erreurs de synchronisation
+logSyncError ( error );
+return { success : false , error };
+}
+} else {
+// Planifier une resynchronisation quand la connexion reviendra
+scheduleSyncWhenOnline ();
+return { success : false , reason : 'offline ' };
+}
+
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+
+};
+Listing 13.1 – Architecture prévue pour la synchronisation offline
+
+Intelligence Artificielle et Analyses Prédictives
+L’intégration d’IA pour améliorer la gestion de projet est envisagée :
+— Prédiction des retards : Modèle ML analysant les données historiques pour identifier les projets à risque
+— Allocation optimale des ressources : Algorithmes d’optimisation pour la répartition des tâches entre membres d’équipe
+— Détection des anomalies : Surveillance des patterns inhabituels pour détecter
+proactivement les problèmes
+— Suggestions intelligentes : Recommandations basées sur les projets similaires passés
+
+Intégration avec d’Autres Systèmes
+L’application sera connectée à d’autres systèmes de SRM Marrakech-Safi :
+
+68
+
+— ERP interne : Synchronisation bidirectionnelle pour l’allocation budgétaire et le
+suivi financier
+— Système RH : Intégration des données de disponibilité et de compétences pour
+l’assignation intelligente
+— Plateforme IoT : Connexion avec les capteurs et appareils connectés pour les
+projets d’infrastructure
+— Système documentaire : Gestion centralisée des documents attachés aux projets
+
+13.3
+
+Roadmap de Développement
+
+La feuille de route est organisée en trois phases principales :
+TABLE 13.1 – Roadmap de développement sur 24 mois
+
+Phase
+
+Objectifs
+
+Phase 1
+(Consolidation)
+
+Phase 2
+(Extension)
+
+Phase 3
+(Intégration)
+
+13.4
+
+Échéance
+
+— Optimisation des performances
+— Amélioration de l’UX/UI
+— Implémentation des tests automatisés
+— Documentation technique complète
+— Développement de l’application mobile
+— Module de messagerie interne
+— Rapports et tableaux de bord avancés
+— Amélioration de l’accessibilité
+— Intégration avec les systèmes tiers
+— Implémentation des analyses prédictives
+— Architecture microservices
+— API ouverte pour partenaires
+
+T4 2025
+
+T2 2026
+
+T4 2026
+
+Impact Métier Attendu
+
+Ces évolutions devraient apporter des bénéfices significatifs à l’organisation :
+— Gain de productivité estimé à 15-20% grâce à une meilleure coordination et visibilité
+— Réduction des délais de livraison des projets de 10-15% via l’identification précoce des risques
+— Amélioration de la satisfaction client interne et externe grâce à un suivi plus transparent
+— Réduction des coûts opérationnels par l’optimisation de l’allocation des ressources
+Ces perspectives ont été présentées à la direction de SRM Marrakech-Safi et ont reçu un
+accueil favorable, avec un engagement sur les ressources nécessaires pour les phases
+69
+
+1 et 2.
+
+Chapitre 14
+
+Extraits de Code Backend
+Cette section présente un extrait des routes backend pour la gestion des projets.
+const
+2 const
+3 const
+4 const
+5 const
+6 const
+1
+
+express = require ('express ');
+router = express . Router ();
+Project = require ( '../ models /Project ');
+auth = require ( '../ middleware /auth ');
+notificationService = require ( '../ utils / notificationService ');
+projectService = require ( '../ utils / projectService ');
+
+7
+
+// Get all projects
+router .get('/', auth , async (req , res) => {
+10
+try {
+11
+const projects = await Project .find ()
+12
+. populate ('createdBy ', 'name email ')
+13
+. populate (' assignedTo ', 'name email ')
+14
+.sort ({ createdAt : -1 });
+15
+res.json( projects );
+16
+} catch ( error ) {
+17
+res. status (500) .json ({ message : 'Server error ' });
+18
+}
+19 });
+8
+9
+
+Listing 14.1 – Extrait de routes/projects.js
+
+70
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+Chapitre 15
+
+Conclusion et Perspectives
+
+Synthèse du Projet
+Ce stage de deux mois a permis de concevoir et déployer une
+application de gestion de projets basée sur la stack MERN,
+répondant aux besoins spécifiques de SRM Marrakech-Safi.
+
+15.1 Bilan du Stage
+Ce stage a été une expérience enrichissante, tant sur le plan technique que personnel,
+me permettant de développer des compétences en développement full-stack et en
+gestion de projet. Les principaux acquis peuvent être résumés comme suit :
+— Compétences techniques approfondies : Maîtrise pratique de la stack MERN dans
+un contexte professionnel.
+— Méthodes de gestion de projet : Application concrète de la méthodologie Agile
+avec des cycles courts de développement.
+— Communication professionnelle : Capacité à échanger eﬀicacement avec différentes parties prenantes (équipe technique, management, utilisateurs finaux).
+— Résolution de problèmes complexes : Développement d’aptitudes d’analyse et
+de résolution face à des défis techniques et organisationnels.
+L’application développée répond aux besoins initialement exprimés et offre une plateforme évolutive qui pourra s’adapter aux besoins futurs du département informatique.
+Les retours des utilisateurs lors des phases de test ont été très positifs, soulignant particulièrement la facilité d’utilisation et la pertinence des fonctionnalités implémentées.
+
+15.2
+
+Perspectives
+
+Ce stage a posé les fondations d’un système évolutif, avec plusieurs perspectives d’extension :
+
+71
+
+— Application mobile : Développement d’une application mobile React Native
+pour permettre le suivi des projets sur le terrain.
+— Intégration avec d’autres systèmes : Ajout d’APIs permettant l’échange de données avec d’autres logiciels de SRM.
+— Tableau de bord avancé : Mise en place d’analyses visuelles plus poussées avec
+des graphiques interactifs.
+— Automatisation : Développement de workflows automatisés pour certaines tâches
+répétitives.
+
+Feuille de Route
+La feuille de route pour l’évolution du projet comprend trois phases principales :
+1. Phase 1 (Actuelle) : Application de base de gestion de projets (MVP)
+2. Phase 2 : Extensions (mobile, notifications avancées)
+3. Phase 3 : Intégration dans l’écosystème global de SRM
+
+FIGURE 15.1 – Interface utilisateur avec potentiel d’évolution
+
+Note
+Le code a été écrit en prévision de ces évolutions futures, avec une architecture
+modulaire permettant l’ajout de nouvelles fonctionnalités sans refonte majeure.
+
+72
+
+Glossaire
+API Application Programming Interface
+MERN MongoDB, Express, React, Node.js
+JWT JSON Web Token
+RBAC Role-Based Access Control
+CI/CD Continuous Integration / Continuous Deployment
+CRUD Create, Read, Update, Delete
+JSON JavaScript Object Notation
+ODM Object Document Mapper
+UX User Experience
+UI User Interface
+
+Annexe A
+
+Annexes
+Documents Complémentaires
+Cette section contient les captures d’écran de l’application,
+diagrammes techniques et autres ressources visuelles liées au projet
+
+73
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+FIGURE A.1 – Tableau de bord principal de l’application
+
+FIGURE A.2 – Liste des projets
+
+FIGURE A.3 – Détail d’un projet
+
+74
+
+A.1 Captures d’Écran de l’Application
+A.2
+
+Technologies Utilisées
+
+Technologie
+
+Description
+
+Version
+
+React.js - Bibliothèque JavaScript pour la
+construction d’interfaces utilisateur
+
+Node.js - Environnement d’exécution JavaScript côté serveur
+
+Express - Framework web minimaliste pour
+Node.js
+MongoDB - Base de données NoSQL orientée documents
+
+A.3
+
+Diagramme d’Architecture Détaillé
+
+A.4
+
+Glossaire Technique
+
+18.2.0
+
+18.12.0
+
+4.18.2
+6.0
+
+Terme
+
+Définition
+
+API REST
+
+Interface de programmation qui suit les principes REST (Representational State Transfer) pour les communications client-serveur
+
+JWT
+
+JSON Web Token, standard ouvert (RFC 7519) pour créer des jetons d’accès sécurisés
+
+MongoDB
+
+Base de données NoSQL orientée documents stockant les données au format BSON
+
+React
+
+Bibliothèque JavaScript pour construire des interfaces utilisateurs
+à base de composants
+
+Context API
+
+API React native pour gérer l’état global sans nécessiter de bibliothèques tierces
+
+Node.js
+
+Environnement d’exécution JavaScript côté serveur basé sur le
+moteur V8 de Chrome
+
+Express
+
+Framework web minimaliste pour Node.js simplifiant la création
+d’API
+
+Middleware
+
+Fonctions intermédiaires dans le traitement des requêtes HTTP
+
+MERN
+
+Stack technologique combinant MongoDB, Express, React et
+Node.js
+
+75
+
+Rapport de Stage
+
+Iliass Boukhiri
+
+FIGURE A.4 – Architecture de l’application MERN
+
+Notes Finales
+Le présent rapport illustre non seulement l’aboutissement technique d’un projet MERN,
+mais aussi la valeur métier qu’il apporte à SRM Marrakech-Safi. Il met en exergue :
+— La capacité à analyser et comprendre les besoins opérationnels d’une entité
+publique multiservices.
+— Le choix technologique pertinent (MongoDB, Express, React, Node.js) justifié par
+les critères de performance et de maintenabilité.
+— La mise en œuvre d’une méthodologie Agile garantissant le respect des délais
+et la qualité continue du livrable.
+76
+
+— La résolution proactive des défis techniques et organisationnels rencontrés.
+Ce document, rédigé dans un style formel et accessible, répond aux exigences académiques tout en fournissant un support clair aux décideurs de SRM Marrakech-Safi.
+
+Bibliographie
+[1]
+
+MongoDB Inc., MERN Stack - MongoDB, Express, React, Node.js, 2023, https://www.
+mongodb.com/mern-stack
+
+[2]
+
+Node.js Foundation, Node.js Documentation, 2023, https://nodejs.org/en/docs/
+
+[3]
+
+Meta
+
+Inc.,
+
+React
+
+Documentation,
+
+2023,
+
+https://reactjs.org/docs/
+
+getting-started.html
+[4]
+
+Express.js, Express.js Documentation, 2023, https://expressjs.com/
+
+[5]
+
+MongoDB Inc., MongoDB Documentation, 2023, https://docs.mongodb.com/
+
+[6]
+
+Auth0, Introduction to JSON Web Tokens, 2023, https://jwt.io/introduction/
+
+[7]
+
+Roy Fielding, Architectural Styles and the Design of Network-based Software Architectures, 2000, Université de Californie, Irvine
+
+[8]
+
+Meta Inc., Hooks at a Glance, 2023, https://reactjs.org/docs/hooks-overview.
+html
+
+[9]
+
+K. Schwaber and J. Sutherland, The Scrum Guide, 2020, https://scrumguides.org/
+
+[10] M. Fowler, Test-Driven Development, 2005, https://martinfowler.com/bliki/
+TestDrivenDevelopment.html
+[11] A. Cooper, R. Reimann, and D. Cronin, About Face : The Essentials of Interaction
+Design, 2014, Wiley
+[12] OWASP
+
+Foundation,
+
+OWASP
+
+Top
+
+Ten
+
+Project,
+
+2021,
+
+https://owasp.org/
+
+www-project-top-ten/
+[13] G. Kim, J. Humble, P. Debois, and J. Willis, The DevOps Handbook, 2016, IT Revolution
+[14] S. Newman, Building Microservices, 2015, O’Reilly Media
+[15] I. Grigorik, High Performance Browser Networking, 2013, O’Reilly Media
+[16] Material-UI Team, Material-UI : React components for faster and easier web development, 2023, https://mui.com/
+[17] Axios Team, Axios Documentation - Promise based HTTP client, 2023, https://
+axios-http.com/docs/intro
+77
+
+

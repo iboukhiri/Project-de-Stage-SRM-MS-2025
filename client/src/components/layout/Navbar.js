@@ -152,6 +152,8 @@ const Navbar = () => {
   const notificationIconRef = useRef(null);
   const mobileMenuRef = useRef(null);
   const hamburgerRef = useRef(null);
+  const [chefMenuAnchor, setChefMenuAnchor] = useState(null);
+  const isChef = user && (user.role === 'manager' || user.role === 'admin') && user.role !== 'superadmin';
   
   // Define the missing style variables
   const navButtonStyles = {
@@ -541,6 +543,13 @@ const Navbar = () => {
     setAboutDialogOpen(!aboutDialogOpen);
   };
 
+  const handleOpenChefMenu = (event) => {
+    setChefMenuAnchor(event.currentTarget);
+  };
+  const handleCloseChefMenu = () => {
+    setChefMenuAnchor(null);
+  };
+
   const navContent = (
     <StyledAppBar 
       position="static" 
@@ -690,6 +699,37 @@ const Navbar = () => {
                 </>
               )}
             </Box>
+
+            {/* Chef de Projet Dropdown for manager/admin only */}
+            {isChef && (
+              <>
+                <Button
+                  color="inherit"
+                  onClick={handleOpenChefMenu}
+                  startIcon={<AdminIcon />}
+                  sx={{ ...navButtonStyles }}
+                >
+                  Chef de Projet
+                </Button>
+                <Menu
+                  anchorEl={chefMenuAnchor}
+                  open={Boolean(chefMenuAnchor)}
+                  onClose={handleCloseChefMenu}
+                  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                  transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                >
+                  <MenuItem onClick={() => { handleCloseChefMenu(); navigate('/create-project'); }}>
+                    <AddIcon fontSize="small" sx={{ mr: 1 }} /> Créer un projet
+                  </MenuItem>
+                  <MenuItem onClick={() => { handleCloseChefMenu(); navigate('/projects'); }}>
+                    <SettingsIcon fontSize="small" sx={{ mr: 1 }} /> Modifier un projet
+                  </MenuItem>
+                  <MenuItem onClick={() => { handleCloseChefMenu(); navigate('/admin/assign-projects'); }}>
+                    <GroupIcon fontSize="small" sx={{ mr: 1 }} /> Assigner des employés
+                  </MenuItem>
+                </Menu>
+              </>
+            )}
 
             {/* Always visible items */}
             <Tooltip title="Notifications">

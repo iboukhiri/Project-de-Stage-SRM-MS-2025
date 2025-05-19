@@ -148,7 +148,7 @@ const ProjectList = () => {
             </ToggleButton>
           </ToggleButtonGroup>
           
-          {user && user.role === 'admin' && (
+          {user && (user.role === 'manager' || user.role === 'admin') && (
             <Button
               variant="contained"
               color="primary"

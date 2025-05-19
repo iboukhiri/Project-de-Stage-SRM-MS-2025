@@ -75,12 +75,14 @@ const CreateProject = () => {
     startDate: null,
     endDate: null,
     assignedTo: [],
-    guaranteeDays: 0
+    guaranteeMonths: 0
   });
   const [users, setUsers] = useState([]);
   const [error, setError] = useState('');
   const [selectedUsers, setSelectedUsers] = useState([]);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -126,18 +128,26 @@ const CreateProject = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setSuccess(false);
+    setLoading(true);
 
     if (!formData.title || !formData.description || !formData.startDate || !formData.endDate) {
       setError('Veuillez remplir tous les champs obligatoires');
+      setLoading(false);
       return;
     }
 
     try {
       await axios.post(`${config.API_URL}/api/projects`, formData);
-      navigate('/projects');
+      setSuccess(true);
+      setTimeout(() => {
+        navigate('/projects');
+      }, 1200); // Show success for 1.2s before redirect
     } catch (error) {
       setError('Erreur lors de la création du projet');
       console.error('Error creating project:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -184,6 +194,12 @@ const CreateProject = () => {
         {error && (
           <Alert severity="error" sx={{ mb: 4 }}>
             {error}
+          </Alert>
+        )}
+
+        {success && (
+          <Alert severity="success" sx={{ mb: 4 }}>
+            Projet créé avec succès ! Redirection en cours...
           </Alert>
         )}
 
@@ -316,15 +332,15 @@ const CreateProject = () => {
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
-                label="Phase de garantie (en jours)"
-                name="guaranteeDays"
+                label="Phase de garantie (en mois)"
+                name="guaranteeMonths"
                 type="number"
-                value={formData.guaranteeDays}
-                onChange={handleChange}
+                value={formData.guaranteeMonths}
+                onChange={e => setFormData({ ...formData, guaranteeMonths: e.target.value })}
                 InputProps={{ 
                   inputProps: { min: 0 },
                 }}
-                helperText="Nombre de jours de garantie après lesquels le projet passera au statut 'Terminé'"
+                helperText="Nombre de mois de garantie après lesquels le projet passera au statut 'Terminé'"
                 sx={{ 
                   '& .MuiOutlinedInput-root': {
                     borderRadius: 1,
@@ -432,8 +448,9 @@ const CreateProject = () => {
                     borderRadius: 1,
                     boxShadow: 2
                   }}
+                  disabled={loading}
                 >
-                  Ajouter
+                  {loading ? 'Création...' : 'Ajouter'}
                 </Button>
               </Box>
             </Grid>

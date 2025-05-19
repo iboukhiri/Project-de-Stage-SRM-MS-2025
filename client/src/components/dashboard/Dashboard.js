@@ -120,8 +120,8 @@ const Dashboard = () => {
   const getWelcomeMessage = () => {
     if (user?.role === 'superadmin') {
       return "Centre d'Administration Système 💻";
-    } else if (user?.role === 'admin') {
-      return "Bienvenue, Admin ! 👋";
+    } else if (user?.role === 'manager' || user?.role === 'admin') {
+      return "Centre de Gestion des Projets 📊";
     } else {
       return "Bienvenue sur votre tableau de bord ! 👋";
     }
@@ -644,7 +644,7 @@ const Dashboard = () => {
                 Votre tableau de bord personnel vous attend avec des informations actualisées.
               </Typography>
               
-              {(user && (user.role === 'admin' || user.role === 'superadmin')) && (
+              {(user && (user.role === 'manager' || user.role === 'admin' || user.role === 'superadmin')) && (
                 <Box
                   sx={{
                     mt: 2.5,
@@ -699,14 +699,14 @@ const Dashboard = () => {
                   >
                     {user.role === 'superadmin' 
                       ? "En tant que Super Admin, vous avez un accès complet au système. Vous pouvez gérer les utilisateurs, ajouter et modifier des projets, et effectuer toutes les opérations administratives."
-                      : "En tant qu'administrateur, vous pouvez ajouter et modifier des projets à tout moment via le bouton \"Nouveau Projet\" ou depuis la liste des projets."
+                      : "En tant que Chef de Projet, vous pouvez ajouter et modifier des projets à tout moment via le bouton \"Nouveau Projet\" ou depuis la liste des projets."
                     }
                   </Typography>
                 </Box>
               )}
             </Box>
             
-            {(user && (user.role === 'admin' || user.role === 'superadmin')) && (
+            {(user && (user.role === 'manager' || user.role === 'admin' || user.role === 'superadmin')) && (
               <Button
                 variant="contained"
                 startIcon={<AddIcon />}

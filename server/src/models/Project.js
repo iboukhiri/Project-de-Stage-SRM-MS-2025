@@ -66,7 +66,7 @@ const projectSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-  guaranteeDays: {
+  guaranteeMonths: {
     type: Number,
     default: 0
   },
@@ -80,9 +80,9 @@ const projectSchema = new mongoose.Schema({
 projectSchema.pre('save', function(next) {
   this.updatedAt = Date.now();
   
-  if (this.guaranteeDays > 0 && (!this.guaranteeEndDate || this.isModified('guaranteeDays'))) {
+  if (this.guaranteeMonths > 0 && (!this.guaranteeEndDate || this.isModified('guaranteeMonths'))) {
     const today = new Date();
-    this.guaranteeEndDate = new Date(today.setDate(today.getDate() + this.guaranteeDays));
+    this.guaranteeEndDate = new Date(today.setMonth(today.getMonth() + this.guaranteeMonths));
     
     if (this.progress === 100) {
       this.status = 'En garantie';
