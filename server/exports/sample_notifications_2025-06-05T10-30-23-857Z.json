@@ -1,0 +1,96 @@
+[
+  {
+    "_id": "684171bfc396c60718c209b8",
+    "recipient": "684171bfc396c60718c209ab",
+    "sender": "684171bfc396c60718c209a9",
+    "type": "project_assignment",
+    "content": "Vous avez été assigné au projet \"Extension Réseau Eau Potable - Marrakech\"",
+    "relatedProject": "684171bfc396c60718c209af",
+    "read": true,
+    "date": "2024-01-15T08:30:00.000Z",
+    "metadata": {
+      "projectTitle": "Extension Réseau Eau Potable - Marrakech"
+    }
+  },
+  {
+    "_id": "684171bfc396c60718c209b9",
+    "recipient": "684171bfc396c60718c209ac",
+    "sender": "684171bfc396c60718c209a9",
+    "type": "project_assignment",
+    "content": "Vous avez été assigné au projet \"Extension Réseau Eau Potable - Marrakech\"",
+    "relatedProject": "684171bfc396c60718c209af",
+    "read": true,
+    "date": "2024-01-15T08:31:00.000Z",
+    "metadata": {
+      "projectTitle": "Extension Réseau Eau Potable - Marrakech"
+    }
+  },
+  {
+    "_id": "684171bfc396c60718c209ba",
+    "recipient": "684171bfc396c60718c209a9",
+    "sender": "684171bfc396c60718c209ab",
+    "type": "comment",
+    "content": "Nouveau commentaire sur le projet \"Extension Réseau Eau Potable - Marrakech\"",
+    "relatedProject": "684171bfc396c60718c209af",
+    "read": false,
+    "date": "2024-03-10T10:35:00.000Z",
+    "metadata": {
+      "projectTitle": "Extension Réseau Eau Potable - Marrakech",
+      "commentPreview": "Installation des canalisations principales..."
+    }
+  },
+  {
+    "_id": "684171bfc396c60718c209bb",
+    "recipient": "684171bfc396c60718c209ad",
+    "sender": "684171bfc396c60718c209aa",
+    "type": "project_assignment",
+    "content": "Vous avez été assigné au projet \"Centrale Électrique Solaire - Safi\"",
+    "relatedProject": "684171bfc396c60718c209b2",
+    "read": true,
+    "date": "2024-02-01T10:00:00.000Z",
+    "metadata": {
+      "projectTitle": "Centrale Électrique Solaire - Safi"
+    }
+  },
+  {
+    "_id": "684171bfc396c60718c209bc",
+    "recipient": "684171bfc396c60718c209aa",
+    "sender": "684171bfc396c60718c209ad",
+    "type": "progress_milestone",
+    "content": "Le projet \"Centrale Électrique Solaire - Safi\" a atteint 35% de progression",
+    "relatedProject": "684171bfc396c60718c209b2",
+    "read": false,
+    "date": "2024-02-20T16:25:00.000Z",
+    "metadata": {
+      "projectTitle": "Centrale Électrique Solaire - Safi",
+      "progress": 35
+    }
+  },
+  {
+    "_id": "684171bfc396c60718c209bd",
+    "recipient": "684171bfc396c60718c209ab",
+    "sender": null,
+    "type": "deadline_approaching",
+    "content": "Le projet \"Extension Réseau Eau Potable - Marrakech\" arrive à échéance dans 5 mois",
+    "relatedProject": "684171bfc396c60718c209af",
+    "read": false,
+    "date": "2024-03-15T09:00:00.000Z",
+    "metadata": {
+      "projectTitle": "Extension Réseau Eau Potable - Marrakech",
+      "daysLeft": 150
+    }
+  },
+  {
+    "_id": "684171bfc396c60718c209be",
+    "recipient": "684171bfc396c60718c209ac",
+    "sender": "684171bfc396c60718c209aa",
+    "type": "project_assignment",
+    "content": "Vous avez été assigné au projet \"Modernisation Réseau Électrique - Marrakech-Safi\"",
+    "relatedProject": "684171bfc396c60718c209b7",
+    "read": false,
+    "date": "2024-03-01T11:35:00.000Z",
+    "metadata": {
+      "projectTitle": "Modernisation Réseau Électrique - Marrakech-Safi"
+    }
+  }
+]

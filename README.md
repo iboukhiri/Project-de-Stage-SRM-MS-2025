@@ -424,6 +424,7 @@ Crée un jeu de données réaliste comprenant :
 
 ```
 database_exports/
+├── 📄 USER_PROFILES_AND_PASSWORDS.txt           # 🔑 Guide des comptes utilisateurs avec mots de passe
 ├── 📄 users_[timestamp].json                    # Profils utilisateurs avec rôles
 ├── 📄 projects_[timestamp].json                 # Projets avec assignations et commentaires
 ├── 📄 notifications_[timestamp].json            # Historique des notifications
@@ -456,10 +457,19 @@ tar -czf backup_$(date +%Y%m%d).tar.gz database_exports/
 
 #### Pour la Démonstration
 Les fichiers d'exemple incluent :
-- **Projets réalistes** : Migration ERP, Application Mobile, Sécurité Infrastructure
+- **Projets réalistes** : Extension Réseau Eau Potable Marrakech, Centrale Solaire Safi, Station de Traitement Youssoufia
 - **Utilisateurs authentiques** : Noms francophones avec domaines @srm.com
 - **Interactions complètes** : Commentaires, assignations, notifications contextuelles
 - **Instructions d'utilisation** intégrées dans les métadonnées
+- **Guide de connexion** : `USER_PROFILES_AND_PASSWORDS.txt` avec tous les comptes de test
+
+#### 🔑 Accès Rapide aux Comptes de Test
+Le fichier `USER_PROFILES_AND_PASSWORDS.txt` contient :
+- **6 profils utilisateurs** complets avec permissions détaillées
+- **Mot de passe universel** : `password123` pour tous les comptes
+- **Guide de test rapide** pour chaque niveau d'accès (Super Admin, Manager, Admin, Employé, Utilisateur)
+- **Liste des projets** et assignations pour chaque utilisateur
+- **Instructions d'utilisation** pour les tests et démonstrations
 
 ## 🔄 Déploiement en Production
 

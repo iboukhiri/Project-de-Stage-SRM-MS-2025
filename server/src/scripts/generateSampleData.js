@@ -76,66 +76,66 @@ async function generateSampleData() {
     const sampleProjects = [
       {
         _id: new mongoose.Types.ObjectId(),
-        title: 'Migration Système ERP',
-        description: 'Migration complète du système ERP vers une nouvelle plateforme cloud pour améliorer les performances et la scalabilité.',
+        title: 'Extension Réseau Eau Potable - Marrakech',
+        description: 'Extension et modernisation du réseau de distribution d\'eau potable dans les quartiers périphériques de Marrakech, incluant l\'installation de nouvelles canalisations, stations de pompage et compteurs intelligents.',
         status: 'En cours',
         progress: 65,
         startDate: new Date('2024-01-15T00:00:00Z'),
-        endDate: new Date('2024-06-30T00:00:00Z'),
+        endDate: new Date('2024-08-30T00:00:00Z'),
         createdBy: sampleUsers[0]._id,
         assignedTo: [sampleUsers[2]._id, sampleUsers[3]._id],
         comments: [
           {
             _id: new mongoose.Types.ObjectId(),
             user: sampleUsers[2]._id,
-            content: 'Phase de test en cours, migration des données terminée à 80%',
+            content: 'Installation des canalisations principales terminée, travaux sur les branchements secondaires en cours. 15 km de réseau installés sur 23 km prévus.',
             createdAt: new Date('2024-03-10T10:30:00Z'),
             updatedAt: null
           },
           {
             _id: new mongoose.Types.ObjectId(),
             user: sampleUsers[0]._id,
-            content: 'Excellent travail, continuez sur cette lancée',
+            content: 'Excellent progrès, les tests de pression sont conformes aux normes. Continuez sur cette lancée.',
             createdAt: new Date('2024-03-11T14:45:00Z'),
             updatedAt: null
           }
         ],
         createdAt: new Date('2024-01-15T08:00:00Z'),
         updatedAt: new Date('2024-03-11T14:45:00Z'),
-        guaranteeMonths: 12,
+        guaranteeMonths: 24,
         guaranteeEndDate: null
       },
       {
         _id: new mongoose.Types.ObjectId(),
-        title: 'Développement Application Mobile',
-        description: 'Création d\'une application mobile native pour iOS et Android permettant aux clients d\'accéder aux services SRM.',
+        title: 'Centrale Électrique Solaire - Safi',
+        description: 'Construction d\'une centrale photovoltaïque de 50 MW à Safi pour renforcer l\'approvisionnement électrique de la région et développer les énergies renouvelables.',
         status: 'En attente',
-        progress: 25,
+        progress: 35,
         startDate: new Date('2024-02-01T00:00:00Z'),
-        endDate: new Date('2024-08-15T00:00:00Z'),
+        endDate: new Date('2024-12-15T00:00:00Z'),
         createdBy: sampleUsers[1]._id,
         assignedTo: [sampleUsers[4]._id],
         comments: [
           {
             _id: new mongoose.Types.ObjectId(),
             user: sampleUsers[4]._id,
-            content: 'Prototype de l\'interface utilisateur finalisé, en attente de validation client',
+            content: 'Études d\'impact environnemental terminées et approuvées. En attente des autorisations finales pour la phase de construction.',
             createdAt: new Date('2024-02-20T16:20:00Z'),
             updatedAt: null
           }
         ],
         createdAt: new Date('2024-02-01T09:30:00Z'),
         updatedAt: new Date('2024-02-20T16:20:00Z'),
-        guaranteeMonths: 6,
+        guaranteeMonths: 36,
         guaranteeEndDate: null
       },
       {
         _id: new mongoose.Types.ObjectId(),
-        title: 'Mise à jour Sécurité Infrastructure',
-        description: 'Renforcement de la sécurité informatique avec mise en place de nouveaux pare-feu et systèmes de détection d\'intrusion.',
+        title: 'Station de Traitement des Eaux - Youssoufia',
+        description: 'Construction d\'une nouvelle station de traitement des eaux usées à Youssoufia avec une capacité de 25 000 m³/jour, incluant les équipements de traitement biologique et la valorisation des boues.',
         status: 'Terminé',
         progress: 100,
-        startDate: new Date('2023-11-01T00:00:00Z'),
+        startDate: new Date('2023-06-01T00:00:00Z'),
         endDate: new Date('2024-01-31T00:00:00Z'),
         createdBy: sampleUsers[0]._id,
         assignedTo: [sampleUsers[2]._id, sampleUsers[3]._id],
@@ -143,37 +143,37 @@ async function generateSampleData() {
           {
             _id: new mongoose.Types.ObjectId(),
             user: sampleUsers[2]._id,
-            content: 'Installation terminée, tests de pénétration réussis',
+            content: 'Installation terminée et tests de mise en service réussis. Capacité de traitement conforme aux spécifications techniques.',
             createdAt: new Date('2024-01-25T13:15:00Z'),
             updatedAt: null
           },
           {
             _id: new mongoose.Types.ObjectId(),
             user: sampleUsers[0]._id,
-            content: 'Projet livré dans les temps, excellent travail d\'équipe',
+            content: 'Projet livré dans les temps et dans le budget. Excellent travail d\'équipe, station opérationnelle depuis février 2024.',
             createdAt: new Date('2024-01-31T17:00:00Z'),
             updatedAt: null
           }
         ],
-        createdAt: new Date('2023-11-01T10:00:00Z'),
+        createdAt: new Date('2023-06-01T10:00:00Z'),
         updatedAt: new Date('2024-01-31T17:00:00Z'),
-        guaranteeMonths: 24,
-        guaranteeEndDate: new Date('2026-01-31T00:00:00Z')
+        guaranteeMonths: 60,
+        guaranteeEndDate: new Date('2029-01-31T00:00:00Z')
       },
       {
         _id: new mongoose.Types.ObjectId(),
-        title: 'Formation Équipe Développement',
-        description: 'Programme de formation continue pour l\'équipe de développement sur les nouvelles technologies et méthodologies agiles.',
+        title: 'Modernisation Réseau Électrique - Marrakech-Safi',
+        description: 'Programme de modernisation et digitalisation du réseau électrique moyenne tension reliant Marrakech à Safi, incluant l\'installation de compteurs intelligents et systèmes de télégestion.',
         status: 'Non démarré',
         progress: 0,
-        startDate: new Date('2024-04-01T00:00:00Z'),
-        endDate: new Date('2024-07-31T00:00:00Z'),
+        startDate: new Date('2024-05-01T00:00:00Z'),
+        endDate: new Date('2024-11-30T00:00:00Z'),
         createdBy: sampleUsers[1]._id,
         assignedTo: [sampleUsers[3]._id, sampleUsers[4]._id, sampleUsers[5]._id],
         comments: [],
         createdAt: new Date('2024-03-01T11:30:00Z'),
         updatedAt: new Date('2024-03-01T11:30:00Z'),
-        guaranteeMonths: 0,
+        guaranteeMonths: 18,
         guaranteeEndDate: null
       }
     ];
@@ -185,77 +185,77 @@ async function generateSampleData() {
         recipient: sampleUsers[2]._id,
         sender: sampleUsers[0]._id,
         type: 'project_assignment',
-        content: 'Vous avez été assigné au projet "Migration Système ERP"',
+        content: 'Vous avez été assigné au projet "Extension Réseau Eau Potable - Marrakech"',
         relatedProject: sampleProjects[0]._id,
         read: true,
         date: new Date('2024-01-15T08:30:00Z'),
-        metadata: { projectTitle: 'Migration Système ERP' }
+        metadata: { projectTitle: 'Extension Réseau Eau Potable - Marrakech' }
       },
       {
         _id: new mongoose.Types.ObjectId(),
         recipient: sampleUsers[3]._id,
         sender: sampleUsers[0]._id,
         type: 'project_assignment',
-        content: 'Vous avez été assigné au projet "Migration Système ERP"',
+        content: 'Vous avez été assigné au projet "Extension Réseau Eau Potable - Marrakech"',
         relatedProject: sampleProjects[0]._id,
         read: true,
         date: new Date('2024-01-15T08:31:00Z'),
-        metadata: { projectTitle: 'Migration Système ERP' }
+        metadata: { projectTitle: 'Extension Réseau Eau Potable - Marrakech' }
       },
       {
         _id: new mongoose.Types.ObjectId(),
         recipient: sampleUsers[0]._id,
         sender: sampleUsers[2]._id,
         type: 'comment',
-        content: 'Nouveau commentaire sur le projet "Migration Système ERP"',
+        content: 'Nouveau commentaire sur le projet "Extension Réseau Eau Potable - Marrakech"',
         relatedProject: sampleProjects[0]._id,
         read: false,
         date: new Date('2024-03-10T10:35:00Z'),
-        metadata: { projectTitle: 'Migration Système ERP', commentPreview: 'Phase de test en cours...' }
+        metadata: { projectTitle: 'Extension Réseau Eau Potable - Marrakech', commentPreview: 'Installation des canalisations principales...' }
       },
       {
         _id: new mongoose.Types.ObjectId(),
         recipient: sampleUsers[4]._id,
         sender: sampleUsers[1]._id,
         type: 'project_assignment',
-        content: 'Vous avez été assigné au projet "Développement Application Mobile"',
+        content: 'Vous avez été assigné au projet "Centrale Électrique Solaire - Safi"',
         relatedProject: sampleProjects[1]._id,
         read: true,
         date: new Date('2024-02-01T10:00:00Z'),
-        metadata: { projectTitle: 'Développement Application Mobile' }
+        metadata: { projectTitle: 'Centrale Électrique Solaire - Safi' }
       },
       {
         _id: new mongoose.Types.ObjectId(),
         recipient: sampleUsers[1]._id,
         sender: sampleUsers[4]._id,
         type: 'progress_milestone',
-        content: 'Le projet "Développement Application Mobile" a atteint 25% de progression',
+        content: 'Le projet "Centrale Électrique Solaire - Safi" a atteint 35% de progression',
         relatedProject: sampleProjects[1]._id,
         read: false,
         date: new Date('2024-02-20T16:25:00Z'),
-        metadata: { projectTitle: 'Développement Application Mobile', progress: 25 }
+        metadata: { projectTitle: 'Centrale Électrique Solaire - Safi', progress: 35 }
       },
       {
         _id: new mongoose.Types.ObjectId(),
         recipient: sampleUsers[2]._id,
         sender: null,
         type: 'deadline_approaching',
-        content: 'Le projet "Migration Système ERP" arrive à échéance dans 3 mois',
+        content: 'Le projet "Extension Réseau Eau Potable - Marrakech" arrive à échéance dans 5 mois',
         relatedProject: sampleProjects[0]._id,
         read: false,
         date: new Date('2024-03-15T09:00:00Z'),
-        metadata: { projectTitle: 'Migration Système ERP', daysLeft: 90 }
+        metadata: { projectTitle: 'Extension Réseau Eau Potable - Marrakech', daysLeft: 150 }
       },
       {
         _id: new mongoose.Types.ObjectId(),
         recipient: sampleUsers[3]._id,
         sender: sampleUsers[1]._id,
         type: 'project_assignment',
-        content: 'Vous avez été assigné au projet "Formation Équipe Développement"',
+        content: 'Vous avez été assigné au projet "Modernisation Réseau Électrique - Marrakech-Safi"',
         relatedProject: sampleProjects[3]._id,
         read: false,
         date: new Date('2024-03-01T11:35:00Z'),
-        metadata: { projectTitle: 'Formation Équipe Développement' }
+        metadata: { projectTitle: 'Modernisation Réseau Électrique - Marrakech-Safi' }
       }
     ];
 

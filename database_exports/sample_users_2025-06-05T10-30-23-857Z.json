@@ -1,49 +1,49 @@
 [
   {
-    "_id": "68416f7b0f0666b45541be31",
+    "_id": "684171bfc396c60718c209a9",
     "name": "Ahmed Ben Ali",
     "email": "ahmed.benali@srm.com",
-    "password": "$2a$10$QGkIJJC2/IwEGUN0ZFvG2eYTJS7gkH9N5QFPkiOWCO/JbKvsAg.dO",
+    "password": "$2a$10$b07plsG5slUK4FeXbgVoWe3XSfQKYZhAwpaPXy912mUTRVeGJpxEm",
     "role": "superadmin",
     "createdAt": "2024-01-15T08:00:00.000Z"
   },
   {
-    "_id": "68416f7b0f0666b45541be32",
+    "_id": "684171bfc396c60718c209aa",
     "name": "Fatima Ouali",
     "email": "fatima.ouali@srm.com",
-    "password": "$2a$10$QGkIJJC2/IwEGUN0ZFvG2eYTJS7gkH9N5QFPkiOWCO/JbKvsAg.dO",
+    "password": "$2a$10$b07plsG5slUK4FeXbgVoWe3XSfQKYZhAwpaPXy912mUTRVeGJpxEm",
     "role": "manager",
     "createdAt": "2024-01-20T09:30:00.000Z"
   },
   {
-    "_id": "68416f7b0f0666b45541be33",
+    "_id": "684171bfc396c60718c209ab",
     "name": "Mohamed Trabelsi",
     "email": "mohamed.trabelsi@srm.com",
-    "password": "$2a$10$QGkIJJC2/IwEGUN0ZFvG2eYTJS7gkH9N5QFPkiOWCO/JbKvsAg.dO",
+    "password": "$2a$10$b07plsG5slUK4FeXbgVoWe3XSfQKYZhAwpaPXy912mUTRVeGJpxEm",
     "role": "admin",
     "createdAt": "2024-02-01T10:15:00.000Z"
   },
   {
-    "_id": "68416f7b0f0666b45541be34",
+    "_id": "684171bfc396c60718c209ac",
     "name": "Amina Khelifi",
     "email": "amina.khelifi@srm.com",
-    "password": "$2a$10$QGkIJJC2/IwEGUN0ZFvG2eYTJS7gkH9N5QFPkiOWCO/JbKvsAg.dO",
+    "password": "$2a$10$b07plsG5slUK4FeXbgVoWe3XSfQKYZhAwpaPXy912mUTRVeGJpxEm",
     "role": "employee",
     "createdAt": "2024-02-05T11:45:00.000Z"
   },
   {
-    "_id": "68416f7b0f0666b45541be35",
+    "_id": "684171bfc396c60718c209ad",
     "name": "Youssef Gharbi",
     "email": "youssef.gharbi@srm.com",
-    "password": "$2a$10$QGkIJJC2/IwEGUN0ZFvG2eYTJS7gkH9N5QFPkiOWCO/JbKvsAg.dO",
+    "password": "$2a$10$b07plsG5slUK4FeXbgVoWe3XSfQKYZhAwpaPXy912mUTRVeGJpxEm",
     "role": "employee",
     "createdAt": "2024-02-10T14:20:00.000Z"
   },
   {
-    "_id": "68416f7b0f0666b45541be36",
+    "_id": "684171bfc396c60718c209ae",
     "name": "Leila Mansouri",
     "email": "leila.mansouri@srm.com",
-    "password": "$2a$10$QGkIJJC2/IwEGUN0ZFvG2eYTJS7gkH9N5QFPkiOWCO/JbKvsAg.dO",
+    "password": "$2a$10$b07plsG5slUK4FeXbgVoWe3XSfQKYZhAwpaPXy912mUTRVeGJpxEm",
     "role": "user",
     "createdAt": "2024-02-15T16:30:00.000Z"
   }

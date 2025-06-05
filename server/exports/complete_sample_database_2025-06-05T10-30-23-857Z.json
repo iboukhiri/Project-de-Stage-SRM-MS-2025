@@ -1,0 +1,291 @@
+{
+  "exportDate": "2025-06-05T10:30:23.956Z",
+  "dataType": "sample_data",
+  "collections": {
+    "users": [
+      {
+        "_id": "684171bfc396c60718c209a9",
+        "name": "Ahmed Ben Ali",
+        "email": "ahmed.benali@srm.com",
+        "password": "$2a$10$b07plsG5slUK4FeXbgVoWe3XSfQKYZhAwpaPXy912mUTRVeGJpxEm",
+        "role": "superadmin",
+        "createdAt": "2024-01-15T08:00:00.000Z"
+      },
+      {
+        "_id": "684171bfc396c60718c209aa",
+        "name": "Fatima Ouali",
+        "email": "fatima.ouali@srm.com",
+        "password": "$2a$10$b07plsG5slUK4FeXbgVoWe3XSfQKYZhAwpaPXy912mUTRVeGJpxEm",
+        "role": "manager",
+        "createdAt": "2024-01-20T09:30:00.000Z"
+      },
+      {
+        "_id": "684171bfc396c60718c209ab",
+        "name": "Mohamed Trabelsi",
+        "email": "mohamed.trabelsi@srm.com",
+        "password": "$2a$10$b07plsG5slUK4FeXbgVoWe3XSfQKYZhAwpaPXy912mUTRVeGJpxEm",
+        "role": "admin",
+        "createdAt": "2024-02-01T10:15:00.000Z"
+      },
+      {
+        "_id": "684171bfc396c60718c209ac",
+        "name": "Amina Khelifi",
+        "email": "amina.khelifi@srm.com",
+        "password": "$2a$10$b07plsG5slUK4FeXbgVoWe3XSfQKYZhAwpaPXy912mUTRVeGJpxEm",
+        "role": "employee",
+        "createdAt": "2024-02-05T11:45:00.000Z"
+      },
+      {
+        "_id": "684171bfc396c60718c209ad",
+        "name": "Youssef Gharbi",
+        "email": "youssef.gharbi@srm.com",
+        "password": "$2a$10$b07plsG5slUK4FeXbgVoWe3XSfQKYZhAwpaPXy912mUTRVeGJpxEm",
+        "role": "employee",
+        "createdAt": "2024-02-10T14:20:00.000Z"
+      },
+      {
+        "_id": "684171bfc396c60718c209ae",
+        "name": "Leila Mansouri",
+        "email": "leila.mansouri@srm.com",
+        "password": "$2a$10$b07plsG5slUK4FeXbgVoWe3XSfQKYZhAwpaPXy912mUTRVeGJpxEm",
+        "role": "user",
+        "createdAt": "2024-02-15T16:30:00.000Z"
+      }
+    ],
+    "projects": [
+      {
+        "_id": "684171bfc396c60718c209af",
+        "title": "Extension Réseau Eau Potable - Marrakech",
+        "description": "Extension et modernisation du réseau de distribution d'eau potable dans les quartiers périphériques de Marrakech, incluant l'installation de nouvelles canalisations, stations de pompage et compteurs intelligents.",
+        "status": "En cours",
+        "progress": 65,
+        "startDate": "2024-01-15T00:00:00.000Z",
+        "endDate": "2024-08-30T00:00:00.000Z",
+        "createdBy": "684171bfc396c60718c209a9",
+        "assignedTo": [
+          "684171bfc396c60718c209ab",
+          "684171bfc396c60718c209ac"
+        ],
+        "comments": [
+          {
+            "_id": "684171bfc396c60718c209b0",
+            "user": "684171bfc396c60718c209ab",
+            "content": "Installation des canalisations principales terminée, travaux sur les branchements secondaires en cours. 15 km de réseau installés sur 23 km prévus.",
+            "createdAt": "2024-03-10T10:30:00.000Z",
+            "updatedAt": null
+          },
+          {
+            "_id": "684171bfc396c60718c209b1",
+            "user": "684171bfc396c60718c209a9",
+            "content": "Excellent progrès, les tests de pression sont conformes aux normes. Continuez sur cette lancée.",
+            "createdAt": "2024-03-11T14:45:00.000Z",
+            "updatedAt": null
+          }
+        ],
+        "createdAt": "2024-01-15T08:00:00.000Z",
+        "updatedAt": "2024-03-11T14:45:00.000Z",
+        "guaranteeMonths": 24,
+        "guaranteeEndDate": null
+      },
+      {
+        "_id": "684171bfc396c60718c209b2",
+        "title": "Centrale Électrique Solaire - Safi",
+        "description": "Construction d'une centrale photovoltaïque de 50 MW à Safi pour renforcer l'approvisionnement électrique de la région et développer les énergies renouvelables.",
+        "status": "En attente",
+        "progress": 35,
+        "startDate": "2024-02-01T00:00:00.000Z",
+        "endDate": "2024-12-15T00:00:00.000Z",
+        "createdBy": "684171bfc396c60718c209aa",
+        "assignedTo": [
+          "684171bfc396c60718c209ad"
+        ],
+        "comments": [
+          {
+            "_id": "684171bfc396c60718c209b3",
+            "user": "684171bfc396c60718c209ad",
+            "content": "Études d'impact environnemental terminées et approuvées. En attente des autorisations finales pour la phase de construction.",
+            "createdAt": "2024-02-20T16:20:00.000Z",
+            "updatedAt": null
+          }
+        ],
+        "createdAt": "2024-02-01T09:30:00.000Z",
+        "updatedAt": "2024-02-20T16:20:00.000Z",
+        "guaranteeMonths": 36,
+        "guaranteeEndDate": null
+      },
+      {
+        "_id": "684171bfc396c60718c209b4",
+        "title": "Station de Traitement des Eaux - Youssoufia",
+        "description": "Construction d'une nouvelle station de traitement des eaux usées à Youssoufia avec une capacité de 25 000 m³/jour, incluant les équipements de traitement biologique et la valorisation des boues.",
+        "status": "Terminé",
+        "progress": 100,
+        "startDate": "2023-06-01T00:00:00.000Z",
+        "endDate": "2024-01-31T00:00:00.000Z",
+        "createdBy": "684171bfc396c60718c209a9",
+        "assignedTo": [
+          "684171bfc396c60718c209ab",
+          "684171bfc396c60718c209ac"
+        ],
+        "comments": [
+          {
+            "_id": "684171bfc396c60718c209b5",
+            "user": "684171bfc396c60718c209ab",
+            "content": "Installation terminée et tests de mise en service réussis. Capacité de traitement conforme aux spécifications techniques.",
+            "createdAt": "2024-01-25T13:15:00.000Z",
+            "updatedAt": null
+          },
+          {
+            "_id": "684171bfc396c60718c209b6",
+            "user": "684171bfc396c60718c209a9",
+            "content": "Projet livré dans les temps et dans le budget. Excellent travail d'équipe, station opérationnelle depuis février 2024.",
+            "createdAt": "2024-01-31T17:00:00.000Z",
+            "updatedAt": null
+          }
+        ],
+        "createdAt": "2023-06-01T10:00:00.000Z",
+        "updatedAt": "2024-01-31T17:00:00.000Z",
+        "guaranteeMonths": 60,
+        "guaranteeEndDate": "2029-01-31T00:00:00.000Z"
+      },
+      {
+        "_id": "684171bfc396c60718c209b7",
+        "title": "Modernisation Réseau Électrique - Marrakech-Safi",
+        "description": "Programme de modernisation et digitalisation du réseau électrique moyenne tension reliant Marrakech à Safi, incluant l'installation de compteurs intelligents et systèmes de télégestion.",
+        "status": "Non démarré",
+        "progress": 0,
+        "startDate": "2024-05-01T00:00:00.000Z",
+        "endDate": "2024-11-30T00:00:00.000Z",
+        "createdBy": "684171bfc396c60718c209aa",
+        "assignedTo": [
+          "684171bfc396c60718c209ac",
+          "684171bfc396c60718c209ad",
+          "684171bfc396c60718c209ae"
+        ],
+        "comments": [],
+        "createdAt": "2024-03-01T11:30:00.000Z",
+        "updatedAt": "2024-03-01T11:30:00.000Z",
+        "guaranteeMonths": 18,
+        "guaranteeEndDate": null
+      }
+    ],
+    "notifications": [
+      {
+        "_id": "684171bfc396c60718c209b8",
+        "recipient": "684171bfc396c60718c209ab",
+        "sender": "684171bfc396c60718c209a9",
+        "type": "project_assignment",
+        "content": "Vous avez été assigné au projet \"Extension Réseau Eau Potable - Marrakech\"",
+        "relatedProject": "684171bfc396c60718c209af",
+        "read": true,
+        "date": "2024-01-15T08:30:00.000Z",
+        "metadata": {
+          "projectTitle": "Extension Réseau Eau Potable - Marrakech"
+        }
+      },
+      {
+        "_id": "684171bfc396c60718c209b9",
+        "recipient": "684171bfc396c60718c209ac",
+        "sender": "684171bfc396c60718c209a9",
+        "type": "project_assignment",
+        "content": "Vous avez été assigné au projet \"Extension Réseau Eau Potable - Marrakech\"",
+        "relatedProject": "684171bfc396c60718c209af",
+        "read": true,
+        "date": "2024-01-15T08:31:00.000Z",
+        "metadata": {
+          "projectTitle": "Extension Réseau Eau Potable - Marrakech"
+        }
+      },
+      {
+        "_id": "684171bfc396c60718c209ba",
+        "recipient": "684171bfc396c60718c209a9",
+        "sender": "684171bfc396c60718c209ab",
+        "type": "comment",
+        "content": "Nouveau commentaire sur le projet \"Extension Réseau Eau Potable - Marrakech\"",
+        "relatedProject": "684171bfc396c60718c209af",
+        "read": false,
+        "date": "2024-03-10T10:35:00.000Z",
+        "metadata": {
+          "projectTitle": "Extension Réseau Eau Potable - Marrakech",
+          "commentPreview": "Installation des canalisations principales..."
+        }
+      },
+      {
+        "_id": "684171bfc396c60718c209bb",
+        "recipient": "684171bfc396c60718c209ad",
+        "sender": "684171bfc396c60718c209aa",
+        "type": "project_assignment",
+        "content": "Vous avez été assigné au projet \"Centrale Électrique Solaire - Safi\"",
+        "relatedProject": "684171bfc396c60718c209b2",
+        "read": true,
+        "date": "2024-02-01T10:00:00.000Z",
+        "metadata": {
+          "projectTitle": "Centrale Électrique Solaire - Safi"
+        }
+      },
+      {
+        "_id": "684171bfc396c60718c209bc",
+        "recipient": "684171bfc396c60718c209aa",
+        "sender": "684171bfc396c60718c209ad",
+        "type": "progress_milestone",
+        "content": "Le projet \"Centrale Électrique Solaire - Safi\" a atteint 35% de progression",
+        "relatedProject": "684171bfc396c60718c209b2",
+        "read": false,
+        "date": "2024-02-20T16:25:00.000Z",
+        "metadata": {
+          "projectTitle": "Centrale Électrique Solaire - Safi",
+          "progress": 35
+        }
+      },
+      {
+        "_id": "684171bfc396c60718c209bd",
+        "recipient": "684171bfc396c60718c209ab",
+        "sender": null,
+        "type": "deadline_approaching",
+        "content": "Le projet \"Extension Réseau Eau Potable - Marrakech\" arrive à échéance dans 5 mois",
+        "relatedProject": "684171bfc396c60718c209af",
+        "read": false,
+        "date": "2024-03-15T09:00:00.000Z",
+        "metadata": {
+          "projectTitle": "Extension Réseau Eau Potable - Marrakech",
+          "daysLeft": 150
+        }
+      },
+      {
+        "_id": "684171bfc396c60718c209be",
+        "recipient": "684171bfc396c60718c209ac",
+        "sender": "684171bfc396c60718c209aa",
+        "type": "project_assignment",
+        "content": "Vous avez été assigné au projet \"Modernisation Réseau Électrique - Marrakech-Safi\"",
+        "relatedProject": "684171bfc396c60718c209b7",
+        "read": false,
+        "date": "2024-03-01T11:35:00.000Z",
+        "metadata": {
+          "projectTitle": "Modernisation Réseau Électrique - Marrakech-Safi"
+        }
+      }
+    ]
+  },
+  "summary": {
+    "totalUsers": 6,
+    "totalProjects": 4,
+    "totalNotifications": 7
+  },
+  "instructions": {
+    "usage": "This file contains sample data that can be imported into the database",
+    "defaultPassword": "password123",
+    "userRoles": [
+      "superadmin",
+      "manager",
+      "admin",
+      "employee",
+      "user"
+    ],
+    "projectStatuses": [
+      "Non démarré",
+      "En cours",
+      "En attente",
+      "Terminé",
+      "En garantie"
+    ]
+  }
+}
