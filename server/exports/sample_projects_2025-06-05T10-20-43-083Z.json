@@ -1,0 +1,116 @@
+[
+  {
+    "_id": "68416f7b0f0666b45541be37",
+    "title": "Migration Système ERP",
+    "description": "Migration complète du système ERP vers une nouvelle plateforme cloud pour améliorer les performances et la scalabilité.",
+    "status": "En cours",
+    "progress": 65,
+    "startDate": "2024-01-15T00:00:00.000Z",
+    "endDate": "2024-06-30T00:00:00.000Z",
+    "createdBy": "68416f7b0f0666b45541be31",
+    "assignedTo": [
+      "68416f7b0f0666b45541be33",
+      "68416f7b0f0666b45541be34"
+    ],
+    "comments": [
+      {
+        "_id": "68416f7b0f0666b45541be38",
+        "user": "68416f7b0f0666b45541be33",
+        "content": "Phase de test en cours, migration des données terminée à 80%",
+        "createdAt": "2024-03-10T10:30:00.000Z",
+        "updatedAt": null
+      },
+      {
+        "_id": "68416f7b0f0666b45541be39",
+        "user": "68416f7b0f0666b45541be31",
+        "content": "Excellent travail, continuez sur cette lancée",
+        "createdAt": "2024-03-11T14:45:00.000Z",
+        "updatedAt": null
+      }
+    ],
+    "createdAt": "2024-01-15T08:00:00.000Z",
+    "updatedAt": "2024-03-11T14:45:00.000Z",
+    "guaranteeMonths": 12,
+    "guaranteeEndDate": null
+  },
+  {
+    "_id": "68416f7b0f0666b45541be3a",
+    "title": "Développement Application Mobile",
+    "description": "Création d'une application mobile native pour iOS et Android permettant aux clients d'accéder aux services SRM.",
+    "status": "En attente",
+    "progress": 25,
+    "startDate": "2024-02-01T00:00:00.000Z",
+    "endDate": "2024-08-15T00:00:00.000Z",
+    "createdBy": "68416f7b0f0666b45541be32",
+    "assignedTo": [
+      "68416f7b0f0666b45541be35"
+    ],
+    "comments": [
+      {
+        "_id": "68416f7b0f0666b45541be3b",
+        "user": "68416f7b0f0666b45541be35",
+        "content": "Prototype de l'interface utilisateur finalisé, en attente de validation client",
+        "createdAt": "2024-02-20T16:20:00.000Z",
+        "updatedAt": null
+      }
+    ],
+    "createdAt": "2024-02-01T09:30:00.000Z",
+    "updatedAt": "2024-02-20T16:20:00.000Z",
+    "guaranteeMonths": 6,
+    "guaranteeEndDate": null
+  },
+  {
+    "_id": "68416f7b0f0666b45541be3c",
+    "title": "Mise à jour Sécurité Infrastructure",
+    "description": "Renforcement de la sécurité informatique avec mise en place de nouveaux pare-feu et systèmes de détection d'intrusion.",
+    "status": "Terminé",
+    "progress": 100,
+    "startDate": "2023-11-01T00:00:00.000Z",
+    "endDate": "2024-01-31T00:00:00.000Z",
+    "createdBy": "68416f7b0f0666b45541be31",
+    "assignedTo": [
+      "68416f7b0f0666b45541be33",
+      "68416f7b0f0666b45541be34"
+    ],
+    "comments": [
+      {
+        "_id": "68416f7b0f0666b45541be3d",
+        "user": "68416f7b0f0666b45541be33",
+        "content": "Installation terminée, tests de pénétration réussis",
+        "createdAt": "2024-01-25T13:15:00.000Z",
+        "updatedAt": null
+      },
+      {
+        "_id": "68416f7b0f0666b45541be3e",
+        "user": "68416f7b0f0666b45541be31",
+        "content": "Projet livré dans les temps, excellent travail d'équipe",
+        "createdAt": "2024-01-31T17:00:00.000Z",
+        "updatedAt": null
+      }
+    ],
+    "createdAt": "2023-11-01T10:00:00.000Z",
+    "updatedAt": "2024-01-31T17:00:00.000Z",
+    "guaranteeMonths": 24,
+    "guaranteeEndDate": "2026-01-31T00:00:00.000Z"
+  },
+  {
+    "_id": "68416f7b0f0666b45541be3f",
+    "title": "Formation Équipe Développement",
+    "description": "Programme de formation continue pour l'équipe de développement sur les nouvelles technologies et méthodologies agiles.",
+    "status": "Non démarré",
+    "progress": 0,
+    "startDate": "2024-04-01T00:00:00.000Z",
+    "endDate": "2024-07-31T00:00:00.000Z",
+    "createdBy": "68416f7b0f0666b45541be32",
+    "assignedTo": [
+      "68416f7b0f0666b45541be34",
+      "68416f7b0f0666b45541be35",
+      "68416f7b0f0666b45541be36"
+    ],
+    "comments": [],
+    "createdAt": "2024-03-01T11:30:00.000Z",
+    "updatedAt": "2024-03-01T11:30:00.000Z",
+    "guaranteeMonths": 0,
+    "guaranteeEndDate": null
+  }
+]

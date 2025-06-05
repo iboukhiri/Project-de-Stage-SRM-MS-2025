@@ -335,6 +335,13 @@ npm run build          # Construire l'application pour la production
 npm run update-photos  # Script de mise à jour des photos utilisateurs
 ```
 
+### Scripts de Données
+```bash
+npm run export-data    # Exporter toutes les données actuelles de la base de données en JSON
+npm run generate-sample # Générer des données d'exemple pour les tests et démonstrations
+npm run seed-demo      # Peupler la base de données avec des données de démonstration
+```
+
 ### Scripts de Maintenance
 ```bash
 # Nettoyage des dépendances
@@ -383,6 +390,76 @@ POST   /api/comments              # Ajouter un commentaire
 PUT    /api/comments/:id          # Modifier un commentaire
 DELETE /api/comments/:id          # Supprimer un commentaire
 ```
+
+## 💾 Gestion des Données et Export
+
+### 📤 Export de Base de Données
+
+Le système inclut des fonctionnalités avancées d'export et de génération de données pour faciliter la sauvegarde, les tests et les démonstrations.
+
+#### Export des Données Actuelles
+```bash
+npm run export-data
+```
+
+Cette commande génère automatiquement :
+- **Fichiers individuels** : `users_[timestamp].json`, `projects_[timestamp].json`, `notifications_[timestamp].json`
+- **Export complet** : `complete_database_export_[timestamp].json` avec résumé et métadonnées
+- **Localisation** : Dossier `server/exports/` et copie automatique dans `database_exports/` (racine)
+- **Données populées** : Inclut les références utilisateur (noms, emails) pour une meilleure lisibilité
+
+#### Génération de Données d'Exemple
+```bash
+npm run generate-sample
+```
+
+Crée un jeu de données réaliste comprenant :
+- **6 utilisateurs** avec différents rôles (superadmin, manager, admin, employee, user)
+- **4 projets** avec statuts variés et commentaires
+- **7 notifications** représentatives des interactions système
+- **Mot de passe par défaut** : `password123` pour tous les utilisateurs de test
+- **Données en français** adaptées au contexte SRM
+
+### 📁 Structure des Exports
+
+```
+database_exports/
+├── 📄 users_[timestamp].json                    # Profils utilisateurs avec rôles
+├── 📄 projects_[timestamp].json                 # Projets avec assignations et commentaires
+├── 📄 notifications_[timestamp].json            # Historique des notifications
+├── 📄 complete_database_export_[timestamp].json # Export complet avec métadonnées
+├── 📄 sample_users_[timestamp].json             # Utilisateurs d'exemple
+├── 📄 sample_projects_[timestamp].json          # Projets d'exemple
+├── 📄 sample_notifications_[timestamp].json     # Notifications d'exemple
+└── 📄 complete_sample_database_[timestamp].json # Base de données d'exemple complète
+```
+
+### 🔧 Utilisation des Exports
+
+#### Pour les Tests
+```bash
+# Générer des données de test
+npm run generate-sample
+
+# Vérifier les données générées
+ls -la database_exports/
+```
+
+#### Pour la Sauvegarde
+```bash
+# Exporter les données actuelles
+npm run export-data
+
+# Archiver les exports
+tar -czf backup_$(date +%Y%m%d).tar.gz database_exports/
+```
+
+#### Pour la Démonstration
+Les fichiers d'exemple incluent :
+- **Projets réalistes** : Migration ERP, Application Mobile, Sécurité Infrastructure
+- **Utilisateurs authentiques** : Noms francophones avec domaines @srm.com
+- **Interactions complètes** : Commentaires, assignations, notifications contextuelles
+- **Instructions d'utilisation** intégrées dans les métadonnées
 
 ## 🔄 Déploiement en Production
 

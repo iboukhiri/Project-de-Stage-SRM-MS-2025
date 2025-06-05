@@ -10,7 +10,9 @@
     "dev:full": "concurrently \"npm run dev\" \"npm run client\"",
     "build": "cd client && npm install && npm run build",
     "update-photos": "node server/src/utils/updateUserPhotos.js",
-    "seed-demo": "node server/src/scripts/seedDemo.js"
+    "seed-demo": "node server/src/scripts/seedDemo.js",
+    "export-data": "node server/src/scripts/exportData.js",
+    "generate-sample": "node server/src/scripts/generateSampleData.js"
   },
   "engines": {
     "node": ">=14.0.0"

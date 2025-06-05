@@ -1,0 +1,96 @@
+[
+  {
+    "_id": "68416f7b0f0666b45541be40",
+    "recipient": "68416f7b0f0666b45541be33",
+    "sender": "68416f7b0f0666b45541be31",
+    "type": "project_assignment",
+    "content": "Vous avez été assigné au projet \"Migration Système ERP\"",
+    "relatedProject": "68416f7b0f0666b45541be37",
+    "read": true,
+    "date": "2024-01-15T08:30:00.000Z",
+    "metadata": {
+      "projectTitle": "Migration Système ERP"
+    }
+  },
+  {
+    "_id": "68416f7b0f0666b45541be41",
+    "recipient": "68416f7b0f0666b45541be34",
+    "sender": "68416f7b0f0666b45541be31",
+    "type": "project_assignment",
+    "content": "Vous avez été assigné au projet \"Migration Système ERP\"",
+    "relatedProject": "68416f7b0f0666b45541be37",
+    "read": true,
+    "date": "2024-01-15T08:31:00.000Z",
+    "metadata": {
+      "projectTitle": "Migration Système ERP"
+    }
+  },
+  {
+    "_id": "68416f7b0f0666b45541be42",
+    "recipient": "68416f7b0f0666b45541be31",
+    "sender": "68416f7b0f0666b45541be33",
+    "type": "comment",
+    "content": "Nouveau commentaire sur le projet \"Migration Système ERP\"",
+    "relatedProject": "68416f7b0f0666b45541be37",
+    "read": false,
+    "date": "2024-03-10T10:35:00.000Z",
+    "metadata": {
+      "projectTitle": "Migration Système ERP",
+      "commentPreview": "Phase de test en cours..."
+    }
+  },
+  {
+    "_id": "68416f7b0f0666b45541be43",
+    "recipient": "68416f7b0f0666b45541be35",
+    "sender": "68416f7b0f0666b45541be32",
+    "type": "project_assignment",
+    "content": "Vous avez été assigné au projet \"Développement Application Mobile\"",
+    "relatedProject": "68416f7b0f0666b45541be3a",
+    "read": true,
+    "date": "2024-02-01T10:00:00.000Z",
+    "metadata": {
+      "projectTitle": "Développement Application Mobile"
+    }
+  },
+  {
+    "_id": "68416f7b0f0666b45541be44",
+    "recipient": "68416f7b0f0666b45541be32",
+    "sender": "68416f7b0f0666b45541be35",
+    "type": "progress_milestone",
+    "content": "Le projet \"Développement Application Mobile\" a atteint 25% de progression",
+    "relatedProject": "68416f7b0f0666b45541be3a",
+    "read": false,
+    "date": "2024-02-20T16:25:00.000Z",
+    "metadata": {
+      "projectTitle": "Développement Application Mobile",
+      "progress": 25
+    }
+  },
+  {
+    "_id": "68416f7b0f0666b45541be45",
+    "recipient": "68416f7b0f0666b45541be33",
+    "sender": null,
+    "type": "deadline_approaching",
+    "content": "Le projet \"Migration Système ERP\" arrive à échéance dans 3 mois",
+    "relatedProject": "68416f7b0f0666b45541be37",
+    "read": false,
+    "date": "2024-03-15T09:00:00.000Z",
+    "metadata": {
+      "projectTitle": "Migration Système ERP",
+      "daysLeft": 90
+    }
+  },
+  {
+    "_id": "68416f7b0f0666b45541be46",
+    "recipient": "68416f7b0f0666b45541be34",
+    "sender": "68416f7b0f0666b45541be32",
+    "type": "project_assignment",
+    "content": "Vous avez été assigné au projet \"Formation Équipe Développement\"",
+    "relatedProject": "68416f7b0f0666b45541be3f",
+    "read": false,
+    "date": "2024-03-01T11:35:00.000Z",
+    "metadata": {
+      "projectTitle": "Formation Équipe Développement"
+    }
+  }
+]
