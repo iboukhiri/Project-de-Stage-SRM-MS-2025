@@ -9,7 +9,8 @@
     "client": "cd client && npm start",
     "dev:full": "concurrently \"npm run dev\" \"npm run client\"",
     "build": "cd client && npm install && npm run build",
-    "update-photos": "node server/src/utils/updateUserPhotos.js"
+    "update-photos": "node server/src/utils/updateUserPhotos.js",
+    "seed-demo": "node server/src/scripts/seedDemo.js"
   },
   "engines": {
     "node": ">=14.0.0"
